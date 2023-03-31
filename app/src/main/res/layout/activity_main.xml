@@ -34,9 +34,7 @@
         app:icon="@drawable/search"
         app:iconGravity="textStart"
         app:iconPadding="10dp"
-        app:iconTint="@color/black"
-
-        />
+        app:iconTint="@color/black" />
 
     <Button
         android:id="@+id/btn_library"
@@ -55,8 +53,7 @@
         app:icon="@drawable/library"
         app:iconGravity="textStart"
         app:iconPadding="10dp"
-        app:iconTint="@color/black"
-        />
+        app:iconTint="@color/black" />
 
     <Button
         android:id="@+id/btn_settings"
@@ -75,7 +72,6 @@
         app:icon="@drawable/settings"
         app:iconGravity="textStart"
         app:iconPadding="10dp"
-        app:iconTint="@color/black"
-        />
+        app:iconTint="@color/black" />
 
 </LinearLayout>

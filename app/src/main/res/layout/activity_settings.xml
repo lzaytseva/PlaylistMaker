@@ -20,8 +20,7 @@
             android:layout_marginStart="20dp"
             android:layout_gravity="center"
             android:src="@drawable/arrow_back"
-            android:contentDescription="@string/go_back"
-            />
+            android:contentDescription="@string/go_back" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -29,8 +28,7 @@
             android:layout_marginStart="28dp"
             android:textSize="@dimen/primary_text_size"
             android:textColor="@color/primary_text_color"
-            android:text="@string/settings"
-            />
+            android:text="@string/settings"/>
 
     </LinearLayout>
 
@@ -50,14 +48,12 @@
         android:layout_gravity="start|center"
         android:textSize="@dimen/settings_options_text_size"
         android:textColor="@color/primary_text_color"
-        android:text="@string/dark_theme"
-            />
+        android:text="@string/dark_theme" />
 
         <androidx.appcompat.widget.SwitchCompat
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end|center"
-            />
+            android:layout_gravity="end|center" />
 
     </FrameLayout>
 
@@ -75,16 +71,14 @@
             android:layout_gravity="start|center"
             android:textSize="@dimen/settings_options_text_size"
             android:textColor="@color/primary_text_color"
-            android:text="@string/share_app"
-            />
+            android:text="@string/share_app" />
 
         <ImageView
             android:layout_width="16dp"
             android:layout_height="18dp"
             android:layout_gravity="end|center"
             android:src="@drawable/share"
-            android:contentDescription="@string/share_app"
-            />
+            android:contentDescription="@string/share_app" />
 
     </FrameLayout>
 
@@ -102,16 +96,14 @@
             android:layout_gravity="start|center"
             android:textSize="@dimen/settings_options_text_size"
             android:textColor="@color/primary_text_color"
-            android:text="@string/contact_support"
-            />
+            android:text="@string/contact_support" />
 
         <ImageView
             android:layout_width="20dp"
             android:layout_height="18dp"
             android:layout_gravity="end|center"
             android:src="@drawable/support"
-            android:contentDescription="@string/contact_support"
-            />
+            android:contentDescription="@string/contact_support" />
 
     </FrameLayout>
 
@@ -129,16 +121,14 @@
             android:layout_gravity="start|center"
             android:textSize="@dimen/settings_options_text_size"
             android:textColor="@color/primary_text_color"
-            android:text="@string/user_agreement"
-            />
+            android:text="@string/user_agreement" />
 
         <ImageView
             android:layout_width="20dp"
             android:layout_height="18dp"
             android:layout_gravity="end|center"
             android:src="@drawable/arrow_forward"
-            android:contentDescription="@string/go_forward"
-            />
+            android:contentDescription="@string/go_forward" />
 
     </FrameLayout>
 
