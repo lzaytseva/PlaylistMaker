@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:layout_marginBottom="40dp"
+        tools:ignore="UseCompoundDrawables">
+
+        <ImageView
+            android:id="@+id/arrow_back"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginStart="20dp"
+            android:layout_gravity="center"
+            android:src="@drawable/arrow_back"
+            android:contentDescription="@string/go_back" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="28dp"
+            android:textSize="@dimen/primary_text_size"
+            android:textColor="@color/primary_text_color"
+            android:text="@string/settings"/>
+
+    </LinearLayout>
+
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="16dp"
+        android:paddingEnd="18dp">
+
+        <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/settings_options_text_padding"
+        android:paddingBottom="@dimen/settings_options_text_padding"
+        android:layout_gravity="start|center"
+        android:textSize="@dimen/settings_options_text_size"
+        android:textColor="@color/primary_text_color"
+        android:text="@string/dark_theme" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|center" />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="16dp"
+        android:paddingEnd="21dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/settings_options_text_padding"
+            android:paddingBottom="@dimen/settings_options_text_padding"
+            android:layout_gravity="start|center"
+            android:textSize="@dimen/settings_options_text_size"
+            android:textColor="@color/primary_text_color"
+            android:text="@string/share_app" />
+
+        <ImageView
+            android:layout_width="16dp"
+            android:layout_height="18dp"
+            android:layout_gravity="end|center"
+            android:src="@drawable/share"
+            android:contentDescription="@string/share_app" />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="16dp"
+        android:paddingEnd="21dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/settings_options_text_padding"
+            android:paddingBottom="@dimen/settings_options_text_padding"
+            android:layout_gravity="start|center"
+            android:textSize="@dimen/settings_options_text_size"
+            android:textColor="@color/primary_text_color"
+            android:text="@string/contact_support" />
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="18dp"
+            android:layout_gravity="end|center"
+            android:src="@drawable/support"
+            android:contentDescription="@string/contact_support" />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="16dp"
+        android:paddingEnd="23dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/settings_options_text_padding"
+            android:paddingBottom="@dimen/settings_options_text_padding"
+            android:layout_gravity="start|center"
+            android:textSize="@dimen/settings_options_text_size"
+            android:textColor="@color/primary_text_color"
+            android:text="@string/user_agreement" />
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="18dp"
+            android:layout_gravity="end|center"
+            android:src="@drawable/arrow_forward"
+            android:contentDescription="@string/go_forward" />
+
+    </FrameLayout>
+
+
+</LinearLayout>
