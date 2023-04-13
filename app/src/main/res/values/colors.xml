@@ -9,5 +9,8 @@
     <color name="white">#FFFFFFFF</color>
     <color name="primary_text_color">#FF000000</color>
     <color name="main_screen_background">#3772E7</color>
+    <color name="settings_screen_background">#FFFFFFFF</color>
+    <color name="dark_blue">#3772E7</color>
+    <color name="hint_gray">#AEAFB4</color>
 
 </resources>
