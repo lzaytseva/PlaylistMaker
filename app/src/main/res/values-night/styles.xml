@@ -4,8 +4,8 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_weight">1</item>
-        <item name="android:layout_marginStart">17dp</item>
-        <item name="android:layout_marginEnd">15dp</item>
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:layout_marginEnd">16dp</item>
         <item name="android:layout_marginBottom">16dp</item>
         <item name="backgroundTint">@color/white</item>
         <item name="cornerRadius">@dimen/btn_corners_radius</item>
@@ -21,7 +21,7 @@
     <style name="ArrowBackStyle">
         <item name="android:layout_width">16dp</item>
         <item name="android:layout_height">16dp</item>
-        <item name="android:layout_marginStart">20dp</item>
+        <item name="android:layout_marginStart">4dp</item>
         <item name="android:layout_gravity">center</item>
         <item name="android:contentDescription">@string/go_back</item>
         <item name="android:src">@drawable/arrow_back</item>
