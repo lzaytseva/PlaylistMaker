@@ -13,12 +13,15 @@ class SearchActivity : AppCompatActivity() {
 
     var savedSearchRequest = ""
     private lateinit var searchEditText: EditText
+    private lateinit var backButton: ImageView
+    private lateinit var clearButton: ImageView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
-        val backButton = findViewById<ImageView>(R.id.arrow_back)
-        val clearButton = findViewById<ImageView>(R.id.btn_clear)
+        backButton = findViewById(R.id.arrow_back)
+        clearButton = findViewById(R.id.btn_clear)
         searchEditText = findViewById(R.id.search_edit_text)
 
         searchEditText.setText(savedSearchRequest)
@@ -58,10 +61,6 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-    companion object {
-        const val SEARCH_ET_TEXT = "SEARCH_ET_TEXT"
-    }
-
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
         savedSearchRequest = savedInstanceState.getString(SEARCH_ET_TEXT, "")
@@ -70,5 +69,9 @@ class SearchActivity : AppCompatActivity() {
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString(SEARCH_ET_TEXT, savedSearchRequest)
+    }
+
+    companion object {
+        const val SEARCH_ET_TEXT = "SEARCH_ET_TEXT"
     }
 }
