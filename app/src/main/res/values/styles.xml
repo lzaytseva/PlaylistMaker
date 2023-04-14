@@ -43,7 +43,7 @@
     <style name="ArrowBackStyle">
         <item name="android:layout_width">16dp</item>
         <item name="android:layout_height">16dp</item>
-        <item name="android:layout_marginStart">20dp</item>
+        <item name="android:layout_marginStart">4dp</item>
         <item name="android:layout_gravity">center</item>
         <item name="android:contentDescription">@string/go_back</item>
         <item name="android:src">@drawable/arrow_back</item>
