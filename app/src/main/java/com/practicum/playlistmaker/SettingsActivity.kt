@@ -34,9 +34,8 @@ class SettingsActivity: AppCompatActivity() {
             action = Intent.ACTION_SEND
             putExtra(Intent.EXTRA_TEXT, message)
             type = "text/plain"
+            startActivity(this)
         }
-
-        startActivity(shareIntent)
     }
 
     private fun startContactSupportActivity() {
@@ -50,13 +49,16 @@ class SettingsActivity: AppCompatActivity() {
             putExtra(Intent.EXTRA_EMAIL, arrayOf(emailTo))
             putExtra(Intent.EXTRA_SUBJECT, emailSubject)
             putExtra(Intent.EXTRA_TEXT, emailText)
+            startActivity(this)
         }
-
-        startActivity(sendIntent)
     }
     private fun startOpenUserAgreementActivity() {
         val url = getString(R.string.practicum_offer)
-        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-        startActivity(browserIntent)
+
+        val browserIntent = Intent().apply {
+            action = Intent.ACTION_VIEW
+            data = Uri.parse(url)
+            startActivity(this)
+        }
     }
 }
