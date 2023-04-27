@@ -7,6 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmaker.R
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 
 class TrackViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
 
@@ -21,7 +22,8 @@ class TrackViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         duration.text = model.trackTime
         Glide.with(itemView)
             .load(model.artworkUrl100)
-            //.placeholder(R.drawable.barsik)
+            .placeholder(R.drawable.album_placeholder)
+            .transform(RoundedCorners(10))
             .into(albumCover)
     }
 }
