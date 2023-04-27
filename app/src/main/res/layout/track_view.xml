@@ -23,7 +23,7 @@
         android:layout_marginStart="8dp"
         app:layout_constraintStart_toEndOf="@id/iv_album_cover"
         app:layout_constraintTop_toTopOf="parent"
-        android:textColor="@color/black"
+        android:textColor="?attr/colorOnPrimary"
         android:fontFamily="@font/ys_display_regular"
         android:textSize="16sp"
         tools:text="Yesterday" />
@@ -38,7 +38,7 @@
         app:layout_constraintTop_toBottomOf="@id/tv_song_title"
         android:fontFamily="@font/ys_display_regular"
         android:textSize="11sp"
-        android:textColor="@color/gray"
+        android:textColor="?attr/colorSecondary"
         tools:text="The Beatles" />
 
     <ImageView
@@ -49,6 +49,7 @@
         app:layout_constraintStart_toEndOf="@id/tv_artist"
         app:layout_constraintTop_toTopOf="@id/tv_artist"
         app:layout_constraintBottom_toBottomOf="@id/tv_artist"
+        app:tint="?attr/colorSecondary"
         android:src="@drawable/ellipse" />
 
     <TextView
@@ -61,7 +62,7 @@
         app:layout_constraintTop_toBottomOf="@id/tv_song_title"
         android:fontFamily="@font/ys_display_regular"
         android:textSize="11sp"
-        android:textColor="@color/gray"
+        android:textColor="?attr/colorSecondary"
         tools:text="4:21" />
 
     <ImageView
@@ -69,6 +70,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:src="@drawable/arrow_forward"
+        app:tint="?attr/colorSecondary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent" />

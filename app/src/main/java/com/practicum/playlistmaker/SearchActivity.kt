@@ -27,15 +27,10 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
-        backButton = findViewById(R.id.arrow_back)
         clearButton = findViewById(R.id.btn_clear)
         searchEditText = findViewById(R.id.search_edit_text)
 
         searchEditText.setText(savedSearchRequest)
-
-        backButton.setOnClickListener {
-            finish()
-        }
 
         searchEditText.addTextChangedListener (object: TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -70,7 +65,6 @@ class SearchActivity : AppCompatActivity() {
 
         val trackAdapter = TrackAdapter(tracksList)
         recyclerView.adapter = trackAdapter
-
 
     }
 
