@@ -1,13 +1,20 @@
 package com.practicum.playlistmaker
 
+import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.practicum.playlistmaker.track.Track
+import com.practicum.playlistmaker.track.TrackAdapter
+import com.practicum.playlistmaker.track.getTrackList
 
 class SearchActivity : AppCompatActivity() {
 
@@ -50,7 +57,21 @@ class SearchActivity : AppCompatActivity() {
         clearButton.setOnClickListener {
             searchEditText.setText("")
             savedSearchRequest = ""
+
+            val keyboard = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            keyboard.hideSoftInputFromWindow(searchEditText.windowToken, 0) // скрыть клавиатуру
+            searchEditText.clearFocus()
         }
+
+        val recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+
+        val tracksList: ArrayList<Track> = getTrackList()
+
+        val trackAdapter = TrackAdapter(tracksList)
+        recyclerView.adapter = trackAdapter
+
+
     }
 
     private fun clearButtonVisibility(s: CharSequence?): Int {
