@@ -13,9 +13,7 @@ class TrackAdapter(
         return TrackViewHolder(view)
     }
 
-    override fun getItemCount(): Int {
-        return tracksList.size
-    }
+    override fun getItemCount() = tracksList.size
 
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
         holder.bind(tracksList[position])

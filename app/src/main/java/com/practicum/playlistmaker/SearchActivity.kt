@@ -20,8 +20,8 @@ class SearchActivity : AppCompatActivity() {
 
     var savedSearchRequest = ""
     private lateinit var searchEditText: EditText
-    private lateinit var backButton: ImageView
     private lateinit var clearButton: ImageView
+    private lateinit var recyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,7 +58,7 @@ class SearchActivity : AppCompatActivity() {
             searchEditText.clearFocus()
         }
 
-        val recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
+        recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
         val tracksList: ArrayList<Track> = getTrackList()
