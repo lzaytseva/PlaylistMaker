@@ -7,7 +7,7 @@
         android:left="36dp"
         android:right="33dp"/>
     <solid
-        android:color="#E6E8EB"/>
+        android:color="@color/et_search_color"/>
     <corners
         android:radius="8dp" />
 </shape>

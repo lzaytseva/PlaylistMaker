@@ -3,10 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:paddingStart="16dp"
     android:paddingEnd="21dp"
-    android:orientation="vertical"
-    android:background="@color/settings_screen_background">
+    android:orientation="vertical">
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,6 +22,7 @@
 
         <TextView
             style="@style/HeaderStyle"
+            android:layout_marginStart="28dp"
             android:text="@string/settings"/>
 
     </LinearLayout>
@@ -36,7 +38,8 @@
         <com.google.android.material.switchmaterial.SwitchMaterial
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end|center" />
+            android:layout_gravity="end|center"
+            android:checked="false" />
 
     </FrameLayout>
 
@@ -54,6 +57,7 @@
             android:layout_height="18dp"
             android:layout_gravity="end|center"
             android:src="@drawable/share"
+            app:tint="?attr/colorSecondary"
             android:contentDescription="@string/share_app" />
 
     </FrameLayout>
@@ -72,6 +76,7 @@
             android:layout_height="18dp"
             android:layout_gravity="end|center"
             android:src="@drawable/support"
+            app:tint="?attr/colorSecondary"
             android:contentDescription="@string/contact_support" />
 
     </FrameLayout>
@@ -90,6 +95,7 @@
             android:layout_height="18dp"
             android:layout_gravity="end|center"
             android:src="@drawable/arrow_forward"
+            app:tint="?attr/colorSecondary"
             android:contentDescription="@string/go_forward" />
 
     </FrameLayout>

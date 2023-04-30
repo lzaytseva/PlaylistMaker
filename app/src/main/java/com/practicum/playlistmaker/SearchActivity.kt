@@ -1,34 +1,36 @@
 package com.practicum.playlistmaker
 
+import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.practicum.playlistmaker.track.Track
+import com.practicum.playlistmaker.track.TrackAdapter
+import com.practicum.playlistmaker.track.getTrackList
 
 class SearchActivity : AppCompatActivity() {
 
     var savedSearchRequest = ""
     private lateinit var searchEditText: EditText
-    private lateinit var backButton: ImageView
     private lateinit var clearButton: ImageView
+    private lateinit var recyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
-        backButton = findViewById(R.id.arrow_back)
         clearButton = findViewById(R.id.btn_clear)
         searchEditText = findViewById(R.id.search_edit_text)
 
         searchEditText.setText(savedSearchRequest)
-
-        backButton.setOnClickListener {
-            finish()
-        }
 
         searchEditText.addTextChangedListener (object: TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -50,7 +52,20 @@ class SearchActivity : AppCompatActivity() {
         clearButton.setOnClickListener {
             searchEditText.setText("")
             savedSearchRequest = ""
+
+            val keyboard = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            keyboard.hideSoftInputFromWindow(searchEditText.windowToken, 0) // скрыть клавиатуру
+            searchEditText.clearFocus()
         }
+
+        recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+
+        val tracksList: ArrayList<Track> = getTrackList()
+
+        val trackAdapter = TrackAdapter(tracksList)
+        recyclerView.adapter = trackAdapter
+
     }
 
     private fun clearButtonVisibility(s: CharSequence?): Int {
