@@ -1,15 +1,14 @@
 package com.practicum.playlistmaker
 
 import android.content.Context
+import android.content.res.Configuration
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
-import android.widget.ImageView
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -39,13 +38,16 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var searchEditText: EditText
     private lateinit var clearButton: ImageView
     private lateinit var recyclerView: RecyclerView
+    private lateinit var placeholderError: LinearLayout
+    private lateinit var placeholderImage: ImageView
+    private lateinit var placeholderMessage: TextView
+    private lateinit var refreshButton: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
-
-        clearButton = findViewById(R.id.btn_clear)
-        searchEditText = findViewById(R.id.search_edit_text)
+        initViews()
+        buildRecyclerView()
 
         searchEditText.setText(savedSearchRequest)
 
@@ -80,14 +82,31 @@ class SearchActivity : AppCompatActivity() {
             val keyboard = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             keyboard.hideSoftInputFromWindow(searchEditText.windowToken, 0) // скрыть клавиатуру
             searchEditText.clearFocus()
+
+            tracksList.clear()
+            adapter.notifyDataSetChanged()
         }
 
-        recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
-        recyclerView.layoutManager = LinearLayoutManager(this)
+        refreshButton.setOnClickListener {
+            search()
+        }
 
+    }
+
+    private fun initViews() {
+        clearButton = findViewById(R.id.btn_clear)
+        searchEditText = findViewById(R.id.search_edit_text)
+        recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
+        placeholderError = findViewById(R.id.placeHolderError)
+        placeholderImage = findViewById(R.id.placeHolderImage)
+        placeholderMessage = findViewById(R.id.placeholderMessage)
+        refreshButton = findViewById(R.id.button_refresh)
+    }
+
+    private fun buildRecyclerView() {
+        recyclerView.layoutManager = LinearLayoutManager(this)
         adapter.tracksList = tracksList
         recyclerView.adapter = adapter
-
     }
 
     private fun search() {
@@ -104,21 +123,54 @@ class SearchActivity : AppCompatActivity() {
                             adapter.notifyDataSetChanged()
                         }
                         if (tracksList.isEmpty()) {
-                            Log.d("SearchActivity", "Ничего не найдено")
+                            showMessage(getString(R.string.nothing_found))
+
                         } else {
-                            //убрать плейсхолдеры
+                            placeholderError.visibility = View.GONE
                         }
                     }
                     else {
-                        Log.d("SearchActivity", response.code().toString())
+                        showMessage(getString(R.string.check_connection))
                     }
                 }
 
                 override fun onFailure(call: Call<SearchTracksResponse>, t: Throwable) {
-                    Log.d("SearchActivity", t.message!!)
+                    showMessage(getString(R.string.check_connection))
                 }
 
             })
+    }
+
+    private fun showMessage(text: String) {
+        if (text.isNotEmpty()) {
+            placeholderError.visibility = View.VISIBLE
+            tracksList.clear()
+            adapter.notifyDataSetChanged()
+            placeholderMessage.text = text
+            setPlaceHolderImage(text)
+        } else {
+            placeholderMessage.visibility = View.GONE
+        }
+    }
+
+    private fun setPlaceHolderImage(text: String) {
+        val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        when (currentNightMode) {
+            Configuration.UI_MODE_NIGHT_NO -> {
+                if (text.equals(getString(R.string.nothing_found))) {
+                    placeholderImage.setImageResource(R.drawable.light_mode_empty)
+                } else {
+                    placeholderImage.setImageResource(R.drawable.light_mode_no_internet)
+                }
+            }
+            Configuration.UI_MODE_NIGHT_YES -> {
+                if (text.equals(getString(R.string.nothing_found))) {
+                    placeholderImage.setImageResource(R.drawable.dark_mode_emtpty)
+                } else {
+                    placeholderImage.setImageResource(R.drawable.dark_mode_no_internet)
+                }
+            }
+        }
     }
 
     private fun clearButtonVisibility(s: CharSequence?): Int {
