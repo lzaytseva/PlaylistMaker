@@ -32,6 +32,8 @@
             android:id="@+id/search_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:imeOptions="actionDone"
+            android:singleLine="true"
             android:inputType="text"
             android:importantForAutofill="no"
             android:hint="@string/search"
