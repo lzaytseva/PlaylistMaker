@@ -85,6 +85,7 @@ class SearchActivity : AppCompatActivity() {
 
             tracksList.clear()
             adapter.notifyDataSetChanged()
+            placeholderError.visibility = View.GONE
         }
 
         refreshButton.setOnClickListener {
@@ -96,7 +97,7 @@ class SearchActivity : AppCompatActivity() {
     private fun initViews() {
         clearButton = findViewById(R.id.btn_clear)
         searchEditText = findViewById(R.id.search_edit_text)
-        recyclerView = findViewById<RecyclerView>(R.id.recycler_view)
+        recyclerView = findViewById(R.id.recycler_view)
         placeholderError = findViewById(R.id.placeHolderError)
         placeholderImage = findViewById(R.id.placeHolderImage)
         placeholderMessage = findViewById(R.id.placeholderMessage)
@@ -142,15 +143,19 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun showMessage(text: String) {
-        if (text.isNotEmpty()) {
-            placeholderError.visibility = View.VISIBLE
-            tracksList.clear()
-            adapter.notifyDataSetChanged()
-            placeholderMessage.text = text
-            setPlaceHolderImage(text)
-        } else {
-            placeholderMessage.visibility = View.GONE
+        placeholderError.visibility = View.VISIBLE
+        if (text.equals(getString(R.string.nothing_found))) {
+            refreshButton.visibility = View.INVISIBLE
         }
+        tracksList.clear()
+        adapter.notifyDataSetChanged()
+        placeholderMessage.text = text
+        setPlaceHolderImage(text)
+    }
+
+    private fun isNightMode():Boolean {
+        val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+        return currentNightMode == Configuration.UI_MODE_NIGHT_YES
     }
 
     private fun setPlaceHolderImage(text: String) {
