@@ -3,6 +3,7 @@ package com.practicum.playlistmaker
 import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
+import android.provider.ContactsContract.CommonDataKinds.Im
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -12,6 +13,7 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.practicum.playlistmaker.api.ApiFactory
 import com.practicum.playlistmaker.api.ItunesApi
 import com.practicum.playlistmaker.api.SearchTracksResponse
 import com.practicum.playlistmaker.track.Track
@@ -23,13 +25,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class SearchActivity : AppCompatActivity() {
-
-    private val BASE_URL = "https://itunes.apple.com/"
-    private val retrofit: Retrofit = Retrofit.Builder()
-        .baseUrl(BASE_URL)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-    val itunesService: ItunesApi = retrofit.create(ItunesApi::class.java)
+    private val itunesService = ApiFactory.itunesService
 
     private val tracksList = ArrayList<Track>()
     private val adapter = TrackAdapter()
@@ -42,6 +38,7 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var placeholderImage: ImageView
     private lateinit var placeholderMessage: TextView
     private lateinit var refreshButton: Button
+    private lateinit var arrowBack: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,7 +61,6 @@ class SearchActivity : AppCompatActivity() {
                 //empty
                 savedSearchRequest = s.toString()
             }
-
         })
 
         searchEditText.setOnEditorActionListener { _, actionId, _ ->
@@ -92,6 +88,10 @@ class SearchActivity : AppCompatActivity() {
             search()
         }
 
+        arrowBack.setOnClickListener {
+            finish()
+        }
+
     }
 
     private fun initViews() {
@@ -102,6 +102,7 @@ class SearchActivity : AppCompatActivity() {
         placeholderImage = findViewById(R.id.placeHolderImage)
         placeholderMessage = findViewById(R.id.placeholderMessage)
         refreshButton = findViewById(R.id.button_refresh)
+        arrowBack = findViewById(R.id.arrow_back)
     }
 
     private fun buildRecyclerView() {
@@ -134,17 +135,15 @@ class SearchActivity : AppCompatActivity() {
                         showMessage(getString(R.string.check_connection))
                     }
                 }
-
                 override fun onFailure(call: Call<SearchTracksResponse>, t: Throwable) {
                     showMessage(getString(R.string.check_connection))
                 }
-
             })
     }
 
     private fun showMessage(text: String) {
         placeholderError.visibility = View.VISIBLE
-        if (text.equals(getString(R.string.nothing_found))) {
+        if (text == getString(R.string.nothing_found)) {
             refreshButton.visibility = View.INVISIBLE
         }
         tracksList.clear()
@@ -153,27 +152,24 @@ class SearchActivity : AppCompatActivity() {
         setPlaceHolderImage(text)
     }
 
-    private fun isNightMode():Boolean {
+    private fun isNightMode(): Boolean {
         val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
         return currentNightMode == Configuration.UI_MODE_NIGHT_YES
     }
 
     private fun setPlaceHolderImage(text: String) {
-        val currentNightMode = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
-        when (currentNightMode) {
-            Configuration.UI_MODE_NIGHT_NO -> {
-                if (text.equals(getString(R.string.nothing_found))) {
-                    placeholderImage.setImageResource(R.drawable.light_mode_empty)
-                } else {
-                    placeholderImage.setImageResource(R.drawable.light_mode_no_internet)
-                }
+        when (text) {
+            getString(R.string.nothing_found) -> {
+                placeholderImage.setImageResource(
+                    if (isNightMode()) R.drawable.dark_mode_emtpty
+                    else R.drawable.light_mode_empty
+                )
             }
-            Configuration.UI_MODE_NIGHT_YES -> {
-                if (text.equals(getString(R.string.nothing_found))) {
-                    placeholderImage.setImageResource(R.drawable.dark_mode_emtpty)
-                } else {
-                    placeholderImage.setImageResource(R.drawable.dark_mode_no_internet)
-                }
+            getString(R.string.check_connection) -> {
+                placeholderImage.setImageResource(
+                    if (isNightMode()) R.drawable.dark_mode_no_internet
+                    else R.drawable.light_mode_no_internet
+                )
             }
         }
     }
