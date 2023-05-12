@@ -3,26 +3,21 @@ package com.practicum.playlistmaker
 import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
-import android.provider.ContactsContract.CommonDataKinds.Im
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmaker.api.ApiFactory
-import com.practicum.playlistmaker.api.ItunesApi
 import com.practicum.playlistmaker.api.SearchTracksResponse
+import com.practicum.playlistmaker.databinding.ActivitySearchBinding
 import com.practicum.playlistmaker.track.Track
 import com.practicum.playlistmaker.track.TrackAdapter
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 class SearchActivity : AppCompatActivity() {
     private val itunesService = ApiFactory.itunesService
@@ -31,30 +26,25 @@ class SearchActivity : AppCompatActivity() {
     private val adapter = TrackAdapter()
 
     var savedSearchRequest = ""
-    private lateinit var searchEditText: EditText
-    private lateinit var clearButton: ImageView
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var placeholderError: LinearLayout
-    private lateinit var placeholderImage: ImageView
-    private lateinit var placeholderMessage: TextView
-    private lateinit var refreshButton: Button
-    private lateinit var arrowBack: ImageView
+
+    private lateinit var binding: ActivitySearchBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_search)
-        initViews()
+        binding = ActivitySearchBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
         buildRecyclerView()
 
-        searchEditText.setText(savedSearchRequest)
+        binding.searchEditText.setText(savedSearchRequest)
 
-        searchEditText.addTextChangedListener (object: TextWatcher {
+        binding.searchEditText.addTextChangedListener (object: TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 //empty
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                clearButton.visibility = clearButtonVisibility(s)
+                binding.btnClear.visibility = clearButtonVisibility(s)
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -63,7 +53,7 @@ class SearchActivity : AppCompatActivity() {
             }
         })
 
-        searchEditText.setOnEditorActionListener { _, actionId, _ ->
+        binding.searchEditText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 search()
                 true
@@ -71,48 +61,37 @@ class SearchActivity : AppCompatActivity() {
             false
         }
 
-        clearButton.setOnClickListener {
-            searchEditText.setText("")
+        binding.btnClear.setOnClickListener {
+            binding.searchEditText.setText("")
             savedSearchRequest = ""
 
             val keyboard = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            keyboard.hideSoftInputFromWindow(searchEditText.windowToken, 0) // скрыть клавиатуру
-            searchEditText.clearFocus()
+            keyboard.hideSoftInputFromWindow(binding.searchEditText.windowToken, 0) // скрыть клавиатуру
+            binding.searchEditText.clearFocus()
 
             tracksList.clear()
             adapter.notifyDataSetChanged()
-            placeholderError.visibility = View.GONE
+            binding.placeholderError.visibility = View.GONE
         }
 
-        refreshButton.setOnClickListener {
+        binding.btnRefresh.setOnClickListener {
             search()
         }
 
-        arrowBack.setOnClickListener {
+        binding.btnBack.setOnClickListener {
             finish()
         }
 
     }
 
-    private fun initViews() {
-        clearButton = findViewById(R.id.btn_clear)
-        searchEditText = findViewById(R.id.search_edit_text)
-        recyclerView = findViewById(R.id.recycler_view)
-        placeholderError = findViewById(R.id.placeHolderError)
-        placeholderImage = findViewById(R.id.placeHolderImage)
-        placeholderMessage = findViewById(R.id.placeholderMessage)
-        refreshButton = findViewById(R.id.button_refresh)
-        arrowBack = findViewById(R.id.arrow_back)
-    }
-
     private fun buildRecyclerView() {
-        recyclerView.layoutManager = LinearLayoutManager(this)
+        binding.recyclerView.layoutManager = LinearLayoutManager(this)
         adapter.tracksList = tracksList
-        recyclerView.adapter = adapter
+        binding.recyclerView.adapter = adapter
     }
 
     private fun search() {
-        itunesService.search(searchEditText.text.toString())
+        itunesService.search(binding.searchEditText.text.toString())
             .enqueue(object: Callback<SearchTracksResponse> {
                 override fun onResponse(
                     call: Call<SearchTracksResponse>,
@@ -128,7 +107,7 @@ class SearchActivity : AppCompatActivity() {
                             showMessage(getString(R.string.nothing_found))
 
                         } else {
-                            placeholderError.visibility = View.GONE
+                            binding.placeholderError.visibility = View.GONE
                         }
                     }
                     else {
@@ -142,13 +121,13 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun showMessage(text: String) {
-        placeholderError.visibility = View.VISIBLE
+        binding.placeholderError.visibility = View.VISIBLE
         if (text == getString(R.string.nothing_found)) {
-            refreshButton.visibility = View.INVISIBLE
+            binding.btnRefresh.visibility = View.INVISIBLE
         }
         tracksList.clear()
         adapter.notifyDataSetChanged()
-        placeholderMessage.text = text
+        binding.placeholderMessage.text = text
         setPlaceHolderImage(text)
     }
 
@@ -160,13 +139,13 @@ class SearchActivity : AppCompatActivity() {
     private fun setPlaceHolderImage(text: String) {
         when (text) {
             getString(R.string.nothing_found) -> {
-                placeholderImage.setImageResource(
+                binding.placeholderImage.setImageResource(
                     if (isNightMode()) R.drawable.dark_mode_emtpty
                     else R.drawable.light_mode_empty
                 )
             }
             getString(R.string.check_connection) -> {
-                placeholderImage.setImageResource(
+                binding.placeholderImage.setImageResource(
                     if (isNightMode()) R.drawable.dark_mode_no_internet
                     else R.drawable.light_mode_no_internet
                 )
