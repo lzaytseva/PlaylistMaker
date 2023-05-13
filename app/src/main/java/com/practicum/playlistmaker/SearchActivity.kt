@@ -25,7 +25,7 @@ class SearchActivity : AppCompatActivity() {
     private val tracksList = ArrayList<Track>()
     private val adapter = TrackAdapter()
 
-    var savedSearchRequest = ""
+    private var savedSearchRequest = ""
 
     private lateinit var binding: ActivitySearchBinding
 
@@ -101,34 +101,38 @@ class SearchActivity : AppCompatActivity() {
                         tracksList.clear()
                         if (response.body()?.tracks?.isNotEmpty() == true) {
                             tracksList.addAll(response.body()?.tracks!!)
-                            adapter.notifyDataSetChanged()
+                            showResult(LoadingState.SUCCESS)
                         }
                         if (tracksList.isEmpty()) {
-                            showMessage(getString(R.string.nothing_found))
-
-                        } else {
-                            binding.placeholderError.visibility = View.GONE
+                            showResult(LoadingState.NOTHING_FOUND)
                         }
                     }
                     else {
-                        showMessage(getString(R.string.check_connection))
+                        showResult(LoadingState.NO_INTERNET)
                     }
                 }
                 override fun onFailure(call: Call<SearchTracksResponse>, t: Throwable) {
-                    showMessage(getString(R.string.check_connection))
+                    showResult(LoadingState.NO_INTERNET)
                 }
             })
     }
 
-    private fun showMessage(text: String) {
-        binding.placeholderError.visibility = View.VISIBLE
-        if (text == getString(R.string.nothing_found)) {
-            binding.btnRefresh.visibility = View.INVISIBLE
+    private fun showResult(state: LoadingState) {
+        if (state == LoadingState.SUCCESS) {
+            adapter.notifyDataSetChanged()
+            binding.placeholderError.visibility = View.GONE
+        } else {
+            binding.placeholderError.visibility = View.VISIBLE
+            if (state == LoadingState.NOTHING_FOUND) {
+                binding.btnRefresh.visibility = View.INVISIBLE
+                binding.placeholderMessage.text = getString(R.string.nothing_found)
+            } else if (state == LoadingState.NO_INTERNET) {
+                binding.placeholderMessage.text = getString(R.string.check_connection)
+            }
+            tracksList.clear()
+            adapter.notifyDataSetChanged()
+            setPlaceHolderImage(state)
         }
-        tracksList.clear()
-        adapter.notifyDataSetChanged()
-        binding.placeholderMessage.text = text
-        setPlaceHolderImage(text)
     }
 
     private fun isNightMode(): Boolean {
@@ -136,20 +140,18 @@ class SearchActivity : AppCompatActivity() {
         return currentNightMode == Configuration.UI_MODE_NIGHT_YES
     }
 
-    private fun setPlaceHolderImage(text: String) {
-        when (text) {
-            getString(R.string.nothing_found) -> {
-                binding.placeholderImage.setImageResource(
-                    if (isNightMode()) R.drawable.dark_mode_emtpty
-                    else R.drawable.light_mode_empty
-                )
-            }
-            getString(R.string.check_connection) -> {
-                binding.placeholderImage.setImageResource(
-                    if (isNightMode()) R.drawable.dark_mode_no_internet
-                    else R.drawable.light_mode_no_internet
-                )
-            }
+    private fun setPlaceHolderImage(state: LoadingState) {
+        if (state == LoadingState.NOTHING_FOUND) {
+            binding.placeholderImage.setImageResource(
+                if (isNightMode()) R.drawable.dark_mode_emtpty
+                else R.drawable.light_mode_empty
+            )
+        }
+        else if (state == LoadingState.NO_INTERNET) {
+            binding.placeholderImage.setImageResource(
+                if (isNightMode()) R.drawable.dark_mode_no_internet
+                else R.drawable.light_mode_no_internet
+            )
         }
     }
 
