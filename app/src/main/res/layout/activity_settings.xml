@@ -18,7 +18,7 @@
 
         <ImageView
             style="@style/ArrowBackStyle"
-            android:id="@+id/arrow_back"/>
+            android:id="@+id/btn_back"/>
 
         <TextView
             style="@style/HeaderStyle"
