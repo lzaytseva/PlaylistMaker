@@ -106,8 +106,9 @@ class SearchActivity : AppCompatActivity() {
 
             binding.placeholderError.visibility = View.GONE
 
-
-            binding.viewGroupHistorySearch.visibility = View.VISIBLE
+            if (tracksInHistory.isNotEmpty()) {
+                binding.viewGroupHistorySearch.visibility = View.VISIBLE
+            }
         }
 
         binding.btnRefresh.setOnClickListener {
@@ -127,7 +128,7 @@ class SearchActivity : AppCompatActivity() {
         val listener =
             SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key ->
                 if (key == HISTORY_LIST_KEY) {
-                    val history = sharedPreferences?.getString(key, null)
+                    val history = sharedPreferences?.getString(HISTORY_LIST_KEY, null)
                     if (history != null) {
                         tracksInHistory.clear()
                         tracksInHistory.addAll(searchHistory.createTracksListFromJson(history))
