@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker
+package com.practicum.playlistmaker.presentation
 
 import android.content.Context
 import android.content.res.Configuration
@@ -10,6 +10,7 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.api.ApiFactory
 import com.practicum.playlistmaker.api.SearchTracksResponse
 import com.practicum.playlistmaker.databinding.ActivitySearchBinding
@@ -142,16 +143,10 @@ class SearchActivity : AppCompatActivity() {
 
     private fun setPlaceHolderImage(state: LoadingState) {
         if (state == LoadingState.NOTHING_FOUND) {
-            binding.placeholderImage.setImageResource(
-                if (isNightMode()) R.drawable.dark_mode_emtpty
-                else R.drawable.light_mode_empty
-            )
+            binding.placeholderImage.setImageResource(R.drawable.ic_empty)
         }
         else if (state == LoadingState.NO_INTERNET) {
-            binding.placeholderImage.setImageResource(
-                if (isNightMode()) R.drawable.dark_mode_no_internet
-                else R.drawable.light_mode_no_internet
-            )
+            binding.placeholderImage.setImageResource(R.drawable.ic_no_internet)
         }
     }
 
