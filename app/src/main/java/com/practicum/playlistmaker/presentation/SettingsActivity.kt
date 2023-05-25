@@ -5,6 +5,7 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.app.App
 import com.practicum.playlistmaker.databinding.ActivitySettingsBinding
 
 class SettingsActivity: AppCompatActivity() {
@@ -24,6 +25,12 @@ class SettingsActivity: AppCompatActivity() {
         binding.bthContactSupport.setOnClickListener { startContactSupportActivity() }
 
         binding.btnUserAgreement.setOnClickListener { startOpenUserAgreementActivity() }
+
+        binding.switchDarkMode.isChecked = (applicationContext as App).darkTheme
+
+        binding.switchDarkMode.setOnCheckedChangeListener { switch, isChecked ->
+            (applicationContext as App).switchTheme(isChecked)
+        }
     }
 
     private fun startShareAppActivity() {
