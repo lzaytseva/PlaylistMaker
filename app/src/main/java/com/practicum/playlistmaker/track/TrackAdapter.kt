@@ -22,7 +22,6 @@ class TrackAdapter() : RecyclerView.Adapter<TrackViewHolder>() {
 
         holder.itemView.setOnClickListener {
             onTrackClicked?.invoke(tracksList[position])
-            Log.d("SearchActivity", "item was clicked")
         }
     }
 

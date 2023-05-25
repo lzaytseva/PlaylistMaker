@@ -31,6 +31,8 @@ class SearchActivity : AppCompatActivity() {
     private val adapter = TrackAdapter()
     private val searchHistoryAdapter = TrackAdapter()
 
+    private lateinit var listener: SharedPreferences.OnSharedPreferenceChangeListener
+
     private var savedSearchRequest = ""
 
     private lateinit var binding: ActivitySearchBinding
@@ -125,7 +127,7 @@ class SearchActivity : AppCompatActivity() {
         }
 
 
-        val listener =
+        listener =
             SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key ->
                 if (key == HISTORY_LIST_KEY) {
                     val history = sharedPreferences?.getString(HISTORY_LIST_KEY, null)
