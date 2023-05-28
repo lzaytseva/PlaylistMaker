@@ -5,8 +5,6 @@ import android.util.Log
 import com.google.gson.Gson
 import com.practicum.playlistmaker.track.Track
 
-const val HISTORY_LIST_KEY = "history_list_key"
-
 class SearchHistory(private val sharedPrefs: SharedPreferences) {
     val savedTracks = ArrayList<Track>()
 
@@ -21,7 +19,7 @@ class SearchHistory(private val sharedPrefs: SharedPreferences) {
         if (savedTracks.contains(track)) {
             savedTracks.remove(track)
         }
-        if (savedTracks.size == 10) {
+        if (savedTracks.size == MAX_NUMBER_OF_TRACKS) {
             savedTracks.removeLast();
         }
         savedTracks.add(0, track)
@@ -44,6 +42,11 @@ class SearchHistory(private val sharedPrefs: SharedPreferences) {
         sharedPrefs.edit()
             .remove(HISTORY_LIST_KEY)
             .apply()
+    }
+
+    companion object {
+        const val HISTORY_LIST_KEY = "history_list_key"
+        const val MAX_NUMBER_OF_TRACKS = 10
     }
 
 }
