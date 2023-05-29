@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.practicum.playlistmaker.R
 
-class TrackAdapter() : RecyclerView.Adapter<TrackViewHolder>() {
+class TrackAdapter : RecyclerView.Adapter<TrackViewHolder>() {
     var tracksList = ArrayList<Track>()
     var onTrackClicked: ((Track) -> Unit)? = null
 
@@ -24,5 +24,4 @@ class TrackAdapter() : RecyclerView.Adapter<TrackViewHolder>() {
             onTrackClicked?.invoke(tracksList[position])
         }
     }
-
 }

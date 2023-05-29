@@ -24,6 +24,8 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class SearchActivity : AppCompatActivity() {
+    private lateinit var binding: ActivitySearchBinding
+
     private val itunesService = ApiFactory.itunesService
 
     private val tracksInHistory = ArrayList<Track>()
@@ -31,13 +33,10 @@ class SearchActivity : AppCompatActivity() {
     private val adapter = TrackAdapter()
     private val searchHistoryAdapter = TrackAdapter()
 
-    private lateinit var listener: SharedPreferences.OnSharedPreferenceChangeListener
-
     private var savedSearchRequest = ""
 
-    private lateinit var binding: ActivitySearchBinding
-
     private lateinit var sharedPrefs: SharedPreferences
+    private lateinit var listener: SharedPreferences.OnSharedPreferenceChangeListener
     private lateinit var searchHistory: SearchHistory
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -121,11 +120,9 @@ class SearchActivity : AppCompatActivity() {
             finish()
         }
 
-
         if (tracksInHistory.isNotEmpty()) {
             binding.viewGroupHistorySearch.visibility = View.VISIBLE
         }
-
 
         listener =
             SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key ->
@@ -149,7 +146,6 @@ class SearchActivity : AppCompatActivity() {
         }
 
     }
-
 
     private fun buildSearchRecyclerView() {
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
