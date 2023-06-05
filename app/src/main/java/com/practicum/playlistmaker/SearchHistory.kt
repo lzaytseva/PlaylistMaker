@@ -1,7 +1,6 @@
 package com.practicum.playlistmaker
 
 import android.content.SharedPreferences
-import android.util.Log
 import com.google.gson.Gson
 import com.practicum.playlistmaker.track.Track
 
@@ -48,5 +47,4 @@ class SearchHistory(private val sharedPrefs: SharedPreferences) {
         const val HISTORY_LIST_KEY = "history_list_key"
         const val MAX_NUMBER_OF_TRACKS = 10
     }
-
 }
