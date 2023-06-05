@@ -5,4 +5,7 @@
     <dimen name="btn_corners_radius">16dp</dimen>
     <dimen name="settings_options_text_padding">21dp</dimen>
     <dimen name="song_desc_text_size">11sp</dimen>
+    <dimen name="placeholders_text_size">19sp</dimen>
+    <dimen name="search_field_text_size">16sp</dimen>
+    <dimen name="views_bottom_margin_search_history">24dp</dimen>
 </resources>

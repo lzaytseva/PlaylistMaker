@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="14dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="@dimen/views_bottom_margin_search_history"
         android:paddingStart="3dp"
         tools:ignore="UseCompoundDrawables">
 
@@ -30,7 +30,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="@dimen/views_bottom_margin_search_history"
         android:paddingStart="3dp">
 
         <EditText
@@ -48,7 +48,7 @@
             android:singleLine="true"
             android:textColor="@color/black"
             android:textColorHint="@color/gray"
-            android:textSize="16sp" />
+            android:textSize="@dimen/search_field_text_size" />
 
         <ImageView
             android:id="@+id/btn_search"
@@ -105,11 +105,11 @@
                 android:id="@+id/placeholderMessage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
+                android:layout_marginBottom="@dimen/views_bottom_margin_search_history"
                 android:fontFamily="@font/ys_display_medium"
                 android:textAlignment="center"
                 android:textColor="?attr/colorOnPrimary"
-                android:textSize="19sp"
+                android:textSize="@dimen/placeholders_text_size"
                 tools:text="Проверьте соединение" />
 
             <Button
@@ -144,13 +144,13 @@
                     android:text="@string/search_history_title"
                     android:textAlignment="center"
                     android:textColor="?attr/colorOnPrimary"
-                    android:textSize="19sp" />
+                    android:textSize="@dimen/placeholders_text_size" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycler_view_history"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="24dp"
+                    android:layout_marginBottom="@dimen/views_bottom_margin_search_history"
                     android:nestedScrollingEnabled="false" />
 
                 <Button
