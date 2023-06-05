@@ -1,5 +1,6 @@
 package com.practicum.playlistmaker.presentation
 
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -65,6 +66,12 @@ class SettingsActivity: AppCompatActivity() {
             action = Intent.ACTION_VIEW
             data = Uri.parse(url)
             startActivity(this)
+        }
+    }
+
+    companion object {
+        fun newIntent(context: Context): Intent {
+            return Intent(context, SettingsActivity::class.java)
         }
     }
 }

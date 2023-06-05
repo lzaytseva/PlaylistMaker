@@ -1,12 +1,11 @@
 package com.practicum.playlistmaker.presentation
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
-import android.content.res.Configuration
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -44,73 +43,14 @@ class SearchActivity : AppCompatActivity() {
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        sharedPrefs = getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
-        searchHistory = SearchHistory(sharedPrefs)
-        tracksInHistory.addAll(searchHistory.savedTracks)
+        getHistoryFromSP()
 
         buildSearchRecyclerView()
         buildHistoryRecyclerView()
 
-        binding.searchEditText.setText(savedSearchRequest)
+        setupSearchEditText()
 
-        binding.searchEditText.setOnFocusChangeListener { _, hasFocus ->
-            binding.viewGroupHistorySearch.visibility =
-                if (hasFocus && binding.searchEditText.text.isEmpty() && tracksInHistory.isNotEmpty())
-                    View.VISIBLE
-                else
-                    View.GONE
-        }
-
-        binding.searchEditText.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                //empty
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                binding.btnClear.visibility = clearButtonVisibility(s)
-                if (s != null) {
-                    binding.viewGroupHistorySearch.visibility =
-                        if (binding.searchEditText.hasFocus() && s.isEmpty() && tracksInHistory.isNotEmpty())
-                            View.VISIBLE
-                        else
-                            View.GONE
-                }
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-                //empty
-                savedSearchRequest = s.toString()
-            }
-        })
-
-        binding.searchEditText.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                search()
-                true
-            }
-            false
-        }
-
-        binding.btnClear.setOnClickListener {
-            binding.searchEditText.setText("")
-            savedSearchRequest = ""
-
-            val keyboard = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            keyboard.hideSoftInputFromWindow(
-                binding.searchEditText.windowToken,
-                0
-            ) // скрыть клавиатуру
-            binding.searchEditText.clearFocus()
-
-            tracksList.clear()
-            adapter.notifyDataSetChanged()
-
-            binding.placeholderError.visibility = View.GONE
-
-            if (tracksInHistory.isNotEmpty()) {
-                binding.viewGroupHistorySearch.visibility = View.VISIBLE
-            }
-        }
+        setupBtnClearSearchClickListener()
 
         binding.btnRefresh.setOnClickListener {
             search()
@@ -124,27 +64,105 @@ class SearchActivity : AppCompatActivity() {
             binding.viewGroupHistorySearch.visibility = View.VISIBLE
         }
 
-        listener =
-            SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key ->
-                if (key == HISTORY_LIST_KEY) {
-                    val history = sharedPreferences?.getString(HISTORY_LIST_KEY, null)
-                    if (history != null) {
-                        tracksInHistory.clear()
-                        tracksInHistory.addAll(searchHistory.createTracksListFromJson(history))
-                        searchHistoryAdapter.notifyDataSetChanged()
-                    }
-                }
-            }
+        setupSPChangeListener()
 
-        sharedPrefs.registerOnSharedPreferenceChangeListener(listener)
+        setupBtnClearHistoryClickListener()
+    }
 
+    private fun setupBtnClearHistoryClickListener() {
         binding.btnClearHistory.setOnClickListener {
             searchHistory.clearHistory()
             tracksInHistory.clear()
             binding.viewGroupHistorySearch.visibility = View.GONE
             searchHistoryAdapter.notifyDataSetChanged()
         }
+    }
 
+    private fun setupSPChangeListener() {
+        listener = SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key ->
+            if (key == HISTORY_LIST_KEY) {
+                val history = sharedPreferences?.getString(HISTORY_LIST_KEY, null)
+                if (history != null) {
+                    tracksInHistory.clear()
+                    tracksInHistory.addAll(searchHistory.createTracksListFromJson(history))
+                    searchHistoryAdapter.notifyDataSetChanged()
+                }
+            }
+        }
+        sharedPrefs.registerOnSharedPreferenceChangeListener(listener)
+    }
+
+    private fun setupBtnClearSearchClickListener() {
+        binding.btnClear.setOnClickListener {
+            binding.searchEditText.setText("")
+            savedSearchRequest = ""
+
+            val keyboard = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+            keyboard.hideSoftInputFromWindow(
+                binding.searchEditText.windowToken, 0
+            )
+            binding.searchEditText.clearFocus()
+
+            tracksList.clear()
+            adapter.notifyDataSetChanged()
+
+            binding.placeholderError.visibility = View.GONE
+
+            if (tracksInHistory.isNotEmpty()) {
+                binding.viewGroupHistorySearch.visibility = View.VISIBLE
+            }
+        }
+    }
+
+    private fun setupSearchEditText() {
+        binding.searchEditText.setText(savedSearchRequest)
+        setupFocusChangeListener()
+        setupTextChangedListener()
+        setupEditorActionListener()
+    }
+
+    private fun setupEditorActionListener() {
+        binding.searchEditText.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                search()
+                true
+            }
+            false
+        }
+    }
+
+    private fun setupTextChangedListener() {
+        binding.searchEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                binding.btnClear.visibility = clearButtonVisibility(s)
+                if (s != null) {
+                    binding.viewGroupHistorySearch.visibility =
+                        if (binding.searchEditText.hasFocus() && s.isEmpty() && tracksInHistory.isNotEmpty()) View.VISIBLE
+                        else View.GONE
+                }
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                savedSearchRequest = s.toString()
+            }
+        })
+    }
+
+    private fun setupFocusChangeListener() {
+        binding.searchEditText.setOnFocusChangeListener { _, hasFocus ->
+            binding.viewGroupHistorySearch.visibility =
+                if (hasFocus && binding.searchEditText.text.isEmpty() && tracksInHistory.isNotEmpty()) View.VISIBLE
+                else View.GONE
+        }
+    }
+
+    private fun getHistoryFromSP() {
+        sharedPrefs = getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
+        searchHistory = SearchHistory(sharedPrefs)
+        tracksInHistory.addAll(searchHistory.savedTracks)
     }
 
     private fun buildSearchRecyclerView() {
@@ -164,8 +182,7 @@ class SearchActivity : AppCompatActivity() {
         itunesService.search(binding.searchEditText.text.toString())
             .enqueue(object : Callback<SearchTracksResponse> {
                 override fun onResponse(
-                    call: Call<SearchTracksResponse>,
-                    response: Response<SearchTracksResponse>
+                    call: Call<SearchTracksResponse>, response: Response<SearchTracksResponse>
                 ) {
                     if (response.code() == 200) {
                         tracksList.clear()
@@ -180,7 +197,6 @@ class SearchActivity : AppCompatActivity() {
                         showResult(LoadingState.NO_INTERNET)
                     }
                 }
-
                 override fun onFailure(call: Call<SearchTracksResponse>, t: Throwable) {
                     showResult(LoadingState.NO_INTERNET)
                 }
@@ -233,14 +249,16 @@ class SearchActivity : AppCompatActivity() {
     }
 
     companion object {
-        const val SEARCH_ET_TEXT = "SEARCH_ET_TEXT"
+        const val SEARCH_ET_TEXT = "search_et_text"
         const val PLAYLIST_MAKER_PREFERENCES = "playlist_maker_preferences"
         const val HISTORY_LIST_KEY = "history_list_key"
+
+        fun newIntent(context: Context): Intent {
+            return Intent(context, SearchActivity::class.java)
+        }
     }
 
     enum class LoadingState {
-        SUCCESS,
-        NO_INTERNET,
-        NOTHING_FOUND
+        SUCCESS, NO_INTERNET, NOTHING_FOUND
     }
 }
