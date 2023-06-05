@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="14dp"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="@dimen/views_bottom_margin_search_history"
         android:paddingStart="3dp"
         tools:ignore="UseCompoundDrawables">
 
@@ -30,7 +30,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="@dimen/views_bottom_margin_search_history"
         android:paddingStart="3dp">
 
         <EditText
@@ -48,7 +48,7 @@
             android:singleLine="true"
             android:textColor="@color/black"
             android:textColorHint="@color/gray"
-            android:textSize="16sp" />
+            android:textSize="@dimen/search_field_text_size" />
 
         <ImageView
             android:id="@+id/btn_search"
@@ -91,8 +91,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="88dp"
             android:orientation="vertical"
-            android:visibility="gone"
-            tools:visibility="visible">
+            android:visibility="gone">
 
             <ImageView
                 android:id="@+id/placeholderImage"
@@ -100,17 +99,17 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginBottom="16dp"
-                tools:src="@drawable/light_mode_no_internet" />
+                tools:src="@drawable/ic_no_internet" />
 
             <TextView
                 android:id="@+id/placeholderMessage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
+                android:layout_marginBottom="@dimen/views_bottom_margin_search_history"
                 android:fontFamily="@font/ys_display_medium"
                 android:textAlignment="center"
                 android:textColor="?attr/colorOnPrimary"
-                android:textSize="19sp"
+                android:textSize="@dimen/placeholders_text_size"
                 tools:text="Проверьте соединение" />
 
             <Button
@@ -123,7 +122,49 @@
 
         </LinearLayout>
 
-    </FrameLayout>
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/viewGroupHistorySearch"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="26dp"
+            android:visibility="gone"
+            tools:visibility="visible">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="20dp"
+                    android:fontFamily="@font/ys_display_medium"
+                    android:text="@string/search_history_title"
+                    android:textAlignment="center"
+                    android:textColor="?attr/colorOnPrimary"
+                    android:textSize="@dimen/placeholders_text_size" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_view_history"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/views_bottom_margin_search_history"
+                    android:nestedScrollingEnabled="false" />
+
+                <Button
+                    android:id="@+id/btn_clear_history"
+                    style="@style/RefreshButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/clear_history" />
+
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+    </FrameLayout>
 
 </LinearLayout>
