@@ -168,7 +168,10 @@ class SearchActivity : AppCompatActivity() {
     private fun buildSearchRecyclerView() {
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
         adapter.tracksList = tracksList
-        adapter.onTrackClicked = { track: Track -> searchHistory.saveTrack(track) }
+        adapter.onTrackClicked = { track: Track ->
+            searchHistory.saveTrack(track)
+            PlayerActivity.newIntent(this, track).apply { startActivity(this) }
+        }
         binding.recyclerView.adapter = adapter
     }
 
@@ -176,6 +179,11 @@ class SearchActivity : AppCompatActivity() {
         binding.recyclerViewHistory.layoutManager = LinearLayoutManager(this)
         searchHistoryAdapter.tracksList = tracksInHistory
         binding.recyclerViewHistory.adapter = searchHistoryAdapter
+        searchHistoryAdapter.onTrackClicked = {
+            PlayerActivity.newIntent(this, it).apply {
+                startActivity(this)
+            }
+        }
     }
 
     private fun search() {
@@ -197,6 +205,7 @@ class SearchActivity : AppCompatActivity() {
                         showResult(LoadingState.NO_INTERNET)
                     }
                 }
+
                 override fun onFailure(call: Call<SearchTracksResponse>, t: Throwable) {
                     showResult(LoadingState.NO_INTERNET)
                 }

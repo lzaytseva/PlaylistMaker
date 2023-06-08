@@ -8,4 +8,10 @@
     <dimen name="placeholders_text_size">19sp</dimen>
     <dimen name="search_field_text_size">16sp</dimen>
     <dimen name="views_bottom_margin_search_history">24dp</dimen>
+    <dimen name="margin16dp">16dp</dimen>
+    <dimen name="margin12dp">12dp</dimen>
+    <dimen name="margin24dp">24dp</dimen>
+    <dimen name="margin32dp">32dp</dimen>
+
+
 </resources>
