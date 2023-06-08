@@ -9,7 +9,7 @@ import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.app.App
 import com.practicum.playlistmaker.databinding.ActivitySettingsBinding
 
-class SettingsActivity: AppCompatActivity() {
+class SettingsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySettingsBinding
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,6 +59,7 @@ class SettingsActivity: AppCompatActivity() {
             startActivity(this)
         }
     }
+
     private fun startOpenUserAgreementActivity() {
         val url = getString(R.string.practicum_offer)
 
