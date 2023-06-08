@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatDelegate
 
 class App : Application() {
     var darkTheme = false
-    lateinit var sharedPrefs: SharedPreferences
+    private lateinit var sharedPrefs: SharedPreferences
 
     override fun onCreate() {
         super.onCreate()

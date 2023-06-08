@@ -29,7 +29,7 @@ class SettingsActivity : AppCompatActivity() {
 
         binding.switchDarkMode.isChecked = (applicationContext as App).darkTheme
 
-        binding.switchDarkMode.setOnCheckedChangeListener { switch, isChecked ->
+        binding.switchDarkMode.setOnCheckedChangeListener { _, isChecked ->
             (applicationContext as App).switchTheme(isChecked)
         }
     }
