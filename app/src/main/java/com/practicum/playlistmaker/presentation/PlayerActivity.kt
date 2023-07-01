@@ -31,7 +31,7 @@ class PlayerActivity : AppCompatActivity() {
     private fun setTrackInfoToViews() {
         with(binding) {
             Glide.with(this@PlayerActivity)
-                .load(track.getCoverArtwork())
+                .load(track.artworkUrl512)
                 .placeholder(R.drawable.album_placeholder_big)
                 .transform(RoundedCorners(10))
                 .into(ivAlbumCover)

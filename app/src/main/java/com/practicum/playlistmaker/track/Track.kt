@@ -17,7 +17,10 @@ data class Track(
     val primaryGenreName: String,
     val country: String
 ) : Parcelable {
-    fun getCoverArtwork() = artworkUrl100.replaceAfterLast('/', "512x512bb.jpg")
+
+    val artworkUrl512
+        get() = artworkUrl100.replaceAfterLast('/', "512x512bb.jpg")
+
     fun getDuration(): String =
         SimpleDateFormat("mm:ss", Locale.getDefault()).format(trackTimeMillis)
 
