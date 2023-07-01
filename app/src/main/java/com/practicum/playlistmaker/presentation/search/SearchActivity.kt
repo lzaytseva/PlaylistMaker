@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.presentation
+package com.practicum.playlistmaker.presentation.search
 
 import android.content.Context
 import android.content.Intent
@@ -8,20 +8,18 @@ import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.SearchHistory
-import com.practicum.playlistmaker.api.ApiFactory
-import com.practicum.playlistmaker.api.SearchTracksResponse
+import com.practicum.playlistmaker.data.network.ApiFactory
+import com.practicum.playlistmaker.data.network.SearchTracksResponse
 import com.practicum.playlistmaker.databinding.ActivitySearchBinding
 import com.practicum.playlistmaker.presentation.player.PlayerActivity
-import com.practicum.playlistmaker.track.Track
-import com.practicum.playlistmaker.track.TrackAdapter
+import com.practicum.playlistmaker.presentation.model.Track
+import com.practicum.playlistmaker.presentation.adapters.TrackAdapter
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

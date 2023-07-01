@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.track
+package com.practicum.playlistmaker.presentation.model
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
