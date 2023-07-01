@@ -4,8 +4,11 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
@@ -38,6 +41,11 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var sharedPrefs: SharedPreferences
     private lateinit var listener: SharedPreferences.OnSharedPreferenceChangeListener
     private lateinit var searchHistory: SearchHistory
+
+    private val handler = Handler(Looper.getMainLooper())
+    private val searchRunnable = Runnable { search() }
+
+    private var isClickAllowed = true;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -143,6 +151,7 @@ class SearchActivity : AppCompatActivity() {
                     binding.viewGroupHistorySearch.visibility =
                         if (binding.searchEditText.hasFocus() && s.isEmpty() && tracksInHistory.isNotEmpty()) View.VISIBLE
                         else View.GONE
+                    searchDebounce()
                 }
             }
 
@@ -166,12 +175,23 @@ class SearchActivity : AppCompatActivity() {
         tracksInHistory.addAll(searchHistory.savedTracks)
     }
 
+    private fun clickDebounce(): Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
+        }
+        return current
+    }
+
     private fun buildSearchRecyclerView() {
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
         adapter.tracksList = tracksList
         adapter.onTrackClicked = { track: Track ->
-            searchHistory.saveTrack(track)
-            PlayerActivity.newIntent(this, track).apply { startActivity(this) }
+            if (clickDebounce()) {
+                searchHistory.saveTrack(track)
+                PlayerActivity.newIntent(this, track).apply { startActivity(this) }
+            }
         }
         binding.recyclerView.adapter = adapter
     }
@@ -181,13 +201,21 @@ class SearchActivity : AppCompatActivity() {
         searchHistoryAdapter.tracksList = tracksInHistory
         binding.recyclerViewHistory.adapter = searchHistoryAdapter
         searchHistoryAdapter.onTrackClicked = {
-            PlayerActivity.newIntent(this, it).apply {
-                startActivity(this)
+            if (clickDebounce()) {
+                PlayerActivity.newIntent(this, it).apply {
+                    startActivity(this)
+                }
             }
         }
     }
 
+    private fun searchDebounce() {
+        handler.removeCallbacks(searchRunnable)
+        handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
+    }
+
     private fun search() {
+        Log.d("Search", "searching")
         itunesService.search(binding.searchEditText.text.toString())
             .enqueue(object : Callback<SearchTracksResponse> {
                 override fun onResponse(
@@ -262,6 +290,8 @@ class SearchActivity : AppCompatActivity() {
         const val SEARCH_ET_TEXT = "search_et_text"
         const val PLAYLIST_MAKER_PREFERENCES = "playlist_maker_preferences"
         const val HISTORY_LIST_KEY = "history_list_key"
+        private const val SEARCH_DEBOUNCE_DELAY = 1000L
+        private const val CLICK_DEBOUNCE_DELAY = 1000L
 
         fun newIntent(context: Context): Intent {
             return Intent(context, SearchActivity::class.java)
