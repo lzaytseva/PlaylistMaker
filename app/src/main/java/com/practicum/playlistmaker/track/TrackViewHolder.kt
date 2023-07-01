@@ -8,10 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.R
-import java.text.SimpleDateFormat
-import java.util.*
 
-class TrackViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     private val songTitle: TextView = itemView.findViewById(R.id.tv_song_title)
     private val artist: TextView = itemView.findViewById(R.id.tv_artist)
@@ -21,7 +19,7 @@ class TrackViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
     fun bind(model: Track) {
         songTitle.text = model.trackName
         artist.text = model.artistName
-        duration.text = SimpleDateFormat("mm:ss", Locale.getDefault()).format(model.trackTimeMillis)
+        duration.text = model.getDuration()
         Glide.with(itemView)
             .load(model.artworkUrl100)
             .placeholder(R.drawable.album_placeholder)

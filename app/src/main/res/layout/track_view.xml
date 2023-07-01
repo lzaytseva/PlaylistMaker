@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -13,7 +12,8 @@
         android:layout_height="45dp"
         android:layout_gravity="center_vertical"
         android:scaleType="fitCenter"
-        android:src="@drawable/album_placeholder" />
+        android:src="@drawable/album_placeholder"
+        android:contentDescription="@string/album_cover_description" />
 
     <LinearLayout
         android:layout_width="0dp"
@@ -33,7 +33,7 @@
             android:maxLines="1"
             android:textColor="?attr/colorOnPrimary"
             android:textSize="16sp"
-            tools:text="Yesterday"/>
+            tools:text="Yesterday" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -42,32 +42,33 @@
 
             <TextView
                 android:id="@+id/tv_artist"
+                style="@style/SongDescTextStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:layout_marginStart="8dp"
+                android:layout_weight="1"
                 android:ellipsize="end"
                 android:maxLines="1"
-                style="@style/SongDescTextStyle"
                 tools:text="The Beatles" />
 
             <ImageView
                 android:id="@+id/ellipse"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="0"
-                android:layout_marginStart="5dp"
                 android:layout_gravity="center_vertical"
+                android:layout_marginStart="5dp"
+                android:layout_weight="0"
                 android:src="@drawable/ellipse"
-                app:tint="?attr/colorSecondary" />
+                app:tint="?attr/colorSecondary"
+                tools:ignore="ContentDescription" />
 
             <TextView
                 android:id="@+id/tv_duration"
+                style="@style/SongDescTextStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="0"
                 android:layout_marginStart="5dp"
-                style="@style/SongDescTextStyle"
+                android:layout_weight="0"
                 tools:text="4:21" />
 
         </LinearLayout>
@@ -81,6 +82,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="8dp"
         android:src="@drawable/arrow_forward"
-        app:tint="?attr/colorSecondary"/>
+        app:tint="?attr/colorSecondary"
+        tools:ignore="ContentDescription" />
 
 </LinearLayout>

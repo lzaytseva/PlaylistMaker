@@ -1,5 +1,6 @@
 package com.practicum.playlistmaker.presentation
 
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -8,7 +9,7 @@ import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.app.App
 import com.practicum.playlistmaker.databinding.ActivitySettingsBinding
 
-class SettingsActivity: AppCompatActivity() {
+class SettingsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySettingsBinding
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,7 +29,7 @@ class SettingsActivity: AppCompatActivity() {
 
         binding.switchDarkMode.isChecked = (applicationContext as App).darkTheme
 
-        binding.switchDarkMode.setOnCheckedChangeListener { switch, isChecked ->
+        binding.switchDarkMode.setOnCheckedChangeListener { _, isChecked ->
             (applicationContext as App).switchTheme(isChecked)
         }
     }
@@ -58,6 +59,7 @@ class SettingsActivity: AppCompatActivity() {
             startActivity(this)
         }
     }
+
     private fun startOpenUserAgreementActivity() {
         val url = getString(R.string.practicum_offer)
 
@@ -65,6 +67,12 @@ class SettingsActivity: AppCompatActivity() {
             action = Intent.ACTION_VIEW
             data = Uri.parse(url)
             startActivity(this)
+        }
+    }
+
+    companion object {
+        fun newIntent(context: Context): Intent {
+            return Intent(context, SettingsActivity::class.java)
         }
     }
 }
