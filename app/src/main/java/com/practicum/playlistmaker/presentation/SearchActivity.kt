@@ -16,6 +16,7 @@ import com.practicum.playlistmaker.SearchHistory
 import com.practicum.playlistmaker.api.ApiFactory
 import com.practicum.playlistmaker.api.SearchTracksResponse
 import com.practicum.playlistmaker.databinding.ActivitySearchBinding
+import com.practicum.playlistmaker.presentation.player.PlayerActivity
 import com.practicum.playlistmaker.track.Track
 import com.practicum.playlistmaker.track.TrackAdapter
 import retrofit2.Call
