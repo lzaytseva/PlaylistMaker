@@ -209,18 +209,26 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
+    private fun hideAllPlaceHolders() {
+        binding.viewGroupHistorySearch.visibility = View.GONE
+        binding.placeholderError.visibility = View.GONE
+        binding.recyclerView.visibility = View.GONE
+    }
+
     private fun searchDebounce() {
         handler.removeCallbacks(searchRunnable)
         handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
     }
 
     private fun search() {
-        Log.d("Search", "searching")
+        hideAllPlaceHolders()
+        binding.progressBar.visibility = View.VISIBLE
         itunesService.search(binding.searchEditText.text.toString())
             .enqueue(object : Callback<SearchTracksResponse> {
                 override fun onResponse(
                     call: Call<SearchTracksResponse>, response: Response<SearchTracksResponse>
                 ) {
+                    binding.progressBar.visibility = View.GONE
                     if (response.code() == 200) {
                         tracksList.clear()
                         if (response.body()?.tracks?.isNotEmpty() == true) {
@@ -236,6 +244,7 @@ class SearchActivity : AppCompatActivity() {
                 }
 
                 override fun onFailure(call: Call<SearchTracksResponse>, t: Throwable) {
+                    binding.progressBar.visibility = View.GONE
                     showResult(LoadingState.NO_INTERNET)
                 }
             })
@@ -243,6 +252,7 @@ class SearchActivity : AppCompatActivity() {
 
     private fun showResult(state: LoadingState) {
         if (state == LoadingState.SUCCESS) {
+            binding.recyclerView.visibility = View.VISIBLE
             adapter.notifyDataSetChanged()
             binding.placeholderError.visibility = View.GONE
         } else {
