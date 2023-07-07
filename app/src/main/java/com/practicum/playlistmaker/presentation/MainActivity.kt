@@ -3,6 +3,7 @@ package com.practicum.playlistmaker.presentation
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.practicum.playlistmaker.databinding.ActivityMainBinding
+import com.practicum.playlistmaker.presentation.search.SearchActivity
 
 class MainActivity : AppCompatActivity() {
 

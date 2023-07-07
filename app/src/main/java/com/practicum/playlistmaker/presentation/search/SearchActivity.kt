@@ -1,9 +1,11 @@
-package com.practicum.playlistmaker.presentation
+package com.practicum.playlistmaker.presentation.search
 
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
@@ -12,12 +14,12 @@ import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.SearchHistory
-import com.practicum.playlistmaker.api.ApiFactory
-import com.practicum.playlistmaker.api.SearchTracksResponse
+import com.practicum.playlistmaker.data.network.ApiFactory
+import com.practicum.playlistmaker.data.network.SearchTracksResponse
 import com.practicum.playlistmaker.databinding.ActivitySearchBinding
-import com.practicum.playlistmaker.track.Track
-import com.practicum.playlistmaker.track.TrackAdapter
+import com.practicum.playlistmaker.presentation.player.PlayerActivity
+import com.practicum.playlistmaker.presentation.model.Track
+import com.practicum.playlistmaker.presentation.adapters.TrackAdapter
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -29,8 +31,8 @@ class SearchActivity : AppCompatActivity() {
 
     private val tracksInHistory = ArrayList<Track>()
     private val tracksList = ArrayList<Track>()
-    private val adapter = TrackAdapter()
-    private val searchHistoryAdapter = TrackAdapter()
+    private lateinit var adapter: TrackAdapter
+    private lateinit var searchHistoryAdapter: TrackAdapter
 
     private var savedSearchRequest = ""
 
@@ -38,10 +40,17 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var listener: SharedPreferences.OnSharedPreferenceChangeListener
     private lateinit var searchHistory: SearchHistory
 
+    private val handler = Handler(Looper.getMainLooper())
+    private val searchRunnable = Runnable { search() }
+
+    private var isClickAllowed = true;
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        initAdapters()
 
         getHistoryFromSP()
 
@@ -67,6 +76,22 @@ class SearchActivity : AppCompatActivity() {
         setupSPChangeListener()
 
         setupBtnClearHistoryClickListener()
+    }
+
+    private fun initAdapters() {
+        adapter = TrackAdapter {
+            if (clickDebounce()) {
+                searchHistory.saveTrack(it)
+                PlayerActivity.newIntent(this, it).apply { startActivity(this) }
+            }
+        }
+        searchHistoryAdapter = TrackAdapter {
+            if (clickDebounce()) {
+                PlayerActivity.newIntent(this, it).apply {
+                    startActivity(this)
+                }
+            }
+        }
     }
 
     private fun setupBtnClearHistoryClickListener() {
@@ -142,6 +167,9 @@ class SearchActivity : AppCompatActivity() {
                     binding.viewGroupHistorySearch.visibility =
                         if (binding.searchEditText.hasFocus() && s.isEmpty() && tracksInHistory.isNotEmpty()) View.VISIBLE
                         else View.GONE
+                    if (s.isNotEmpty()) {
+                        searchDebounce()
+                    }
                 }
             }
 
@@ -165,13 +193,18 @@ class SearchActivity : AppCompatActivity() {
         tracksInHistory.addAll(searchHistory.savedTracks)
     }
 
+    private fun clickDebounce(): Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
+        }
+        return current
+    }
+
     private fun buildSearchRecyclerView() {
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
         adapter.tracksList = tracksList
-        adapter.onTrackClicked = { track: Track ->
-            searchHistory.saveTrack(track)
-            PlayerActivity.newIntent(this, track).apply { startActivity(this) }
-        }
         binding.recyclerView.adapter = adapter
     }
 
@@ -179,19 +212,28 @@ class SearchActivity : AppCompatActivity() {
         binding.recyclerViewHistory.layoutManager = LinearLayoutManager(this)
         searchHistoryAdapter.tracksList = tracksInHistory
         binding.recyclerViewHistory.adapter = searchHistoryAdapter
-        searchHistoryAdapter.onTrackClicked = {
-            PlayerActivity.newIntent(this, it).apply {
-                startActivity(this)
-            }
-        }
+    }
+
+    private fun hideAllPlaceHolders() {
+        binding.viewGroupHistorySearch.visibility = View.GONE
+        binding.placeholderError.visibility = View.GONE
+        binding.recyclerView.visibility = View.GONE
+    }
+
+    private fun searchDebounce() {
+        handler.removeCallbacks(searchRunnable)
+        handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
     }
 
     private fun search() {
+        hideAllPlaceHolders()
+        binding.progressBar.visibility = View.VISIBLE
         itunesService.search(binding.searchEditText.text.toString())
             .enqueue(object : Callback<SearchTracksResponse> {
                 override fun onResponse(
                     call: Call<SearchTracksResponse>, response: Response<SearchTracksResponse>
                 ) {
+                    binding.progressBar.visibility = View.GONE
                     if (response.code() == 200) {
                         tracksList.clear()
                         if (response.body()?.tracks?.isNotEmpty() == true) {
@@ -207,6 +249,7 @@ class SearchActivity : AppCompatActivity() {
                 }
 
                 override fun onFailure(call: Call<SearchTracksResponse>, t: Throwable) {
+                    binding.progressBar.visibility = View.GONE
                     showResult(LoadingState.NO_INTERNET)
                 }
             })
@@ -214,6 +257,7 @@ class SearchActivity : AppCompatActivity() {
 
     private fun showResult(state: LoadingState) {
         if (state == LoadingState.SUCCESS) {
+            binding.recyclerView.visibility = View.VISIBLE
             adapter.notifyDataSetChanged()
             binding.placeholderError.visibility = View.GONE
         } else {
@@ -261,6 +305,8 @@ class SearchActivity : AppCompatActivity() {
         const val SEARCH_ET_TEXT = "search_et_text"
         const val PLAYLIST_MAKER_PREFERENCES = "playlist_maker_preferences"
         const val HISTORY_LIST_KEY = "history_list_key"
+        private const val SEARCH_DEBOUNCE_DELAY = 1000L
+        private const val CLICK_DEBOUNCE_DELAY = 1000L
 
         fun newIntent(context: Context): Intent {
             return Intent(context, SearchActivity::class.java)

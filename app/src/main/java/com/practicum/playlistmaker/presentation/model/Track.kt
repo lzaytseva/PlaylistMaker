@@ -1,9 +1,9 @@
-package com.practicum.playlistmaker.track
+package com.practicum.playlistmaker.presentation.model
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
 
 @Parcelize
 data class Track(
@@ -15,7 +15,8 @@ data class Track(
     val collectionName: String?,
     val releaseDate: String,
     val primaryGenreName: String,
-    val country: String
+    val country: String,
+    val previewUrl: String
 ) : Parcelable {
 
     val artworkUrl512
