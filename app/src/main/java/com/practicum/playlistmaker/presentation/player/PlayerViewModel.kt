@@ -7,7 +7,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
 
 class PlayerViewModel(private val trackUrl: String) : ViewModel() {
 

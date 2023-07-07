@@ -31,8 +31,8 @@ class SearchActivity : AppCompatActivity() {
 
     private val tracksInHistory = ArrayList<Track>()
     private val tracksList = ArrayList<Track>()
-    private val adapter = TrackAdapter()
-    private val searchHistoryAdapter = TrackAdapter()
+    private lateinit var adapter: TrackAdapter
+    private lateinit var searchHistoryAdapter: TrackAdapter
 
     private var savedSearchRequest = ""
 
@@ -49,6 +49,8 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        initAdapters()
 
         getHistoryFromSP()
 
@@ -74,6 +76,22 @@ class SearchActivity : AppCompatActivity() {
         setupSPChangeListener()
 
         setupBtnClearHistoryClickListener()
+    }
+
+    private fun initAdapters() {
+        adapter = TrackAdapter {
+            if (clickDebounce()) {
+                searchHistory.saveTrack(it)
+                PlayerActivity.newIntent(this, it).apply { startActivity(this) }
+            }
+        }
+        searchHistoryAdapter = TrackAdapter {
+            if (clickDebounce()) {
+                PlayerActivity.newIntent(this, it).apply {
+                    startActivity(this)
+                }
+            }
+        }
     }
 
     private fun setupBtnClearHistoryClickListener() {
@@ -149,7 +167,9 @@ class SearchActivity : AppCompatActivity() {
                     binding.viewGroupHistorySearch.visibility =
                         if (binding.searchEditText.hasFocus() && s.isEmpty() && tracksInHistory.isNotEmpty()) View.VISIBLE
                         else View.GONE
-                    searchDebounce()
+                    if (s.isNotEmpty()) {
+                        searchDebounce()
+                    }
                 }
             }
 
@@ -185,12 +205,6 @@ class SearchActivity : AppCompatActivity() {
     private fun buildSearchRecyclerView() {
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
         adapter.tracksList = tracksList
-        adapter.onTrackClicked = { track: Track ->
-            if (clickDebounce()) {
-                searchHistory.saveTrack(track)
-                PlayerActivity.newIntent(this, track).apply { startActivity(this) }
-            }
-        }
         binding.recyclerView.adapter = adapter
     }
 
@@ -198,13 +212,6 @@ class SearchActivity : AppCompatActivity() {
         binding.recyclerViewHistory.layoutManager = LinearLayoutManager(this)
         searchHistoryAdapter.tracksList = tracksInHistory
         binding.recyclerViewHistory.adapter = searchHistoryAdapter
-        searchHistoryAdapter.onTrackClicked = {
-            if (clickDebounce()) {
-                PlayerActivity.newIntent(this, it).apply {
-                    startActivity(this)
-                }
-            }
-        }
     }
 
     private fun hideAllPlaceHolders() {
