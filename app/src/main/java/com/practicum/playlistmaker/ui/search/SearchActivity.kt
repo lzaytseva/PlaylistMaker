@@ -199,7 +199,7 @@ class SearchActivity : AppCompatActivity() {
         val current = isClickAllowed
         if (isClickAllowed) {
             isClickAllowed = false
-            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
+            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY_IN_MILLIS)
         }
         return current
     }
@@ -224,7 +224,7 @@ class SearchActivity : AppCompatActivity() {
 
     private fun searchDebounce() {
         handler.removeCallbacks(searchRunnable)
-        handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
+        handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY_IN_MILLIS)
     }
 
     private fun search() {
@@ -309,8 +309,8 @@ class SearchActivity : AppCompatActivity() {
         const val SEARCH_ET_TEXT = "search_et_text"
         const val PLAYLIST_MAKER_PREFERENCES = "playlist_maker_preferences"
         const val HISTORY_LIST_KEY = "history_list_key"
-        private const val SEARCH_DEBOUNCE_DELAY = 1000L
-        private const val CLICK_DEBOUNCE_DELAY = 1000L
+        private const val SEARCH_DEBOUNCE_DELAY_IN_MILLIS = 1000L
+        private const val CLICK_DEBOUNCE_DELAY_IN_MILLIS = 1000L
 
         fun newIntent(context: Context): Intent {
             return Intent(context, SearchActivity::class.java)

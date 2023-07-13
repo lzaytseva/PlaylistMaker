@@ -65,23 +65,25 @@ class PlayerActivity : AppCompatActivity() {
 
     private fun setTrackInfoToViews() {
         with(binding) {
-            Glide.with(this@PlayerActivity)
-                .load(track.artworkUrl512)
-                .placeholder(R.drawable.album_placeholder_big)
-                .transform(RoundedCorners(10))
-                .into(ivAlbumCover)
-            tvSongTitle.text = track.trackName
-            tvArtist.text = track.artistName
-            tvDuration.text = track.duration
-            if (track.collectionName != null) {
-                tvAlbum.text = track.collectionName
-            } else {
-                tvAlbum.visibility = View.INVISIBLE
-                tvAlbumLabel.visibility = View.INVISIBLE
+            with(track) {
+                Glide.with(this@PlayerActivity)
+                    .load(artworkUrl512)
+                    .placeholder(R.drawable.album_placeholder_big)
+                    .transform(RoundedCorners(10))
+                    .into(ivAlbumCover)
+                tvSongTitle.text = trackName
+                tvArtist.text = artistName
+                tvDuration.text = duration
+                if (collectionName != null) {
+                    tvAlbum.text = collectionName
+                } else {
+                    tvAlbum.visibility = View.INVISIBLE
+                    tvAlbumLabel.visibility = View.INVISIBLE
+                }
+                tvGenre.text = primaryGenreName
+                tvCountry.text = country
+                tvYear.text = year
             }
-            tvGenre.text = track.primaryGenreName
-            tvCountry.text = track.country
-            tvYear.text = track.year
         }
     }
 
