@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.presentation.player
+package com.practicum.playlistmaker.ui.player
 
 import android.content.Context
 import android.content.Intent
@@ -10,7 +10,9 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.ActivityPlayerBinding
-import com.practicum.playlistmaker.presentation.model.Track
+import com.practicum.playlistmaker.domain.models.Track
+import com.practicum.playlistmaker.presentation.player.PlayerViewModel
+import com.practicum.playlistmaker.presentation.player.PlayerViewModelFactory
 
 class PlayerActivity : AppCompatActivity() {
 

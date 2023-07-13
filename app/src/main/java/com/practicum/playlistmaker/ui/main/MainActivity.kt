@@ -1,9 +1,11 @@
-package com.practicum.playlistmaker.presentation
+package com.practicum.playlistmaker.ui.main
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.practicum.playlistmaker.databinding.ActivityMainBinding
-import com.practicum.playlistmaker.presentation.search.SearchActivity
+import com.practicum.playlistmaker.ui.library.LibraryActivity
+import com.practicum.playlistmaker.ui.settings.SettingsActivity
+import com.practicum.playlistmaker.ui.search.SearchActivity
 
 class MainActivity : AppCompatActivity() {
 
