@@ -17,9 +17,15 @@ import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.data.dto.SearchTracksResponse
 import com.practicum.playlistmaker.data.mappers.TrackMapper
 import com.practicum.playlistmaker.data.network.ApiFactory
+import com.practicum.playlistmaker.data.repository.HistoryRepositoryImpl
+import com.practicum.playlistmaker.data.storage.HistoryStorage
+import com.practicum.playlistmaker.data.storage.shared_prefs.SharedPrefsHistoryStorage
+import com.practicum.playlistmaker.data.storage.shared_prefs.SharedPrefsHistoryStorage.Companion.HISTORY_LIST_KEY
 import com.practicum.playlistmaker.databinding.ActivitySearchBinding
+import com.practicum.playlistmaker.domain.api.HistoryInteractor
+import com.practicum.playlistmaker.domain.api.HistoryRepository
+import com.practicum.playlistmaker.domain.impl.HistoryInteractorImpl
 import com.practicum.playlistmaker.domain.models.Track
-import com.practicum.playlistmaker.presentation.search.SearchHistory
 import com.practicum.playlistmaker.ui.adapters.TrackAdapter
 import com.practicum.playlistmaker.ui.player.PlayerActivity
 import retrofit2.Call
@@ -40,7 +46,9 @@ class SearchActivity : AppCompatActivity() {
 
     private lateinit var sharedPrefs: SharedPreferences
     private lateinit var listener: SharedPreferences.OnSharedPreferenceChangeListener
-    private lateinit var searchHistory: SearchHistory
+    private lateinit var historyInteractor: HistoryInteractor
+    private lateinit var historyRepository: HistoryRepository
+    private lateinit var storage: HistoryStorage
 
     private val handler = Handler(Looper.getMainLooper())
     private val searchRunnable = Runnable { search() }
@@ -51,6 +59,8 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        initHistoryInteractor()
 
         initAdapters()
 
@@ -80,10 +90,17 @@ class SearchActivity : AppCompatActivity() {
         setupBtnClearHistoryClickListener()
     }
 
+    private fun initHistoryInteractor() {
+        sharedPrefs = getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
+        storage = SharedPrefsHistoryStorage(sharedPrefs)
+        historyRepository = HistoryRepositoryImpl(storage)
+        historyInteractor = HistoryInteractorImpl(historyRepository)
+    }
+
     private fun initAdapters() {
         adapter = TrackAdapter {
             if (clickDebounce()) {
-                searchHistory.saveTrack(it)
+                historyInteractor.saveTrack(it)
                 PlayerActivity.newIntent(this, it).apply { startActivity(this) }
             }
         }
@@ -98,8 +115,7 @@ class SearchActivity : AppCompatActivity() {
 
     private fun setupBtnClearHistoryClickListener() {
         binding.btnClearHistory.setOnClickListener {
-            searchHistory.clearHistory()
-            tracksInHistory.clear()
+            historyInteractor.clearHistory()
             binding.viewGroupHistorySearch.visibility = View.GONE
             searchHistoryAdapter.notifyDataSetChanged()
         }
@@ -108,13 +124,10 @@ class SearchActivity : AppCompatActivity() {
     private fun setupSPChangeListener() {
         listener = SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key ->
             if (key == HISTORY_LIST_KEY) {
-                val history = sharedPreferences?.getString(HISTORY_LIST_KEY, null)
-                if (history != null) {
                     tracksInHistory.clear()
-                    tracksInHistory.addAll(searchHistory.createTracksListFromJson(history))
+                    tracksInHistory.addAll(historyInteractor.getAllTracks())
                     searchHistoryAdapter.notifyDataSetChanged()
                 }
-            }
         }
         sharedPrefs.registerOnSharedPreferenceChangeListener(listener)
     }
@@ -190,9 +203,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun getHistoryFromSP() {
-        sharedPrefs = getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
-        searchHistory = SearchHistory(sharedPrefs)
-        tracksInHistory.addAll(searchHistory.savedTracks)
+        tracksInHistory.addAll(historyInteractor.getAllTracks())
     }
 
     private fun clickDebounce(): Boolean {

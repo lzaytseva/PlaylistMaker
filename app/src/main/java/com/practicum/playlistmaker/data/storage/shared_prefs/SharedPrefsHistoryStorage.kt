@@ -1,20 +1,22 @@
-package com.practicum.playlistmaker.presentation.search
+package com.practicum.playlistmaker.data.storage.shared_prefs
 
 import android.content.SharedPreferences
-import com.google.gson.Gson
+import com.practicum.playlistmaker.data.mappers.TrackMapper
+import com.practicum.playlistmaker.data.storage.HistoryStorage
 import com.practicum.playlistmaker.domain.models.Track
 
-class SearchHistory(private val sharedPrefs: SharedPreferences) {
-    val savedTracks = ArrayList<Track>()
+class SharedPrefsHistoryStorage(private val sharedPrefs: SharedPreferences) : HistoryStorage {
+    private val savedTracks = mutableListOf<Track>()
+    private val mapper = TrackMapper()
 
     init {
         val tracksString = sharedPrefs.getString(HISTORY_LIST_KEY, "")
         if (tracksString?.isNotEmpty() == true) {
-            savedTracks.addAll(createTracksListFromJson(tracksString))
+            savedTracks.addAll(mapper.createTracksListFromJson(tracksString))
         }
     }
 
-    fun saveTrack(track: Track) {
+    override fun saveTrack(track: Track) {
         if (savedTracks.contains(track)) {
             savedTracks.remove(track)
         }
@@ -24,19 +26,18 @@ class SearchHistory(private val sharedPrefs: SharedPreferences) {
         savedTracks.add(0, track)
 
         sharedPrefs.edit()
-            .putString(HISTORY_LIST_KEY, createJsonFromTracksList(savedTracks.toTypedArray()))
+            .putString(
+                HISTORY_LIST_KEY,
+                mapper.createJsonFromTracksList(savedTracks.toTypedArray())
+            )
             .apply()
     }
 
-    fun createTracksListFromJson(json: String): Array<Track> {
-        return Gson().fromJson(json, Array<Track>::class.java)
+    override fun getAllTracks(): List<Track> {
+        return savedTracks.toList()
     }
 
-    private fun createJsonFromTracksList(facts: Array<Track>): String {
-        return Gson().toJson(facts)
-    }
-
-    fun clearHistory() {
+    override fun clearHistory() {
         savedTracks.clear()
         sharedPrefs.edit()
             .remove(HISTORY_LIST_KEY)

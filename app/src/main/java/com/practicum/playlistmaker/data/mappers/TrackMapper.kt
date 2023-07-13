@@ -1,5 +1,6 @@
 package com.practicum.playlistmaker.data.mappers
 
+import com.google.gson.Gson
 import com.practicum.playlistmaker.data.dto.TrackDto
 import com.practicum.playlistmaker.domain.models.Track
 import java.text.SimpleDateFormat
@@ -23,4 +24,12 @@ class TrackMapper {
         SimpleDateFormat("mm:ss", Locale.getDefault()).format(trackTimeMillis)
 
     private fun getYear(releaseDate: String) = releaseDate.substringBefore("-")
+
+    fun createTracksListFromJson(json: String): Array<Track> {
+        return Gson().fromJson(json, Array<Track>::class.java)
+    }
+
+    fun createJsonFromTracksList(tracks: Array<Track>): String {
+        return Gson().toJson(tracks)
+    }
 }
