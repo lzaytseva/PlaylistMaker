@@ -13,17 +13,13 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.practicum.playlistmaker.Creator
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.data.dto.SearchTracksResponse
 import com.practicum.playlistmaker.data.mappers.TrackMapper
 import com.practicum.playlistmaker.data.network.ApiFactory
-import com.practicum.playlistmaker.data.repository.HistoryRepositoryImpl
-import com.practicum.playlistmaker.data.storage.HistoryStorage
-import com.practicum.playlistmaker.data.storage.shared_prefs.SharedPrefsHistoryStorage
 import com.practicum.playlistmaker.databinding.ActivitySearchBinding
 import com.practicum.playlistmaker.domain.api.HistoryInteractor
-import com.practicum.playlistmaker.domain.api.HistoryRepository
-import com.practicum.playlistmaker.domain.impl.HistoryInteractorImpl
 import com.practicum.playlistmaker.domain.model.Track
 import com.practicum.playlistmaker.ui.adapters.TrackAdapter
 import com.practicum.playlistmaker.ui.player.PlayerActivity
@@ -46,8 +42,6 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var sharedPrefs: SharedPreferences
     private lateinit var listener: SharedPreferences.OnSharedPreferenceChangeListener
     private lateinit var historyInteractor: HistoryInteractor
-    private lateinit var historyRepository: HistoryRepository
-    private lateinit var storage: HistoryStorage
 
     private val handler = Handler(Looper.getMainLooper())
     private val searchRunnable = Runnable { search() }
@@ -90,9 +84,7 @@ class SearchActivity : AppCompatActivity() {
 
     private fun initHistoryInteractor() {
         sharedPrefs = getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
-        storage = SharedPrefsHistoryStorage(sharedPrefs)
-        historyRepository = HistoryRepositoryImpl(storage)
-        historyInteractor = HistoryInteractorImpl(historyRepository)
+        historyInteractor = Creator(sharedPrefs).getHistoryInteractor()
     }
 
     private fun initAdapters() {
