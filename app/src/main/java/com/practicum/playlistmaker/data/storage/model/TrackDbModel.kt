@@ -1,10 +1,6 @@
-package com.practicum.playlistmaker.domain.models
+package com.practicum.playlistmaker.data.storage.model
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
-
-@Parcelize
-data class Track(
+data class TrackDbModel(
     val trackId: Int, //уникальный идентификатор
     val trackName: String, // Название композиции
     val artistName: String, // Имя исполнителя
@@ -15,8 +11,4 @@ data class Track(
     val primaryGenreName: String,
     val country: String,
     val previewUrl: String
-) : Parcelable {
-
-    val artworkUrl512
-        get() = artworkUrl100.replaceAfterLast('/', "512x512bb.jpg")
-}
+)

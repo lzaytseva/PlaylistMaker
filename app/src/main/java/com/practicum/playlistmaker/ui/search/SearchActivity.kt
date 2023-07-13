@@ -20,12 +20,11 @@ import com.practicum.playlistmaker.data.network.ApiFactory
 import com.practicum.playlistmaker.data.repository.HistoryRepositoryImpl
 import com.practicum.playlistmaker.data.storage.HistoryStorage
 import com.practicum.playlistmaker.data.storage.shared_prefs.SharedPrefsHistoryStorage
-import com.practicum.playlistmaker.data.storage.shared_prefs.SharedPrefsHistoryStorage.Companion.HISTORY_LIST_KEY
 import com.practicum.playlistmaker.databinding.ActivitySearchBinding
 import com.practicum.playlistmaker.domain.api.HistoryInteractor
 import com.practicum.playlistmaker.domain.api.HistoryRepository
 import com.practicum.playlistmaker.domain.impl.HistoryInteractorImpl
-import com.practicum.playlistmaker.domain.models.Track
+import com.practicum.playlistmaker.domain.model.Track
 import com.practicum.playlistmaker.ui.adapters.TrackAdapter
 import com.practicum.playlistmaker.ui.player.PlayerActivity
 import retrofit2.Call
@@ -53,17 +52,16 @@ class SearchActivity : AppCompatActivity() {
     private val handler = Handler(Looper.getMainLooper())
     private val searchRunnable = Runnable { search() }
 
-    private var isClickAllowed = true;
+    private var isClickAllowed = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        initHistoryInteractor()
-
         initAdapters()
 
+        initHistoryInteractor()
         getHistoryFromSP()
 
         buildSearchRecyclerView()

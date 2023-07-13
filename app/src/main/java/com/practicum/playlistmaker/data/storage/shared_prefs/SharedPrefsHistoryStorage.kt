@@ -3,10 +3,11 @@ package com.practicum.playlistmaker.data.storage.shared_prefs
 import android.content.SharedPreferences
 import com.practicum.playlistmaker.data.mappers.TrackMapper
 import com.practicum.playlistmaker.data.storage.HistoryStorage
-import com.practicum.playlistmaker.domain.models.Track
+import com.practicum.playlistmaker.data.storage.model.TrackDbModel
+import com.practicum.playlistmaker.domain.model.Track
 
 class SharedPrefsHistoryStorage(private val sharedPrefs: SharedPreferences) : HistoryStorage {
-    private val savedTracks = mutableListOf<Track>()
+    private val savedTracks = mutableListOf<TrackDbModel>()
     private val mapper = TrackMapper()
 
     init {
@@ -16,7 +17,7 @@ class SharedPrefsHistoryStorage(private val sharedPrefs: SharedPreferences) : Hi
         }
     }
 
-    override fun saveTrack(track: Track) {
+    override fun saveTrack(track: TrackDbModel) {
         if (savedTracks.contains(track)) {
             savedTracks.remove(track)
         }
@@ -33,7 +34,7 @@ class SharedPrefsHistoryStorage(private val sharedPrefs: SharedPreferences) : Hi
             .apply()
     }
 
-    override fun getAllTracks(): List<Track> {
+    override fun getAllTracks(): List<TrackDbModel> {
         return savedTracks.toList()
     }
 
