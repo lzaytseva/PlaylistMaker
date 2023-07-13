@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.data.network.ApiFactory
 import com.practicum.playlistmaker.data.dto.SearchTracksResponse
+import com.practicum.playlistmaker.data.mappers.TrackMapper
 import com.practicum.playlistmaker.databinding.ActivitySearchBinding
 import com.practicum.playlistmaker.ui.player.PlayerActivity
 import com.practicum.playlistmaker.domain.models.Track
@@ -238,7 +239,9 @@ class SearchActivity : AppCompatActivity() {
                     if (response.code() == 200) {
                         tracksList.clear()
                         if (response.body()?.tracks?.isNotEmpty() == true) {
-                            tracksList.addAll(response.body()?.tracks!!)
+                            tracksList.addAll(response.body()?.tracks!!.map {
+                                TrackMapper().mapDtoToEntity(it)
+                            })
                             showResult(LoadingState.SUCCESS)
                         }
                         if (tracksList.isEmpty()) {

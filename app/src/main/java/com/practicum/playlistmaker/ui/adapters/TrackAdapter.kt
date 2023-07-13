@@ -40,7 +40,7 @@ class TrackAdapter(private val onTrackClicked: (Track) -> Unit) :
                 with(model) {
                     tvSongTitle.text = trackName
                     tvArtist.text = artistName
-                    tvDuration.text = this.getDuration()
+                    tvDuration.text = duration
                     Glide.with(itemView)
                         .load(artworkUrl100)
                         .placeholder(R.drawable.album_placeholder)

@@ -72,7 +72,7 @@ class PlayerActivity : AppCompatActivity() {
                 .into(ivAlbumCover)
             tvSongTitle.text = track.trackName
             tvArtist.text = track.artistName
-            tvDuration.text = track.getDuration()
+            tvDuration.text = track.duration
             if (track.collectionName != null) {
                 tvAlbum.text = track.collectionName
             } else {
@@ -81,8 +81,7 @@ class PlayerActivity : AppCompatActivity() {
             }
             tvGenre.text = track.primaryGenreName
             tvCountry.text = track.country
-            tvYear.text = track.releaseDate
-            tvYear.text = track.getYear()
+            tvYear.text = track.year
         }
     }
 
