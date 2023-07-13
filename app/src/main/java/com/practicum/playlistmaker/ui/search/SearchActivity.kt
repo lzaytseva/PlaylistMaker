@@ -14,14 +14,14 @@ import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.data.network.ApiFactory
 import com.practicum.playlistmaker.data.dto.SearchTracksResponse
 import com.practicum.playlistmaker.data.mappers.TrackMapper
+import com.practicum.playlistmaker.data.network.ApiFactory
 import com.practicum.playlistmaker.databinding.ActivitySearchBinding
-import com.practicum.playlistmaker.ui.player.PlayerActivity
 import com.practicum.playlistmaker.domain.models.Track
-import com.practicum.playlistmaker.ui.adapters.TrackAdapter
 import com.practicum.playlistmaker.presentation.search.SearchHistory
+import com.practicum.playlistmaker.ui.adapters.TrackAdapter
+import com.practicum.playlistmaker.ui.player.PlayerActivity
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
