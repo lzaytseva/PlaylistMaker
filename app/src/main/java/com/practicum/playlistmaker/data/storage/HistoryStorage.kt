@@ -1,11 +1,11 @@
 package com.practicum.playlistmaker.data.storage
 
-import com.practicum.playlistmaker.data.storage.model.TrackDbModel
+import com.practicum.playlistmaker.domain.model.Track
 
 interface HistoryStorage {
-    fun saveTrack(track: TrackDbModel)
+    fun saveTrack(track: Track)
 
-    fun getAllTracks(): List<TrackDbModel>
+    fun getAllTracks(): List<Track>
 
     fun clearHistory()
 }

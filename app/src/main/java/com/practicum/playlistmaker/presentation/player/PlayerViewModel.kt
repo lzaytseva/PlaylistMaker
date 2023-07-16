@@ -7,7 +7,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import java.text.SimpleDateFormat
-import java.util.Locale
+import java.util.*
 
 class PlayerViewModel(private val trackUrl: String) : ViewModel() {
 
@@ -67,17 +67,20 @@ class PlayerViewModel(private val trackUrl: String) : ViewModel() {
     }
 
     private fun preparePlayer() {
-        mediaPlayer.setDataSource(trackUrl)
-        mediaPlayer.prepareAsync()
-        mediaPlayer.setOnPreparedListener {
-            playerState = STATE_PREPARED
+        if (trackUrl.isNotEmpty()) {
+            mediaPlayer.setDataSource(trackUrl)
+            mediaPlayer.prepareAsync()
+            mediaPlayer.setOnPreparedListener {
+                playerState = STATE_PREPARED
+            }
+            mediaPlayer.setOnCompletionListener {
+                playerState = STATE_PREPARED
+                _isPlaying.value = false
+                stopTimer()
+                _timeProgress.value = INITIAL_TIME
+            }
         }
-        mediaPlayer.setOnCompletionListener {
-            playerState = STATE_PREPARED
-            _isPlaying.value = false
-            stopTimer()
-            _timeProgress.value = INITIAL_TIME
-        }
+
     }
 
     fun playbackControl() {

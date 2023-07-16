@@ -1,9 +1,11 @@
 package com.practicum.playlistmaker.ui.adapters
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.TrackViewBinding
@@ -40,11 +42,20 @@ class TrackAdapter(private val onTrackClicked: (Track) -> Unit) :
                 with(model) {
                     tvSongTitle.text = trackName
                     tvArtist.text = artistName
-                    tvDuration.text = duration
+                    if (duration.isNotEmpty()) {
+                        tvDuration.text = duration
+                    } else {
+                        ellipse.visibility = View.INVISIBLE
+                    }
                     Glide.with(itemView)
                         .load(artworkUrl100)
                         .placeholder(R.drawable.album_placeholder)
-                        .transform(RoundedCorners(10))
+                        .transform(
+                            CenterCrop(),
+                            RoundedCorners(
+                                itemView.resources.getDimensionPixelSize(R.dimen.album_cover_corner_radius)
+                            ),
+                        )
                         .into(ivAlbumCover)
                 }
             }

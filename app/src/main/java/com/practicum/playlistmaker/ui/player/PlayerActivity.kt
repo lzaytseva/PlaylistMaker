@@ -7,6 +7,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.ActivityPlayerBinding
@@ -69,20 +70,45 @@ class PlayerActivity : AppCompatActivity() {
                 Glide.with(this@PlayerActivity)
                     .load(artworkUrl512)
                     .placeholder(R.drawable.album_placeholder_big)
-                    .transform(RoundedCorners(10))
+                    .transform(
+                        CenterCrop(),
+                        RoundedCorners(
+                            resources.getDimensionPixelSize(R.dimen.album_cover_corner_radius_player)
+                        ),
+                    )
                     .into(ivAlbumCover)
                 tvSongTitle.text = trackName
                 tvArtist.text = artistName
-                tvDuration.text = duration
-                if (collectionName != null) {
+                if (duration.isNotEmpty()) {
+                    tvDuration.text = duration
+                } else {
+                    tvDuration.visibility = View.GONE
+                    tvDurationLabel.visibility = View.GONE
+                }
+                if (collectionName.isNotEmpty()) {
                     tvAlbum.text = collectionName
                 } else {
-                    tvAlbum.visibility = View.INVISIBLE
-                    tvAlbumLabel.visibility = View.INVISIBLE
+                    tvAlbum.visibility = View.GONE
+                    tvAlbumLabel.visibility = View.GONE
                 }
-                tvGenre.text = primaryGenreName
-                tvCountry.text = country
-                tvYear.text = year
+                if (primaryGenreName.isNotEmpty()) {
+                    tvGenre.text = primaryGenreName
+                } else {
+                    tvGenre.visibility = View.GONE
+                    tvGenreLabel.visibility = View.GONE
+                }
+                if (country.isNotEmpty()) {
+                    tvCountry.text = country
+                } else {
+                    tvCountry.visibility = View.GONE
+                    tvCountryLabel.visibility = View.GONE
+                }
+                if (year.isNotEmpty()) {
+                    tvYear.text = year
+                } else {
+                    tvYear.visibility = View.GONE
+                    tvYearLabel.visibility = View.GONE
+                }
             }
         }
     }
