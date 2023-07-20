@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.app.App
@@ -41,7 +42,11 @@ class SettingsActivity : AppCompatActivity() {
             action = Intent.ACTION_SEND
             putExtra(Intent.EXTRA_TEXT, message)
             type = "text/plain"
-            startActivity(this)
+            try {
+                startActivity(this)
+            } catch (t: Throwable) {
+                showErrorToast()
+            }
         }
     }
 
@@ -56,7 +61,11 @@ class SettingsActivity : AppCompatActivity() {
             putExtra(Intent.EXTRA_EMAIL, arrayOf(emailTo))
             putExtra(Intent.EXTRA_SUBJECT, emailSubject)
             putExtra(Intent.EXTRA_TEXT, emailText)
-            startActivity(this)
+            try {
+                startActivity(this)
+            } catch (t: Throwable) {
+                showErrorToast()
+            }
         }
     }
 
@@ -66,8 +75,20 @@ class SettingsActivity : AppCompatActivity() {
         Intent().apply {
             action = Intent.ACTION_VIEW
             data = Uri.parse(url)
-            startActivity(this)
+            try {
+                startActivity(this)
+            } catch (t: Throwable) {
+                showErrorToast()
+            }
         }
+    }
+
+    private fun showErrorToast() {
+        Toast.makeText(
+            this,
+            getString(R.string.no_applications_found),
+            Toast.LENGTH_SHORT
+        ).show()
     }
 
     companion object {
