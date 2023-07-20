@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
@@ -14,6 +15,7 @@ import com.practicum.playlistmaker.databinding.ActivityPlayerBinding
 import com.practicum.playlistmaker.domain.model.Track
 import com.practicum.playlistmaker.presentation.player.PlayerViewModel
 import com.practicum.playlistmaker.presentation.player.PlayerViewModelFactory
+import org.w3c.dom.Text
 
 class PlayerActivity : AppCompatActivity() {
 
@@ -79,37 +81,21 @@ class PlayerActivity : AppCompatActivity() {
                     .into(ivAlbumCover)
                 tvSongTitle.text = trackName
                 tvArtist.text = artistName
-                if (duration.isNotEmpty()) {
-                    tvDuration.text = duration
-                } else {
-                    tvDuration.visibility = View.GONE
-                    tvDurationLabel.visibility = View.GONE
-                }
-                if (collectionName.isNotEmpty()) {
-                    tvAlbum.text = collectionName
-                } else {
-                    tvAlbum.visibility = View.GONE
-                    tvAlbumLabel.visibility = View.GONE
-                }
-                if (primaryGenreName.isNotEmpty()) {
-                    tvGenre.text = primaryGenreName
-                } else {
-                    tvGenre.visibility = View.GONE
-                    tvGenreLabel.visibility = View.GONE
-                }
-                if (country.isNotEmpty()) {
-                    tvCountry.text = country
-                } else {
-                    tvCountry.visibility = View.GONE
-                    tvCountryLabel.visibility = View.GONE
-                }
-                if (year.isNotEmpty()) {
-                    tvYear.text = year
-                } else {
-                    tvYear.visibility = View.GONE
-                    tvYearLabel.visibility = View.GONE
-                }
+                tvDuration.setTextOrHide(duration, tvDurationLabel)
+                tvAlbum.setTextOrHide(collectionName, tvAlbumLabel)
+                tvGenre.setTextOrHide(primaryGenreName, tvGenreLabel)
+                tvCountry.setTextOrHide(country, tvCountryLabel)
+                tvYear.setTextOrHide(year, tvYearLabel)
             }
+        }
+    }
+
+    private fun TextView.setTextOrHide(text: String, fieldLabel: TextView) {
+        if (text.isNotEmpty()) {
+            this.text = text
+        } else {
+            this.visibility = View.GONE
+            fieldLabel.visibility = View.GONE
         }
     }
 
