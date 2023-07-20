@@ -25,6 +25,11 @@ class PlayerViewModel(private val trackUrl: String) : ViewModel() {
     val isPlaying: LiveData<Boolean>
         get() = _isPlaying
 
+    private val _noPreview = MutableLiveData<Boolean>()
+    val noPreview: LiveData<Boolean>
+        get() = _noPreview
+
+
     init {
         preparePlayer()
     }
@@ -56,7 +61,7 @@ class PlayerViewModel(private val trackUrl: String) : ViewModel() {
             override fun run() {
                 if (playerState == STATE_PLAYING) {
                     _timeProgress.value = getFormattedCurrentPlayerPosition()
-                    handler.postDelayed(this, UPDATE_TIMER_DELAY)
+                    handler.postDelayed(this, UPDATE_TIMER_DELAY_IN_MILLIS)
                 }
             }
         }
@@ -79,8 +84,9 @@ class PlayerViewModel(private val trackUrl: String) : ViewModel() {
                 stopTimer()
                 _timeProgress.value = INITIAL_TIME
             }
+        } else {
+            _noPreview.value = true
         }
-
     }
 
     fun playbackControl() {
@@ -105,7 +111,7 @@ class PlayerViewModel(private val trackUrl: String) : ViewModel() {
         private const val STATE_PREPARED = 1
         private const val STATE_PLAYING = 2
         private const val STATE_PAUSED = 3
-        private const val UPDATE_TIMER_DELAY = 500L
+        private const val UPDATE_TIMER_DELAY_IN_MILLIS = 500L
         private const val INITIAL_TIME = "00:00"
     }
 }

@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
@@ -64,7 +65,19 @@ class PlayerActivity : AppCompatActivity() {
         viewModel.timeProgress.observe(this) {
             binding.tvPlayProgress.text = it
         }
+        viewModel.noPreview.observe(this) {
+            if (it == true) {
+                binding.btnPlay.setOnClickListener {
+                    Toast.makeText(
+                        this,
+                        getString(R.string.no_preview_error),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        }
     }
+
 
     private fun setTrackInfoToViews() {
         with(binding) {

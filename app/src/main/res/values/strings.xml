@@ -33,4 +33,5 @@
     <string name="btn_clear_search_description">Кнопка очищения поля ввода</string>
     <string name="placeholder_error_description">Изображение ошибки</string>
     <string name="no_applications_found">Подходящего приложения не найдено на Вашем устройстве</string>
+    <string name="no_preview_error">Для данного трека нет превью</string>
 </resources>
