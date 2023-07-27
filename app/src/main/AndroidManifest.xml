@@ -17,27 +17,27 @@
         android:theme="@style/Theme.PlaylistMaker"
         tools:targetApi="31">
         <activity
-            android:name=".ui.player.PlayerActivity"
+            android:name=".player.ui.activity.PlayerActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.library.LibraryActivity"
+            android:name=".library.ui.LibraryActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".ui.search.SearchActivity"
+            android:name=".search.ui.activity.SearchActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".ui.settings.SettingsActivity"
+            android:name=".settings.ui.SettingsActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.main.MainActivity"
+            android:name=".main.ui.MainActivity"
             android:exported="true"
             android:theme="@style/MainScreenTheme">
             <intent-filter>
