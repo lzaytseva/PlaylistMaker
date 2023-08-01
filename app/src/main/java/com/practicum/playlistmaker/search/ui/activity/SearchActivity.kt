@@ -13,15 +13,17 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.databinding.ActivitySearchBinding
+import com.practicum.playlistmaker.player.ui.activity.PlayerActivity
 import com.practicum.playlistmaker.search.data.dto.SearchTracksResponse
 import com.practicum.playlistmaker.search.data.mappers.TrackMapper
 import com.practicum.playlistmaker.search.data.network.ApiFactory
-import com.practicum.playlistmaker.databinding.ActivitySearchBinding
+import com.practicum.playlistmaker.search.data.repository.HistoryRepositoryImpl
+import com.practicum.playlistmaker.search.data.storage.shared_prefs.SharedPrefsHistoryStorage
 import com.practicum.playlistmaker.search.domain.api.HistoryInteractor
+import com.practicum.playlistmaker.search.domain.impl.HistoryInteractorImpl
 import com.practicum.playlistmaker.search.domain.model.Track
-import com.practicum.playlistmaker.player.ui.activity.PlayerActivity
 import com.practicum.playlistmaker.search.ui.adapters.TrackAdapter
 import retrofit2.Call
 import retrofit2.Callback
@@ -84,7 +86,10 @@ class SearchActivity : AppCompatActivity() {
 
     private fun initHistoryInteractor() {
         sharedPrefs = getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
-        historyInteractor = Creator(sharedPrefs).getHistoryInteractor()
+        //Надо убрать будет эту говну
+        val storage = SharedPrefsHistoryStorage(sharedPrefs)
+        val repository = HistoryRepositoryImpl(storage)
+        historyInteractor = HistoryInteractorImpl(repository)
     }
 
     private fun initAdapters() {
@@ -114,10 +119,10 @@ class SearchActivity : AppCompatActivity() {
     private fun setupSPChangeListener() {
         listener = SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key ->
             if (key == HISTORY_LIST_KEY) {
-                    tracksInHistory.clear()
-                    tracksInHistory.addAll(historyInteractor.getAllTracks())
-                    searchHistoryAdapter.notifyDataSetChanged()
-                }
+                tracksInHistory.clear()
+                tracksInHistory.addAll(historyInteractor.getAllTracks())
+                searchHistoryAdapter.notifyDataSetChanged()
+            }
         }
         sharedPrefs.registerOnSharedPreferenceChangeListener(listener)
     }
