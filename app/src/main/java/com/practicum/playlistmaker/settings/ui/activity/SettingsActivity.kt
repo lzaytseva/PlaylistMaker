@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import com.practicum.playlistmaker.app.App
 import com.practicum.playlistmaker.databinding.ActivitySettingsBinding
 import com.practicum.playlistmaker.settings.ui.view_model.SettingsViewModel
 import com.practicum.playlistmaker.utils.ToastState
@@ -36,12 +35,16 @@ class SettingsActivity : AppCompatActivity() {
 
         binding.btnUserAgreement.setOnClickListener { viewModel.openTerms() }
 
-        binding.switchDarkMode.isChecked = (applicationContext as App).darkTheme
+        binding.switchDarkMode.isChecked = viewModel.isDarkMode()
 
         binding.switchDarkMode.setOnCheckedChangeListener { _, isChecked ->
-            (applicationContext as App).switchTheme(isChecked)
+            viewModel.updateThemeSettings(isChecked)
         }
 
+        observeViewModel()
+    }
+
+    private fun observeViewModel() {
         viewModel.noApplicationsFound.observe(this) {
             if (it is ToastState.Show) {
                 showToast(it.additionalMessage)

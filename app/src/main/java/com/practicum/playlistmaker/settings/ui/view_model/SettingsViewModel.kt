@@ -9,14 +9,16 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.creator.Creator
+import com.practicum.playlistmaker.settings.domain.model.ThemeSettings
 import com.practicum.playlistmaker.utils.ToastState
 
 class SettingsViewModel(
     private val application: Application
 ) : AndroidViewModel(application) {
 
+    private val sharingRepository = Creator.provideSharingRepository(application)
+    private val settingsRepository = Creator.provideSettingsRepository(application)
 
-    private val sharingInteractor = Creator.provideSharingInteractor(getApplication())
     private val _toastState = MutableLiveData<ToastState>()
     val noApplicationsFound: LiveData<ToastState>
         get() = _toastState
@@ -24,7 +26,7 @@ class SettingsViewModel(
 
     fun shareApp() {
         try {
-            sharingInteractor.shareApp()
+            sharingRepository.shareApp()
         } catch (e: Exception) {
             setStateShow()
         }
@@ -32,7 +34,7 @@ class SettingsViewModel(
 
     fun contactSupport() {
         try {
-            sharingInteractor.contactSupport()
+            sharingRepository.contactSupport()
         } catch (e: Exception) {
             setStateShow()
         }
@@ -40,7 +42,7 @@ class SettingsViewModel(
 
     fun openTerms() {
         try {
-            sharingInteractor.openTerms()
+            sharingRepository.openTerms()
         } catch (e: Exception) {
             setStateShow()
         }
@@ -52,6 +54,16 @@ class SettingsViewModel(
 
     fun toastWasShown() {
         _toastState.value = ToastState.None
+    }
+
+    fun isDarkMode(): Boolean {
+        return settingsRepository.getThemeSettings().darkMode
+    }
+
+    fun updateThemeSettings(isDarkModeChecked: Boolean) {
+        settingsRepository.updateThemeSettings(
+            ThemeSettings(isDarkModeChecked)
+        )
     }
 
     private fun getErrorMessage(): String {
