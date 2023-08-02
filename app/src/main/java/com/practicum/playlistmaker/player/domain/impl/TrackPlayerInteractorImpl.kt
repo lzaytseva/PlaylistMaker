@@ -7,7 +7,7 @@ import com.practicum.playlistmaker.player.domain.model.PlayerState
 
 class TrackPlayerInteractorImpl(
     private val trackPlayer: TrackPlayer
-): TrackPlayerInteractor {
+) : TrackPlayerInteractor {
     override fun getState(): LiveData<PlayerState> {
         return trackPlayer.getState()
     }
