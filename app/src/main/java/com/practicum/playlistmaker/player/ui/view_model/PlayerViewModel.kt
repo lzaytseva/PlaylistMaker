@@ -1,117 +1,96 @@
 package com.practicum.playlistmaker.player.ui.view_model
 
-import android.media.MediaPlayer
 import android.os.Handler
 import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
+import com.practicum.playlistmaker.creator.Creator
+import com.practicum.playlistmaker.player.data.TrackPlayerImpl
+import com.practicum.playlistmaker.player.domain.model.PlayerState
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
 
 class PlayerViewModel(private val trackUrl: String) : ViewModel() {
 
-    private var mediaPlayer = MediaPlayer()
-    private var playerState = STATE_DEFAULT
+    private val playerInteractor = Creator.provideTrackPlayerInteractor(trackUrl)
+    val playerState = playerInteractor.getState()
 
     private val looper = Looper.getMainLooper()
     private val handler = Handler(looper)
+    private val timerRunnable = Runnable { updateTimer() }
 
-    private val _timeProgress = MutableLiveData<String>()
+    private val _timeProgress = MutableLiveData<String>(INITIAL_TIME)
     val timeProgress: LiveData<String>
         get() = _timeProgress
 
-    private val _isPlaying = MutableLiveData<Boolean>()
-    val isPlaying: LiveData<Boolean>
-        get() = _isPlaying
-
-    private val _noPreview = MutableLiveData<Boolean>()
-    val noPreview: LiveData<Boolean>
-        get() = _noPreview
-
-
-    init {
-        preparePlayer()
-    }
 
     private fun play() {
-        mediaPlayer.start()
-        playerState = STATE_PLAYING
-        _isPlaying.value = true
-        startTimer()
+        playerInteractor.play()
     }
 
     fun pause() {
-        mediaPlayer.pause()
-        playerState = STATE_PAUSED
-        _isPlaying.value = false
-        stopTimer()
+        playerInteractor.pause()
     }
 
-    private fun startTimer() {
-        handler.post(createUpdateTimerTask())
-    }
-
-    private fun stopTimer() {
-        handler.removeCallbacks(createUpdateTimerTask())
-    }
-
-    private fun createUpdateTimerTask(): Runnable {
-        return object : Runnable {
-            override fun run() {
-                if (playerState == STATE_PLAYING) {
-                    _timeProgress.value = getFormattedCurrentPlayerPosition()
-                    handler.postDelayed(this, UPDATE_TIMER_DELAY_IN_MILLIS)
-                }
-            }
-        }
-    }
 
     private fun getFormattedCurrentPlayerPosition(): String {
-        return SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer.currentPosition)
-    }
-
-    private fun preparePlayer() {
-        if (trackUrl.isNotEmpty()) {
-            mediaPlayer.setDataSource(trackUrl)
-            mediaPlayer.prepareAsync()
-            mediaPlayer.setOnPreparedListener {
-                playerState = STATE_PREPARED
-            }
-            mediaPlayer.setOnCompletionListener {
-                playerState = STATE_PREPARED
-                _isPlaying.value = false
-                stopTimer()
-                _timeProgress.value = INITIAL_TIME
-            }
-        } else {
-            _noPreview.value = true
-        }
+        return SimpleDateFormat("mm:ss", Locale.getDefault()).format(playerInteractor.getCurrentPosition())
     }
 
     fun playbackControl() {
-        when (playerState) {
-            STATE_PLAYING -> {
+        when (playerState.value) {
+            PlayerState.PLAYING -> {
                 pause()
             }
-            STATE_PREPARED, STATE_PAUSED -> {
+
+            PlayerState.PREPARED, PlayerState.PAUSED -> {
                 play()
             }
+
+            else -> {}
         }
+        updateTimer()
+    }
+
+    private fun updateTimer() {
+        when (playerState.value) {
+            PlayerState.PLAYING -> {
+                _timeProgress.value = getFormattedCurrentPlayerPosition()
+                handler.postDelayed(timerRunnable, UPDATE_TIMER_DELAY_IN_MILLIS)
+            }
+
+            PlayerState.PAUSED -> {
+                handler.removeCallbacks(timerRunnable)
+            }
+
+            else -> {
+                handler.removeCallbacks(timerRunnable)
+                _timeProgress.value = INITIAL_TIME
+            }
+        }
+    }
+
+    private fun releasePlayer() {
+        playerInteractor.release()
+        updateTimer()
     }
 
     override fun onCleared() {
         super.onCleared()
-        stopTimer()
-        mediaPlayer.release()
+        releasePlayer()
     }
 
     companion object {
-        private const val STATE_DEFAULT = 0
-        private const val STATE_PREPARED = 1
-        private const val STATE_PLAYING = 2
-        private const val STATE_PAUSED = 3
         private const val UPDATE_TIMER_DELAY_IN_MILLIS = 500L
         private const val INITIAL_TIME = "00:00"
+        fun getViewModelFactory(trackUrl: String): ViewModelProvider.Factory = viewModelFactory {
+            initializer {
+                PlayerViewModel(trackUrl)
+            }
+        }
     }
 }

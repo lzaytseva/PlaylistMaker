@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.practicum.playlistmaker.databinding.ActivitySettingsBinding
 import com.practicum.playlistmaker.settings.ui.view_model.SettingsViewModel
-import com.practicum.playlistmaker.utils.ToastState
+import com.practicum.playlistmaker.settings.ui.ToastState
 
 class SettingsActivity : AppCompatActivity() {
 

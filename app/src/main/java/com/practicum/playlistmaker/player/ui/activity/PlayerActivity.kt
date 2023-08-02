@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
@@ -13,29 +12,33 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.ActivityPlayerBinding
-import com.practicum.playlistmaker.search.domain.model.Track
+import com.practicum.playlistmaker.player.domain.model.PlayerState
 import com.practicum.playlistmaker.player.ui.view_model.PlayerViewModel
-import com.practicum.playlistmaker.player.ui.view_model.PlayerViewModelFactory
+import com.practicum.playlistmaker.search.domain.model.Track
 
 class PlayerActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityPlayerBinding
+    private val binding by lazy {
+        ActivityPlayerBinding.inflate(layoutInflater)
+    }
 
-    private lateinit var track: Track
+    private val track by lazy {
+        intent.extras?.get(EXTRA_KEY_TRACK) as Track
+    }
 
-    private lateinit var viewModel: PlayerViewModel
-    private lateinit var playerViewModelFactory: PlayerViewModelFactory
+    private val viewModel by lazy {
+        ViewModelProvider(
+            this,
+            PlayerViewModel.getViewModelFactory(track.previewUrl)
+        )[PlayerViewModel::class.java]
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        track = intent.extras?.get(EXTRA_KEY_TRACK) as Track
         setTrackInfoToViews()
-
-        playerViewModelFactory = PlayerViewModelFactory(track.previewUrl)
-        viewModel = ViewModelProvider(this, playerViewModelFactory)[PlayerViewModel::class.java]
 
         observeViewModel()
 
@@ -52,29 +55,35 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private fun observeViewModel() {
-        viewModel.isPlaying.observe(this) {
-            val btnImageId =
-                if (it) {
-                    R.drawable.ic_btn_pause
-                } else {
-                    R.drawable.ic_play
-                }
-            binding.btnPlay.setImageResource(btnImageId)
+        viewModel.playerState.observe(this) {
+            renderState(it)
         }
         viewModel.timeProgress.observe(this) {
             binding.tvPlayProgress.text = it
         }
-        viewModel.noPreview.observe(this) {
-            if (it == true) {
-                binding.btnPlay.setOnClickListener {
-                    Toast.makeText(
-                        this,
-                        getString(R.string.no_preview_error),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }
+    }
+
+    private fun renderState(state: PlayerState) {
+        when (state) {
+            PlayerState.PLAYING -> showPauseBtn()
+            PlayerState.PAUSED, PlayerState.PREPARED -> showPlayBtn()
+            PlayerState.DEFAULT -> disableBtn()
         }
+    }
+
+    private fun disableBtn() {
+        binding.btnPlay.isEnabled = false
+        binding.btnPlay.setImageResource(R.drawable.ic_play)
+    }
+
+    private fun showPlayBtn() {
+        binding.btnPlay.isEnabled = true
+        binding.btnPlay.setImageResource(R.drawable.ic_play)
+    }
+
+    private fun showPauseBtn() {
+        binding.btnPlay.isEnabled = true
+        binding.btnPlay.setImageResource(R.drawable.ic_btn_pause)
     }
 
 

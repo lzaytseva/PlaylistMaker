@@ -1,6 +1,9 @@
 package com.practicum.playlistmaker.creator
 
 import android.content.Context
+import com.practicum.playlistmaker.player.data.TrackPlayerImpl
+import com.practicum.playlistmaker.player.domain.api.TrackPlayerInteractor
+import com.practicum.playlistmaker.player.domain.impl.TrackPlayerInteractorImpl
 import com.practicum.playlistmaker.settings.data.repository.SettingsRepositoryImpl
 import com.practicum.playlistmaker.settings.domain.repository.SettingsRepository
 import com.practicum.playlistmaker.sharing.data.navigation.ExternalNavigator
@@ -20,4 +23,7 @@ object Creator {
         return SettingsRepositoryImpl(context)
     }
 
+    fun provideTrackPlayerInteractor(trackUrl: String): TrackPlayerInteractor {
+        return TrackPlayerInteractorImpl(TrackPlayerImpl(trackUrl))
+    }
 }
