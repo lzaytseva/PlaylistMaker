@@ -10,7 +10,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.settings.domain.model.ThemeSettings
-import com.practicum.playlistmaker.settings.ui.ToastState
+import com.practicum.playlistmaker.util.ToastState
 
 class SettingsViewModel(
     private val application: Application

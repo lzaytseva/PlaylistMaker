@@ -1,4 +1,4 @@
-package com.practicum.playlistmaker.settings.ui
+package com.practicum.playlistmaker.util
 
 sealed interface ToastState {
     object None : ToastState

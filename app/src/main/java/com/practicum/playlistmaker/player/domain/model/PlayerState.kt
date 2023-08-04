@@ -5,4 +5,5 @@ enum class PlayerState {
     PREPARED,
     PLAYING,
     PAUSED,
+    ERROR
 }

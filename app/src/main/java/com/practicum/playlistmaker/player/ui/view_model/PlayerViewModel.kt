@@ -13,7 +13,7 @@ import com.practicum.playlistmaker.player.domain.model.PlayerState
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class PlayerViewModel(private val trackUrl: String) : ViewModel() {
+class PlayerViewModel(trackUrl: String) : ViewModel() {
 
     private val playerInteractor = Creator.provideTrackPlayerInteractor(trackUrl)
     val playerState = playerInteractor.getState()
@@ -23,6 +23,8 @@ class PlayerViewModel(private val trackUrl: String) : ViewModel() {
     private val timerRunnable = Runnable { updateTimer() }
 
     private val _timeProgress = MutableLiveData<String>(INITIAL_TIME)
+
+
     val timeProgress: LiveData<String>
         get() = _timeProgress
 

@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
@@ -67,23 +68,45 @@ class PlayerActivity : AppCompatActivity() {
         when (state) {
             PlayerState.PLAYING -> showPauseBtn()
             PlayerState.PAUSED, PlayerState.PREPARED -> showPlayBtn()
-            PlayerState.DEFAULT -> disableBtn()
+            PlayerState.DEFAULT -> showNotReady()
+            PlayerState.ERROR -> showError()
         }
     }
 
-    private fun disableBtn() {
-        binding.btnPlay.isEnabled = false
+    private fun showNotReady() {
+        binding.btnPlay.setOnClickListener {
+            showToast(getString(R.string.player_not_ready))
+        }
         binding.btnPlay.setImageResource(R.drawable.ic_play)
     }
 
     private fun showPlayBtn() {
-        binding.btnPlay.isEnabled = true
+        binding.btnPlay.setOnClickListener {
+            viewModel.playbackControl()
+        }
         binding.btnPlay.setImageResource(R.drawable.ic_play)
     }
 
     private fun showPauseBtn() {
-        binding.btnPlay.isEnabled = true
+        binding.btnPlay.setOnClickListener {
+            viewModel.playbackControl()
+        }
         binding.btnPlay.setImageResource(R.drawable.ic_btn_pause)
+    }
+
+    private fun showError() {
+        binding.btnPlay.setOnClickListener {
+            showToast(getString(R.string.error_loading_preview))
+        }
+        binding.btnPlay.setImageResource(R.drawable.ic_play)
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(
+            this,
+            message,
+            Toast.LENGTH_SHORT
+        ).show()
     }
 
 
