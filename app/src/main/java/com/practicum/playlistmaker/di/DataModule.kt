@@ -17,7 +17,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 val dataModule = module {
     single<HistoryStorage> {
-        SharedPrefsHistoryStorage(get(), get())
+        SharedPrefsHistoryStorage(sharedPrefs = get(), mapper = get())
     }
 
     single {
@@ -26,7 +26,7 @@ val dataModule = module {
     }
 
     factory {
-        TrackMapper(get())
+        TrackMapper(gson = get())
     }
 
     factory {
@@ -42,11 +42,13 @@ val dataModule = module {
     }
 
     single<NetworkClient> {
-        RetrofitNetworkClient(androidContext(), get())
+        RetrofitNetworkClient(
+            context = androidContext(), itunesService = get()
+        )
     }
 
     single {
-        ExternalNavigator(androidContext())
+        ExternalNavigator(context = androidContext())
     }
 
 }

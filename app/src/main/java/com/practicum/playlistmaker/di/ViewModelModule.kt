@@ -8,10 +8,18 @@ import org.koin.dsl.module
 
 val viewModelModule = module {
     viewModel {
-        SearchViewModel(androidApplication(), get(), get())
+        SearchViewModel(
+            application = androidApplication(),
+            searchInteractor = get(),
+            historyInteractor = get()
+        )
     }
 
     viewModel {
-        SettingsViewModel(androidApplication(), get(), get())
+        SettingsViewModel(
+            application = androidApplication(),
+            sharingRepository = get(),
+            settingsRepository = get()
+        )
     }
 }

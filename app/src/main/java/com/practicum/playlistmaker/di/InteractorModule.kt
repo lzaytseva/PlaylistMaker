@@ -8,10 +8,10 @@ import org.koin.dsl.module
 
 val interactorModule = module {
     single<SearchInteractor> {
-        SearchInteractorImpl(get())
+        SearchInteractorImpl(repository = get())
     }
 
     single<HistoryInteractor> {
-        HistoryInteractorImpl(get())
+        HistoryInteractorImpl(repository = get())
     }
 }
