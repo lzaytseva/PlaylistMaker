@@ -6,8 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import com.practicum.playlistmaker.player.domain.api.TrackPlayer
 import com.practicum.playlistmaker.player.domain.model.PlayerState
 
-class TrackPlayerImpl(trackUrl: String) : TrackPlayer {
-    private val mediaPlayer = MediaPlayer()
+class TrackPlayerImpl(trackUrl: String, private val mediaPlayer: MediaPlayer) : TrackPlayer {
+
     private val playerState = MutableLiveData<PlayerState>(PlayerState.DEFAULT)
 
     init {

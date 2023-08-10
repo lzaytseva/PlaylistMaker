@@ -1,7 +1,10 @@
 package com.practicum.playlistmaker.di
 
 import android.content.Context
+import android.media.MediaPlayer
 import com.google.gson.Gson
+import com.practicum.playlistmaker.player.data.TrackPlayerImpl
+import com.practicum.playlistmaker.player.domain.api.TrackPlayer
 import com.practicum.playlistmaker.search.data.mappers.TrackMapper
 import com.practicum.playlistmaker.search.data.network.ItunesApi
 import com.practicum.playlistmaker.search.data.network.NetworkClient
@@ -49,6 +52,14 @@ val dataModule = module {
 
     single {
         ExternalNavigator(context = androidContext())
+    }
+
+    factory<TrackPlayer> {
+        (trackUrl: String) -> TrackPlayerImpl(trackUrl, get())
+    }
+
+    factory {
+        MediaPlayer()
     }
 
 }
