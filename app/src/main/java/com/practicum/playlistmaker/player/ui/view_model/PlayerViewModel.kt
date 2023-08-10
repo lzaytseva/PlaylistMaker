@@ -7,18 +7,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.practicum.playlistmaker.player.domain.api.TrackPlayerInteractor
 import com.practicum.playlistmaker.player.domain.model.PlayerState
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
-import org.koin.core.parameter.parametersOf
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 class PlayerViewModel(
     trackUrl: String,
-) : ViewModel(), KoinComponent {
+    private val playerInteractor: TrackPlayerInteractor
+) : ViewModel() {
 
-    //private val playerInteractor = Creator.provideTrackPlayerInteractor(trackUrl)
-    private val playerInteractor: TrackPlayerInteractor by inject { parametersOf(trackUrl) }
     val playerState = playerInteractor.getState()
 
     private val looper = Looper.getMainLooper()
@@ -27,6 +23,9 @@ class PlayerViewModel(
 
     private val _timeProgress = MutableLiveData<String>(INITIAL_TIME)
 
+    init {
+        playerInteractor.preparePlayer(trackUrl)
+    }
 
     val timeProgress: LiveData<String>
         get() = _timeProgress

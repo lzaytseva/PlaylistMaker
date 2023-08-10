@@ -18,6 +18,6 @@ val interactorModule = module {
     }
 
     factory<TrackPlayerInteractor> {
-        (trackUrl: String) -> TrackPlayerInteractorImpl(trackUrl = trackUrl)
+        TrackPlayerInteractorImpl(trackPlayer = get())
     }
 }

@@ -55,7 +55,7 @@ val dataModule = module {
     }
 
     factory<TrackPlayer> {
-        (trackUrl: String) -> TrackPlayerImpl(trackUrl, get())
+        TrackPlayerImpl(mediaPlayer = get())
     }
 
     factory {
