@@ -9,13 +9,13 @@ import com.practicum.playlistmaker.search.data.network.RetrofitNetworkClient
 import com.practicum.playlistmaker.search.data.storage.HistoryStorage
 import com.practicum.playlistmaker.search.data.storage.shared_prefs.SharedPrefsHistoryStorage
 import com.practicum.playlistmaker.search.data.storage.shared_prefs.SharedPrefsHistoryStorage.Companion.PLAYLIST_MAKER_PREFERENCES
+import com.practicum.playlistmaker.sharing.data.navigation.ExternalNavigator
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 val dataModule = module {
-
     single<HistoryStorage> {
         SharedPrefsHistoryStorage(get(), get())
     }
@@ -43,6 +43,10 @@ val dataModule = module {
 
     single<NetworkClient> {
         RetrofitNetworkClient(androidContext(), get())
+    }
+
+    single {
+        ExternalNavigator(androidContext())
     }
 
 }
