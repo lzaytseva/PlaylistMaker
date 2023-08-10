@@ -42,32 +42,6 @@ object Creator {
         )
     }
 
-    fun provideSearchInteractor(context: Context): SearchInteractor {
-        return SearchInteractorImpl(
-            provideSearchRepository(context)
-        )
-    }
 
-    private fun provideSearchRepository(context: Context): SearchRepository {
-        return SearchRepositoryImpl(
-            RetrofitNetworkClient(context)
-        )
-    }
-
-    fun provideHistoryInteractor(context: Context): HistoryInteractor {
-        return HistoryInteractorImpl(
-            provideHistoryRepository(context)
-        )
-    }
-
-    private fun provideHistoryRepository(context: Context): HistoryRepository {
-        return HistoryRepositoryImpl(
-            provideHistoryStorage(context)
-        )
-    }
-
-    private fun provideHistoryStorage(context: Context): HistoryStorage {
-        return SharedPrefsHistoryStorage(context)
-    }
 
 }

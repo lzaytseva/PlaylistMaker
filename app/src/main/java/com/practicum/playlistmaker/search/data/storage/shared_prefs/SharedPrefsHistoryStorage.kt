@@ -1,15 +1,15 @@
 package com.practicum.playlistmaker.search.data.storage.shared_prefs
 
-import android.content.Context
-import android.content.Context.MODE_PRIVATE
+import android.content.SharedPreferences
 import com.practicum.playlistmaker.search.data.mappers.TrackMapper
 import com.practicum.playlistmaker.search.data.storage.HistoryStorage
 import com.practicum.playlistmaker.search.domain.model.Track
 
-class SharedPrefsHistoryStorage(context: Context) : HistoryStorage {
+class SharedPrefsHistoryStorage(
+    private val sharedPrefs: SharedPreferences,
+    private val mapper: TrackMapper
+) : HistoryStorage {
     private val savedTracks = mutableListOf<Track>()
-    private val mapper = TrackMapper()
-    private val sharedPrefs = context.getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
 
     override fun saveTrack(track: Track) {
         if (savedTracks.contains(track)) {
