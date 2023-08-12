@@ -46,9 +46,15 @@ class SearchActivity : AppCompatActivity() {
         setupBtnRefreshClickListener()
         setupBtnBackClickListener()
 
-        viewModel.showHistory()
         viewModel.state.observe(this) {
             renderState(it)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (binding.searchEditText.text.isEmpty()) {
+            viewModel.showHistory()
         }
     }
 
