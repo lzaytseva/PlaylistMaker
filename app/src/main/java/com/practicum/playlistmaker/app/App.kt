@@ -17,12 +17,10 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
 
-
-            startKoin {
-                androidContext(this@App)
-                modules(dataModule, repositoryModule, interactorModule, viewModelModule)
-            }
-
+        startKoin {
+            androidContext(this@App)
+            modules(dataModule, repositoryModule, interactorModule, viewModelModule)
+        }
 
         sharedPrefs = getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
         darkTheme = sharedPrefs.getBoolean(DARK_MODE_KEY, false)
