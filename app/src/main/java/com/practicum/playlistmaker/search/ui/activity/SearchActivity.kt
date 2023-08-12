@@ -32,37 +32,21 @@ class SearchActivity : AppCompatActivity() {
 
     private var savedSearchRequest = ""
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
         initAdapters()
-
-
         buildSearchRecyclerView()
         buildHistoryRecyclerView()
 
-        viewModel.showHistory()
-
         setupSearchEditText()
-
         setupBtnClearSearchClickListener()
-
-        binding.btnRefresh.setOnClickListener {
-            search()
-        }
-
-        binding.btnBack.setOnClickListener {
-            finish()
-        }
-
-        if (tracksInHistory.isNotEmpty()) {
-            binding.viewGroupHistorySearch.visibility = View.VISIBLE
-        }
-
         setupBtnClearHistoryClickListener()
+        setupBtnRefreshClickListener()
+        setupBtnBackClickListener()
 
+        viewModel.showHistory()
         viewModel.state.observe(this) {
             renderState(it)
         }
@@ -128,19 +112,16 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun initAdapters() {
-        adapter = TrackAdapter {
+        val itemClickListener: (Track) -> Unit = {
             if (viewModel.clickDebounce()) {
                 viewModel.saveTrack(it)
-                PlayerActivity.newIntent(this, it).apply { startActivity(this) }
-            }
-        }
-        searchHistoryAdapter = TrackAdapter {
-            if (viewModel.clickDebounce()) {
                 PlayerActivity.newIntent(this, it).apply {
                     startActivity(this)
                 }
             }
         }
+        adapter = TrackAdapter(itemClickListener)
+        searchHistoryAdapter = TrackAdapter(itemClickListener)
     }
 
     private fun setupBtnClearHistoryClickListener() {
@@ -240,6 +221,19 @@ class SearchActivity : AppCompatActivity() {
             View.GONE
         } else {
             View.VISIBLE
+        }
+    }
+
+
+    private fun setupBtnBackClickListener() {
+        binding.btnBack.setOnClickListener {
+            finish()
+        }
+    }
+
+    private fun setupBtnRefreshClickListener() {
+        binding.btnRefresh.setOnClickListener {
+            search()
         }
     }
 
