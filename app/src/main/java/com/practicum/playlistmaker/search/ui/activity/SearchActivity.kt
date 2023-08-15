@@ -216,11 +216,9 @@ class SearchActivity : AppCompatActivity() {
         binding.recyclerViewHistory.adapter = searchHistoryAdapter
     }
 
-
     private fun search() {
         viewModel.searchDebounce(binding.searchEditText.text.toString())
     }
-
 
     private fun clearButtonVisibility(s: CharSequence?): Int {
         return if (s.isNullOrEmpty()) {
@@ -229,7 +227,6 @@ class SearchActivity : AppCompatActivity() {
             View.VISIBLE
         }
     }
-
 
     private fun setupBtnBackClickListener() {
         binding.btnBack.setOnClickListener {
@@ -260,5 +257,4 @@ class SearchActivity : AppCompatActivity() {
             return Intent(context, SearchActivity::class.java)
         }
     }
-
 }
