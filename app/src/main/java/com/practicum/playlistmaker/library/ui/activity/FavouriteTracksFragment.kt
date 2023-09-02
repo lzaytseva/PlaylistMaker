@@ -10,7 +10,9 @@ import com.practicum.playlistmaker.library.ui.view_model.FavouriteTracksViewMode
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FavouriteTracksFragment : Fragment() {
-    private lateinit var binding: FragmentFavouriteTracksBinding
+    private var _binding: FragmentFavouriteTracksBinding? = null
+    private val binding get() = _binding!!
+
     private val viewModel: FavouriteTracksViewModel by viewModel()
 
     override fun onCreateView(
@@ -18,8 +20,13 @@ class FavouriteTracksFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentFavouriteTracksBinding.inflate(inflater, container, false)
+        _binding = FragmentFavouriteTracksBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     companion object {
