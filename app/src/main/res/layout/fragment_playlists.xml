@@ -11,7 +11,7 @@
 
         <Button
             android:id="@+id/btn_create_playlist"
-            style="@style/BasicButtonStyle"
+            style="@style/basic_button_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -20,7 +20,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/placeholderError"
+        android:id="@+id/placeholder_error"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
@@ -29,7 +29,7 @@
         android:visibility="visible">
 
         <ImageView
-            android:id="@+id/placeholderImage"
+            android:id="@+id/placeholder_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -38,7 +38,7 @@
             android:src="@drawable/ic_empty" />
 
         <TextView
-            android:id="@+id/placeholderMessage"
+            android:id="@+id/placeholder_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/views_bottom_margin_search_history"

@@ -15,27 +15,27 @@
 
         <ImageView
             android:id="@+id/btn_back"
-            style="@style/ArrowBackStyle"
+            style="@style/arrow_back_style"
             android:contentDescription="@string/btn_back_description" />
 
         <TextView
-            style="@style/HeaderStyle"
+            style="@style/header_style"
             android:layout_marginStart="28dp"
             android:text="@string/library" />
 
     </LinearLayout>
 
     <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tabLayout"
-        style="@style/LibraryTabsStyle"
+        android:id="@+id/tab_layout"
+        style="@style/library_tabs_style"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin16dp"
         app:tabMode="fixed"
-        app:tabTextAppearance="@style/TabsTextStyle" />
+        app:tabTextAppearance="@style/tabs_text_style" />
 
     <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/viewPager"
+        android:id="@+id/view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

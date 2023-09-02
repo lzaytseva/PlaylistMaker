@@ -18,11 +18,11 @@
 
         <ImageView
             android:id="@+id/btn_back"
-            style="@style/ArrowBackStyle"
+            style="@style/arrow_back_style"
             android:contentDescription="@string/btn_back_description" />
 
         <TextView
-            style="@style/HeaderStyle"
+            style="@style/header_style"
             android:layout_marginStart="28dp"
             android:text="@string/search" />
 
@@ -76,7 +76,7 @@
     </FrameLayout>
 
     <ProgressBar
-        android:id="@+id/progressBar"
+        android:id="@+id/progress_bar"
         android:layout_width="@dimen/progress_bar_size"
         android:layout_height="@dimen/progress_bar_size"
         android:layout_gravity="center"
@@ -96,7 +96,7 @@
             tools:visibility="gone" />
 
         <LinearLayout
-            android:id="@+id/placeholderError"
+            android:id="@+id/placeholder_error"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
@@ -105,7 +105,7 @@
             android:visibility="gone">
 
             <ImageView
-                android:id="@+id/placeholderImage"
+                android:id="@+id/placeholder_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -114,7 +114,7 @@
                 tools:src="@drawable/ic_no_internet" />
 
             <TextView
-                android:id="@+id/placeholderMessage"
+                android:id="@+id/placeholder_message"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/views_bottom_margin_search_history"
@@ -126,7 +126,7 @@
 
             <Button
                 android:id="@+id/btn_refresh"
-                style="@style/BasicButtonStyle"
+                style="@style/basic_button_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -135,7 +135,7 @@
         </LinearLayout>
 
         <androidx.core.widget.NestedScrollView
-            android:id="@+id/viewGroupHistorySearch"
+            android:id="@+id/view_group_history_search"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="26dp"
@@ -167,7 +167,7 @@
 
                 <Button
                     android:id="@+id/btn_clear_history"
-                    style="@style/BasicButtonStyle"
+                    style="@style/basic_button_style"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
