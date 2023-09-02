@@ -1,5 +1,6 @@
 package com.practicum.playlistmaker.search.data.repository
 
+import com.google.gson.Gson
 import com.practicum.playlistmaker.search.data.dto.SearchTracksResponse
 import com.practicum.playlistmaker.search.data.dto.TracksSearchRequest
 import com.practicum.playlistmaker.search.data.mappers.TrackMapper
@@ -12,7 +13,7 @@ import com.practicum.playlistmaker.util.Resource
 class SearchRepositoryImpl(
     private val networkClient: NetworkClient
 ): SearchRepository {
-    private val mapper = TrackMapper()
+    private val mapper = TrackMapper(Gson())
     override fun searchTracks(expression: String): Resource<List<Track>> {
         val response = networkClient.doRequest(TracksSearchRequest(expression))
         return when (response.resultCode) {

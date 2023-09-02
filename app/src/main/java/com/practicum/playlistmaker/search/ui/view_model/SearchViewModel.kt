@@ -4,23 +4,22 @@ import android.app.Application
 import android.os.Handler
 import android.os.Looper
 import android.os.SystemClock
-import androidx.lifecycle.AndroidViewModel
+
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
+import androidx.lifecycle.ViewModel
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.creator.Creator
+import com.practicum.playlistmaker.search.domain.api.HistoryInteractor
 import com.practicum.playlistmaker.search.domain.api.SearchInteractor
 import com.practicum.playlistmaker.search.domain.model.SearchActivityState
 import com.practicum.playlistmaker.search.domain.model.Track
 import com.practicum.playlistmaker.util.ErrorType
 
-class SearchViewModel(application: Application) : AndroidViewModel(application) {
-
-    private val searchInteractor = Creator.provideSearchInteractor(application)
-    private val historyInteractor = Creator.provideHistoryInteractor(application)
+class SearchViewModel(
+    private val application: Application,
+    private val searchInteractor: SearchInteractor,
+    private val historyInteractor: HistoryInteractor
+) : ViewModel() {
 
     private val handler = Handler(Looper.getMainLooper())
     private var latestSearchText: String? = null
@@ -64,7 +63,7 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
                         errorType != null -> {
                             renderState(
                                 SearchActivityState.Error(
-                                    errorMessage = getApplication<Application>().getString(R.string.check_connection),
+                                    errorMessage = application.getString(R.string.check_connection),
                                 )
                             )
                         }
@@ -72,7 +71,7 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
                         tracks.isEmpty() -> {
                             renderState(
                                 SearchActivityState.Empty(
-                                    message = getApplication<Application>().getString(R.string.nothing_found),
+                                    message = application.getString(R.string.nothing_found),
                                 )
                             )
                         }
@@ -130,11 +129,5 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
         private const val SEARCH_DEBOUNCE_DELAY_IN_MILLIS = 2000L
         private val SEARCH_REQUEST_TOKEN = Any()
         private const val CLICK_DEBOUNCE_DELAY_IN_MILLIS = 1000L
-
-        fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                SearchViewModel(this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as Application)
-            }
-        }
     }
 }

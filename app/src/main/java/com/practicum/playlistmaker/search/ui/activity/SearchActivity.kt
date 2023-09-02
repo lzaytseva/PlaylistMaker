@@ -9,7 +9,6 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.ActivitySearchBinding
@@ -18,18 +17,14 @@ import com.practicum.playlistmaker.search.domain.model.SearchActivityState
 import com.practicum.playlistmaker.search.domain.model.Track
 import com.practicum.playlistmaker.search.ui.adapters.TrackAdapter
 import com.practicum.playlistmaker.search.ui.view_model.SearchViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchActivity : AppCompatActivity() {
     private val binding by lazy {
         ActivitySearchBinding.inflate(layoutInflater)
     }
 
-    private val viewModel by lazy {
-        ViewModelProvider(
-            this,
-            SearchViewModel.getViewModelFactory()
-        )[SearchViewModel::class.java]
-    }
+    private val viewModel: SearchViewModel by viewModel()
     private val tracksInHistory = ArrayList<Track>()
     private val tracksList = ArrayList<Track>()
     private lateinit var adapter: TrackAdapter
@@ -37,39 +32,29 @@ class SearchActivity : AppCompatActivity() {
 
     private var savedSearchRequest = ""
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
         initAdapters()
-
-
         buildSearchRecyclerView()
         buildHistoryRecyclerView()
 
-        viewModel.showHistory()
-
         setupSearchEditText()
-
         setupBtnClearSearchClickListener()
-
-        binding.btnRefresh.setOnClickListener {
-            search()
-        }
-
-        binding.btnBack.setOnClickListener {
-            finish()
-        }
-
-        if (tracksInHistory.isNotEmpty()) {
-            binding.viewGroupHistorySearch.visibility = View.VISIBLE
-        }
-
         setupBtnClearHistoryClickListener()
+        setupBtnRefreshClickListener()
+        setupBtnBackClickListener()
 
         viewModel.state.observe(this) {
             renderState(it)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (binding.searchEditText.text.isEmpty()) {
+            viewModel.showHistory()
         }
     }
 
@@ -133,19 +118,16 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun initAdapters() {
-        adapter = TrackAdapter {
+        val itemClickListener: (Track) -> Unit = {
             if (viewModel.clickDebounce()) {
                 viewModel.saveTrack(it)
-                PlayerActivity.newIntent(this, it).apply { startActivity(this) }
-            }
-        }
-        searchHistoryAdapter = TrackAdapter {
-            if (viewModel.clickDebounce()) {
                 PlayerActivity.newIntent(this, it).apply {
                     startActivity(this)
                 }
             }
         }
+        adapter = TrackAdapter(itemClickListener)
+        searchHistoryAdapter = TrackAdapter(itemClickListener)
     }
 
     private fun setupBtnClearHistoryClickListener() {
@@ -245,6 +227,19 @@ class SearchActivity : AppCompatActivity() {
             View.GONE
         } else {
             View.VISIBLE
+        }
+    }
+
+
+    private fun setupBtnBackClickListener() {
+        binding.btnBack.setOnClickListener {
+            finish()
+        }
+    }
+
+    private fun setupBtnRefreshClickListener() {
+        binding.btnRefresh.setOnClickListener {
+            search()
         }
     }
 

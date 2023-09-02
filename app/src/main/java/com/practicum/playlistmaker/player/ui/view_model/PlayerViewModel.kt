@@ -5,17 +5,16 @@ import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.practicum.playlistmaker.creator.Creator
+import com.practicum.playlistmaker.player.domain.api.TrackPlayerInteractor
 import com.practicum.playlistmaker.player.domain.model.PlayerState
 import java.text.SimpleDateFormat
 import java.util.Locale
 
-class PlayerViewModel(trackUrl: String) : ViewModel() {
+class PlayerViewModel(
+    trackUrl: String,
+    private val playerInteractor: TrackPlayerInteractor
+) : ViewModel() {
 
-    private val playerInteractor = Creator.provideTrackPlayerInteractor(trackUrl)
     val playerState = playerInteractor.getState()
 
     private val looper = Looper.getMainLooper()
@@ -24,6 +23,9 @@ class PlayerViewModel(trackUrl: String) : ViewModel() {
 
     private val _timeProgress = MutableLiveData<String>(INITIAL_TIME)
 
+    init {
+        playerInteractor.preparePlayer(trackUrl)
+    }
 
     val timeProgress: LiveData<String>
         get() = _timeProgress
@@ -91,10 +93,5 @@ class PlayerViewModel(trackUrl: String) : ViewModel() {
     companion object {
         private const val UPDATE_TIMER_DELAY_IN_MILLIS = 500L
         private const val INITIAL_TIME = "00:00"
-        fun getViewModelFactory(trackUrl: String): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                PlayerViewModel(trackUrl)
-            }
-        }
     }
 }

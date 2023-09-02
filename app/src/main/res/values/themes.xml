@@ -7,6 +7,9 @@
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/gray</item>
         <item name="colorSecondaryVariant">@color/gray</item>
+        <item name="android:statusBarColor">?attr/colorPrimary</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+
         <!-- Customize your theme here. -->
         <item name="android:windowBackground">?attr/colorPrimary</item>
         <item name="colorAccent">@color/dark_blue</item>
@@ -20,7 +23,7 @@
         <item name="colorSecondary">@color/main_screen_background</item>
         <item name="colorOnSecondary">@color/white</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <item name="android:statusBarColor">@color/main_screen_background</item>
         <!-- Customize your theme here. -->
         <item name="colorAccent">@color/dark_blue</item>
         <item name="android:windowBackground">?attr/colorSecondary</item>
