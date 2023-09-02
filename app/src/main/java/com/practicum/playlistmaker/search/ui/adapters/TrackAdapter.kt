@@ -44,8 +44,11 @@ class TrackAdapter(private val onTrackClicked: (Track) -> Unit) :
                     tvArtist.text = artistName
                     if (duration.isNotEmpty()) {
                         tvDuration.text = duration
+                        ellipse.visibility = View.VISIBLE
+                        tvDuration.visibility = View.VISIBLE
                     } else {
                         ellipse.visibility = View.INVISIBLE
+                        tvDuration.visibility = View.INVISIBLE
                     }
                     Glide.with(itemView)
                         .load(artworkUrl100)
