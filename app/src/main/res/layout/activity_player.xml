@@ -88,7 +88,7 @@
         android:layout_width="83dp"
         android:layout_height="83dp"
         android:layout_marginTop="32dp"
-        android:background="@drawable/play_round_button"
+        android:background="@drawable/white_round_button"
         android:contentDescription="@string/play_btn_description"
         android:src="@drawable/ic_play"
         app:layout_constraintBottom_toTopOf="@+id/tv_play_progress"
