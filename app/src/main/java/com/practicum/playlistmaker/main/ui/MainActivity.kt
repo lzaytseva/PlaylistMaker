@@ -3,7 +3,7 @@ package com.practicum.playlistmaker.main.ui
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.practicum.playlistmaker.databinding.ActivityMainBinding
-import com.practicum.playlistmaker.library.ui.LibraryActivity
+import com.practicum.playlistmaker.library.ui.activity.LibraryActivity
 import com.practicum.playlistmaker.settings.ui.activity.SettingsActivity
 import com.practicum.playlistmaker.search.ui.activity.SearchActivity
 
