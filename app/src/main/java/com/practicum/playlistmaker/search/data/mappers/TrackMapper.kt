@@ -11,13 +11,13 @@ class TrackMapper(private val gson: Gson) {
         trackId = dto.trackId,
         trackName = dto.trackName,
         artistName = dto.artistName,
-        duration = dto.trackTimeMillis?.let { getDuration(it) } ?: EMPTY_STRING,
-        artworkUrl100 = dto.artworkUrl100 ?: EMPTY_STRING,
-        collectionName = dto.collectionName ?: EMPTY_STRING,
-        year = dto.releaseDate?.let { getYear(it) } ?: EMPTY_STRING,
-        primaryGenreName = dto.primaryGenreName ?: EMPTY_STRING,
-        country = dto.country ?: EMPTY_STRING,
-        previewUrl = dto.previewUrl ?: EMPTY_STRING
+        duration = dto.trackTimeMillis?.let { getDuration(it) }.orEmpty(),
+        artworkUrl100 = dto.artworkUrl100.orEmpty(),
+        collectionName = dto.collectionName.orEmpty(),
+        year = dto.releaseDate?.let { getYear(it) }.orEmpty(),
+        primaryGenreName = dto.primaryGenreName.orEmpty(),
+        country = dto.country.orEmpty(),
+        previewUrl = dto.previewUrl.orEmpty()
     )
 
     private fun getDuration(trackTimeMillis: Long): String =
@@ -31,9 +31,5 @@ class TrackMapper(private val gson: Gson) {
 
     fun createJsonFromTracksList(tracks: Array<Track>): String {
         return gson.toJson(tracks)
-    }
-
-    companion object {
-        private const val EMPTY_STRING = ""
     }
 }
