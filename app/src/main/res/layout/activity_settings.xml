@@ -18,10 +18,10 @@
 
         <ImageView
             android:id="@+id/btn_back"
-            style="@style/ArrowBackStyle" />
+            style="@style/arrow_back_style" />
 
         <TextView
-            style="@style/HeaderStyle"
+            style="@style/header_style"
             android:layout_marginStart="28dp"
             android:text="@string/settings" />
 
@@ -32,11 +32,11 @@
         android:layout_height="wrap_content">
 
         <TextView
-            style="@style/SettingsTextViewOptionsStyle"
+            style="@style/settings_text_view_option_style"
             android:text="@string/dark_theme" />
 
         <com.google.android.material.switchmaterial.SwitchMaterial
-            android:id="@+id/switchDarkMode"
+            android:id="@+id/switch_dark_mode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end|center"
@@ -50,7 +50,7 @@
         android:layout_height="wrap_content">
 
         <TextView
-            style="@style/SettingsTextViewOptionsStyle"
+            style="@style/settings_text_view_option_style"
             android:text="@string/share_app" />
 
         <ImageView
@@ -69,7 +69,7 @@
         android:layout_height="wrap_content">
 
         <TextView
-            style="@style/SettingsTextViewOptionsStyle"
+            style="@style/settings_text_view_option_style"
             android:text="@string/contact_support" />
 
         <ImageView
@@ -88,7 +88,7 @@
         android:layout_height="wrap_content">
 
         <TextView
-            style="@style/SettingsTextViewOptionsStyle"
+            style="@style/settings_text_view_option_style"
             android:text="@string/user_agreement" />
 
         <ImageView

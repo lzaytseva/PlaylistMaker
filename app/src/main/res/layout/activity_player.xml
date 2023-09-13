@@ -8,7 +8,7 @@
 
     <ImageView
         android:id="@+id/arrow_back"
-        style="@style/ArrowBackStyle"
+        style="@style/arrow_back_style"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
         android:contentDescription="@string/btn_back_description"
@@ -48,7 +48,7 @@
 
     <TextView
         android:id="@+id/tv_song_title"
-        style="@style/HeaderStyle"
+        style="@style/header_style"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin24dp"
@@ -60,7 +60,7 @@
 
     <TextView
         android:id="@+id/tv_artist"
-        style="@style/RegularTextStyle"
+        style="@style/regular_text_style"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
@@ -88,7 +88,7 @@
         android:layout_width="83dp"
         android:layout_height="83dp"
         android:layout_marginTop="32dp"
-        android:background="@drawable/play_round_button"
+        android:background="@drawable/white_round_button"
         android:contentDescription="@string/play_btn_description"
         android:src="@drawable/ic_play"
         app:layout_constraintBottom_toTopOf="@+id/tv_play_progress"
@@ -123,7 +123,7 @@
         app:layout_constraintGuide_percent="0.96" />
 
     <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/labelsBarrier"
+        android:id="@+id/labels_barrier"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:barrierDirection="end"
@@ -131,7 +131,7 @@
 
     <TextView
         android:id="@+id/tv_play_progress"
-        style="@style/RegularTextStyle"
+        style="@style/regular_text_style"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin12dp"
@@ -143,7 +143,7 @@
 
     <TextView
         android:id="@+id/tv_duration_label"
-        style="@style/LabelsTextStyle"
+        style="@style/labels_text_style"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin24dp"
@@ -155,7 +155,7 @@
 
     <TextView
         android:id="@+id/tv_album_label"
-        style="@style/LabelsTextStyle"
+        style="@style/labels_text_style"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin16dp"
@@ -167,7 +167,7 @@
 
     <TextView
         android:id="@+id/tv_year_label"
-        style="@style/LabelsTextStyle"
+        style="@style/labels_text_style"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin16dp"
@@ -179,7 +179,7 @@
 
     <TextView
         android:id="@+id/tv_genre_label"
-        style="@style/LabelsTextStyle"
+        style="@style/labels_text_style"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin16dp"
@@ -191,7 +191,7 @@
 
     <TextView
         android:id="@+id/tv_country_label"
-        style="@style/LabelsTextStyle"
+        style="@style/labels_text_style"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin16dp"
@@ -203,7 +203,7 @@
 
     <TextView
         android:id="@+id/tv_duration"
-        style="@style/PlayerSongInfoTextStyle"
+        style="@style/player_song_info_text_style"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBaseline_toBaselineOf="@id/tv_duration_label"
@@ -213,7 +213,7 @@
 
     <TextView
         android:id="@+id/tv_album"
-        style="@style/PlayerSongInfoTextStyle"
+        style="@style/player_song_info_text_style"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -224,13 +224,13 @@
         app:layout_constraintBaseline_toBaselineOf="@id/tv_album_label"
         app:layout_constraintEnd_toStartOf="@id/right_info_guideline"
         app:layout_constraintHorizontal_chainStyle="spread"
-        app:layout_constraintStart_toEndOf="@id/labelsBarrier"
+        app:layout_constraintStart_toEndOf="@id/labels_barrier"
         app:layout_constraintTop_toBottomOf="@id/tv_duration"
         tools:text="Yesterday (Remastered 2009)" />
 
     <TextView
         android:id="@+id/tv_year"
-        style="@style/PlayerSongInfoTextStyle"
+        style="@style/player_song_info_text_style"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBaseline_toBaselineOf="@id/tv_year_label"
@@ -240,7 +240,7 @@
 
     <TextView
         android:id="@+id/tv_genre"
-        style="@style/PlayerSongInfoTextStyle"
+        style="@style/player_song_info_text_style"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBaseline_toBaselineOf="@id/tv_genre_label"
@@ -250,7 +250,7 @@
 
     <TextView
         android:id="@+id/tv_country"
-        style="@style/PlayerSongInfoTextStyle"
+        style="@style/player_song_info_text_style"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBaseline_toBaselineOf="@id/tv_country_label"

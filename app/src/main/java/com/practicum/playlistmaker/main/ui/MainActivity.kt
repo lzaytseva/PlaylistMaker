@@ -3,9 +3,9 @@ package com.practicum.playlistmaker.main.ui
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.practicum.playlistmaker.databinding.ActivityMainBinding
-import com.practicum.playlistmaker.library.ui.LibraryActivity
-import com.practicum.playlistmaker.settings.ui.activity.SettingsActivity
+import com.practicum.playlistmaker.library.ui.activity.LibraryActivity
 import com.practicum.playlistmaker.search.ui.activity.SearchActivity
+import com.practicum.playlistmaker.settings.ui.activity.SettingsActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -16,18 +16,22 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.btnSearch.setOnClickListener {
-            val searchIntent = SearchActivity.newIntent(this)
-            startActivity(searchIntent)
+            SearchActivity.newIntent(this).apply {
+                startActivity(this)
+            }
+
         }
 
         binding.btnLibrary.setOnClickListener {
-            val libraryIntent = LibraryActivity.newIntent(this)
-            startActivity(libraryIntent)
+            LibraryActivity.newIntent(this).apply {
+                startActivity(this)
+            }
         }
 
         binding.btnSettings.setOnClickListener {
-            val settingsIntent = SettingsActivity.newIntent(this)
-            startActivity(settingsIntent)
+            SettingsActivity.newIntent(this).apply {
+                startActivity(this)
+            }
         }
     }
 }
