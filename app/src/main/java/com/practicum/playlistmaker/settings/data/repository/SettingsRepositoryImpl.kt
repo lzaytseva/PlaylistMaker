@@ -6,6 +6,7 @@ import com.practicum.playlistmaker.settings.domain.model.ThemeSettings
 import com.practicum.playlistmaker.settings.domain.repository.SettingsRepository
 
 class SettingsRepositoryImpl(private val context: Context) : SettingsRepository {
+
     override fun getThemeSettings(): ThemeSettings {
         return ThemeSettings(
             darkMode = (context as App).darkTheme

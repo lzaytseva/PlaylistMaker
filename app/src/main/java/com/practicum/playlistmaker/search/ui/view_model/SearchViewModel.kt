@@ -32,13 +32,12 @@ class SearchViewModel(
 
     fun searchDebounce(changedText: String) {
         handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
+
         if (changedText.isBlank()) {
             _state.value = SearchActivityState.SearchHistory(getHistory())
         } else {
             this.latestSearchText = changedText
-
             val searchRunnable = Runnable { searchRequest(changedText) }
-
             val postTime = SystemClock.uptimeMillis() + SEARCH_DEBOUNCE_DELAY_IN_MILLIS
             handler.postAtTime(
                 searchRunnable,
@@ -53,8 +52,10 @@ class SearchViewModel(
             renderState(SearchActivityState.Loading)
 
             searchInteractor.searchTracks(newSearchText, object : SearchInteractor.TracksConsumer {
+
                 override fun consume(foundTracks: List<Track>?, errorType: ErrorType?) {
                     val tracks = mutableListOf<Track>()
+
                     if (foundTracks != null) {
                         tracks.addAll(foundTracks)
                     }

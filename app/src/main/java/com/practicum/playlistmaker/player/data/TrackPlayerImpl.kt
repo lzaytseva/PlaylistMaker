@@ -8,7 +8,7 @@ import com.practicum.playlistmaker.player.domain.model.PlayerState
 
 class TrackPlayerImpl(private val mediaPlayer: MediaPlayer) : TrackPlayer {
 
-    private val playerState = MutableLiveData<PlayerState>(PlayerState.DEFAULT)
+    private val playerState = MutableLiveData(PlayerState.DEFAULT)
 
     override fun preparePlayer(trackUrl: String) {
         if (trackUrl.isNotEmpty()) {

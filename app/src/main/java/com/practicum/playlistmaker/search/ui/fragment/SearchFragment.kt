@@ -21,10 +21,12 @@ import com.practicum.playlistmaker.search.ui.view_model.SearchViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchFragment : Fragment() {
+
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
 
     private val viewModel: SearchViewModel by viewModel()
+
     private val tracksInHistory = ArrayList<Track>()
     private val tracksList = ArrayList<Track>()
     private lateinit var adapter: TrackAdapter
@@ -143,7 +145,6 @@ class SearchFragment : Fragment() {
         }
     }
 
-
     private fun setupBtnClearSearchClickListener() {
         binding.btnClear.setOnClickListener {
             binding.searchEditText.setText("")
@@ -202,7 +203,8 @@ class SearchFragment : Fragment() {
     private fun setupFocusChangeListener() {
         binding.searchEditText.setOnFocusChangeListener { _, hasFocus ->
             binding.viewGroupHistorySearch.visibility =
-                if (hasFocus && binding.searchEditText.text.isEmpty() && tracksInHistory.isNotEmpty()) View.VISIBLE
+                if (hasFocus && binding.searchEditText.text.isEmpty() && tracksInHistory.isNotEmpty())
+                    View.VISIBLE
                 else View.GONE
         }
     }

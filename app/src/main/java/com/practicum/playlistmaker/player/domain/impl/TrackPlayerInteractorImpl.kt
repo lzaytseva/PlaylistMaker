@@ -9,7 +9,6 @@ class TrackPlayerInteractorImpl(
     private val trackPlayer: TrackPlayer
 ) : TrackPlayerInteractor {
 
-
     override fun preparePlayer(trackUrl: String) {
         trackPlayer.preparePlayer(trackUrl)
     }
@@ -17,7 +16,6 @@ class TrackPlayerInteractorImpl(
     override fun getState(): LiveData<PlayerState> {
         return trackPlayer.getState()
     }
-
 
     override fun play() {
         trackPlayer.play()

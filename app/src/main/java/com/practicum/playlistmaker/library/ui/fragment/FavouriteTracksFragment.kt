@@ -11,6 +11,7 @@ import com.practicum.playlistmaker.library.ui.view_model.FavouriteTracksViewMode
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FavouriteTracksFragment : Fragment() {
+
     private var _binding: FragmentFavouriteTracksBinding? = null
     private val binding get() = _binding!!
 
@@ -27,7 +28,8 @@ class FavouriteTracksFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.placeholderErrorLayout.placeholderMessage.text = getString(R.string.error_empty_library)
+        binding.placeholderErrorLayout.placeholderMessage.text =
+            getString(R.string.error_empty_library)
     }
 
     override fun onDestroyView() {

@@ -9,15 +9,18 @@ class SharedPrefsHistoryStorage(
     private val sharedPrefs: SharedPreferences,
     private val mapper: TrackMapper
 ) : HistoryStorage {
+
     private val savedTracks = mutableListOf<Track>()
 
     override fun saveTrack(track: Track) {
         if (savedTracks.contains(track)) {
             savedTracks.remove(track)
         }
+
         if (savedTracks.size == MAX_NUMBER_OF_TRACKS) {
             savedTracks.removeLast()
         }
+
         savedTracks.add(0, track)
 
         sharedPrefs.edit()
@@ -30,6 +33,7 @@ class SharedPrefsHistoryStorage(
 
     override fun getAllTracks(): List<Track> {
         val tracksString = sharedPrefs.getString(HISTORY_LIST_KEY, "")
+
         if (tracksString?.isNotEmpty() == true) {
             savedTracks.clear()
             savedTracks.addAll(mapper.createTracksListFromJson(tracksString))

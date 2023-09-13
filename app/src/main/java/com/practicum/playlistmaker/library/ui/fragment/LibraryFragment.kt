@@ -11,6 +11,7 @@ import com.practicum.playlistmaker.databinding.FragmentLibraryBinding
 import com.practicum.playlistmaker.library.ui.adapters.LibraryPagerAdapter
 
 class LibraryFragment : Fragment() {
+
     private var _binding: FragmentLibraryBinding? = null
     private val binding get() = _binding!!
 
@@ -20,7 +21,7 @@ class LibraryFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentLibraryBinding.inflate(inflater, container, false)
         return binding.root
     }

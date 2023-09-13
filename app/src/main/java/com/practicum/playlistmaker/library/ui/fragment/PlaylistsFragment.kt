@@ -14,6 +14,7 @@ class PlaylistsFragment : Fragment() {
 
     private var _binding: FragmentPlaylistsBinding? = null
     private val binding get() = _binding!!
+
     private val viewModel: PlaylistsViewModel by viewModel()
 
     override fun onCreateView(
@@ -27,7 +28,8 @@ class PlaylistsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.placeholderErrorLayout.placeholderMessage.text = getString(R.string.error_no_playlists)
+        binding.placeholderErrorLayout.placeholderMessage.text =
+            getString(R.string.error_no_playlists)
     }
 
     override fun onDestroyView() {

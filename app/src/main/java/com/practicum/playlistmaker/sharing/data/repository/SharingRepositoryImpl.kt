@@ -10,6 +10,7 @@ class SharingRepositoryImpl(
     private val externalNavigator: ExternalNavigator,
     private val context: Context
 ) : SharingRepository {
+
     override fun shareApp() {
         externalNavigator.shareLink(getShareAppLink())
     }
@@ -37,5 +38,4 @@ class SharingRepositoryImpl(
     private fun getTermsLink(): String {
         return context.getString(R.string.practicum_offer)
     }
-
 }
