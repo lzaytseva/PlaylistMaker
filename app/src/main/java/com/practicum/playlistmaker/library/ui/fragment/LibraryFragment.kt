@@ -12,10 +12,10 @@ import com.practicum.playlistmaker.library.ui.adapters.LibraryPagerAdapter
 
 class LibraryFragment : Fragment() {
 
-    private var _binding: FragmentLibraryBinding? = null
+    private var _binding: FragmentLibraryBinding = null
     private val binding get() = _binding!!
 
-    private lateinit var tabMediator: TabLayoutMediator
+    private var tabMediator: TabLayoutMediator? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,12 +40,12 @@ class LibraryFragment : Fragment() {
                 1 -> tab.text = getString(R.string.playlists)
             }
         }
-        tabMediator.attach()
+        tabMediator?.attach()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        tabMediator.detach()
+        tabMediator?.detach()
     }
 
     override fun onDestroyView() {

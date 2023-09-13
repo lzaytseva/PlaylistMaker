@@ -5,13 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp"
+    android:padding="@dimen/root_layout_padding"
     tools:context=".settings.ui.fragment.SettingsFragment">
 
     <TextView
         android:id="@+id/tv_header"
         style="@style/header_style"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="@dimen/margin24dp"
         android:text="@string/settings"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -48,7 +48,7 @@
             android:layout_gravity="end|center"
             android:contentDescription="@string/share_app"
             android:src="@drawable/share"
-            app:tint="?attr/colorSecondary" />
+            app:tint="@color/settings_icons_tint" />
 
     </FrameLayout>
 
@@ -67,7 +67,7 @@
             android:layout_gravity="end|center"
             android:contentDescription="@string/contact_support"
             android:src="@drawable/support"
-            app:tint="?attr/colorSecondary" />
+            app:tint="@color/settings_icons_tint" />
 
     </FrameLayout>
 
@@ -86,7 +86,7 @@
             android:layout_gravity="end|center"
             android:contentDescription="@string/go_forward"
             android:src="@drawable/arrow_forward"
-            app:tint="?attr/colorSecondary" />
+            app:tint="@color/settings_icons_tint" />
 
     </FrameLayout>
 
