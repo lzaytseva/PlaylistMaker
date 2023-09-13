@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="et_search_color">#FFFFFFFF</color>
-    <color name="unselected_color">@color/white</color>
+    <color name="unselected_tab_color">@color/white</color>
 
     <color name="btn_play_background">@color/black</color>
     <color name="basic_btn_background">@color/white</color>

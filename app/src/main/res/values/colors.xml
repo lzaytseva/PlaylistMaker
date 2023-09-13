@@ -16,8 +16,8 @@
     <color name="basic_btn_background">@color/black</color>
     <color name="basic_btn_text_color">@color/white</color>
     <color name="et_search_color">@color/light_gray</color>
-    <color name="selected_color">@color/dark_blue</color>
-    <color name="unselected_color">@color/black</color>
+    <color name="selected_tab_color">@color/dark_blue</color>
+    <color name="unselected_tab_color">@color/black</color>
     <color name="window_background">@color/white</color>
     <color name="regular_text_color">@color/black</color>
     <color name="labels_text_color">@color/gray</color>
