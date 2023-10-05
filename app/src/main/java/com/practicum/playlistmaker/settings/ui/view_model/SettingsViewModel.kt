@@ -66,5 +66,4 @@ class SettingsViewModel(
     private fun getErrorMessage(): String {
         return application.getString(R.string.no_applications_found)
     }
-
 }

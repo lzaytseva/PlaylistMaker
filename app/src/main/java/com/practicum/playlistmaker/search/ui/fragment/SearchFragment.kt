@@ -1,17 +1,18 @@
-package com.practicum.playlistmaker.search.ui.activity
+package com.practicum.playlistmaker.search.ui.fragment
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.databinding.ActivitySearchBinding
+import com.practicum.playlistmaker.databinding.FragmentSearchBinding
 import com.practicum.playlistmaker.player.ui.activity.PlayerActivity
 import com.practicum.playlistmaker.search.domain.model.SearchActivityState
 import com.practicum.playlistmaker.search.domain.model.Track
@@ -19,22 +20,29 @@ import com.practicum.playlistmaker.search.ui.adapters.TrackAdapter
 import com.practicum.playlistmaker.search.ui.view_model.SearchViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SearchActivity : AppCompatActivity() {
-    private val binding by lazy {
-        ActivitySearchBinding.inflate(layoutInflater)
-    }
+class SearchFragment : Fragment() {
+
+    private var _binding: FragmentSearchBinding? = null
+    private val binding get() = _binding!!
 
     private val viewModel: SearchViewModel by viewModel()
+
     private val tracksInHistory = ArrayList<Track>()
     private val tracksList = ArrayList<Track>()
     private lateinit var adapter: TrackAdapter
     private lateinit var searchHistoryAdapter: TrackAdapter
 
-    private var savedSearchRequest = ""
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentSearchBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(binding.root)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         initAdapters()
         buildSearchRecyclerView()
@@ -44,9 +52,8 @@ class SearchActivity : AppCompatActivity() {
         setupBtnClearSearchClickListener()
         setupBtnClearHistoryClickListener()
         setupBtnRefreshClickListener()
-        setupBtnBackClickListener()
 
-        viewModel.state.observe(this) {
+        viewModel.state.observe(viewLifecycleOwner) {
             renderState(it)
         }
     }
@@ -121,7 +128,7 @@ class SearchActivity : AppCompatActivity() {
         val itemClickListener: (Track) -> Unit = {
             if (viewModel.clickDebounce()) {
                 viewModel.saveTrack(it)
-                PlayerActivity.newIntent(this, it).apply {
+                PlayerActivity.newIntent(requireContext(), it).apply {
                     startActivity(this)
                 }
             }
@@ -138,13 +145,12 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-
     private fun setupBtnClearSearchClickListener() {
         binding.btnClear.setOnClickListener {
             binding.searchEditText.setText("")
-            savedSearchRequest = ""
 
-            val keyboard = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+            val keyboard =
+                requireActivity().getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager
             keyboard.hideSoftInputFromWindow(
                 binding.searchEditText.windowToken, 0
             )
@@ -162,7 +168,6 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun setupSearchEditText() {
-        binding.searchEditText.setText(savedSearchRequest)
         setupFocusChangeListener()
         setupTextChangedListener()
         setupEditorActionListener()
@@ -191,7 +196,6 @@ class SearchActivity : AppCompatActivity() {
             }
 
             override fun afterTextChanged(s: Editable?) {
-                savedSearchRequest = s.toString()
             }
         })
     }
@@ -199,19 +203,20 @@ class SearchActivity : AppCompatActivity() {
     private fun setupFocusChangeListener() {
         binding.searchEditText.setOnFocusChangeListener { _, hasFocus ->
             binding.viewGroupHistorySearch.visibility =
-                if (hasFocus && binding.searchEditText.text.isEmpty() && tracksInHistory.isNotEmpty()) View.VISIBLE
+                if (hasFocus && binding.searchEditText.text.isEmpty() && tracksInHistory.isNotEmpty())
+                    View.VISIBLE
                 else View.GONE
         }
     }
 
     private fun buildSearchRecyclerView() {
-        binding.recyclerView.layoutManager = LinearLayoutManager(this)
+        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         adapter.tracksList = tracksList
         binding.recyclerView.adapter = adapter
     }
 
     private fun buildHistoryRecyclerView() {
-        binding.recyclerViewHistory.layoutManager = LinearLayoutManager(this)
+        binding.recyclerViewHistory.layoutManager = LinearLayoutManager(requireContext())
         searchHistoryAdapter.tracksList = tracksInHistory
         binding.recyclerViewHistory.adapter = searchHistoryAdapter
     }
@@ -228,33 +233,14 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupBtnBackClickListener() {
-        binding.btnBack.setOnClickListener {
-            finish()
-        }
-    }
-
     private fun setupBtnRefreshClickListener() {
         binding.btnRefresh.setOnClickListener {
             search()
         }
     }
 
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        super.onRestoreInstanceState(savedInstanceState)
-        savedSearchRequest = savedInstanceState.getString(SEARCH_ET_TEXT, "")
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putString(SEARCH_ET_TEXT, savedSearchRequest)
-    }
-
-    companion object {
-        const val SEARCH_ET_TEXT = "search_et_text"
-
-        fun newIntent(context: Context): Intent {
-            return Intent(context, SearchActivity::class.java)
-        }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

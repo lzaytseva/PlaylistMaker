@@ -12,7 +12,6 @@ class RetrofitNetworkClient(
     private val itunesService: ItunesApi
 ) : NetworkClient {
 
-
     override fun doRequest(dto: Any): Response {
         if (!isConnected()) {
             return Response().apply { resultCode = -1 }
@@ -48,5 +47,4 @@ class RetrofitNetworkClient(
     companion object {
         const val ITUNES_BASE_URL = "https://itunes.apple.com/"
     }
-
 }

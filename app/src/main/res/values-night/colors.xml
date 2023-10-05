@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="main_screen_background">#FF000000</color>
     <color name="et_search_color">#FFFFFFFF</color>
+    <color name="unselected_tab_color">@color/white</color>
+
+    <color name="btn_play_background">@color/black</color>
+    <color name="basic_btn_background">@color/white</color>
+    <color name="basic_btn_text_color">@color/black</color>
+    <color name="window_background">@color/black</color>
+    <color name="regular_text_color">@color/white</color>
+    <color name="settings_icons_tint">@color/white</color>
+    <color name="search_ic_tint">@color/black</color>
+
 </resources>

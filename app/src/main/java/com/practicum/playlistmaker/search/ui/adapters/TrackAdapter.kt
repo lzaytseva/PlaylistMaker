@@ -1,7 +1,6 @@
 package com.practicum.playlistmaker.search.ui.adapters
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -10,9 +9,11 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.TrackViewBinding
 import com.practicum.playlistmaker.search.domain.model.Track
+import com.practicum.playlistmaker.util.setTextOrHide
 
 class TrackAdapter(private val onTrackClicked: (Track) -> Unit) :
     RecyclerView.Adapter<TrackAdapter.TrackViewHolder>() {
+
     var tracksList = ArrayList<Track>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
@@ -42,14 +43,7 @@ class TrackAdapter(private val onTrackClicked: (Track) -> Unit) :
                 with(model) {
                     tvSongTitle.text = trackName
                     tvArtist.text = artistName
-                    if (duration.isNotEmpty()) {
-                        tvDuration.text = duration
-                        ellipse.visibility = View.VISIBLE
-                        tvDuration.visibility = View.VISIBLE
-                    } else {
-                        ellipse.visibility = View.INVISIBLE
-                        tvDuration.visibility = View.INVISIBLE
-                    }
+                    tvDuration.setTextOrHide(duration, ellipse)
                     Glide.with(itemView)
                         .load(artworkUrl100)
                         .placeholder(R.drawable.album_placeholder)

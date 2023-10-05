@@ -4,7 +4,8 @@ import com.practicum.playlistmaker.search.data.storage.HistoryStorage
 import com.practicum.playlistmaker.search.domain.api.HistoryRepository
 import com.practicum.playlistmaker.search.domain.model.Track
 
-class HistoryRepositoryImpl(private val storage: HistoryStorage): HistoryRepository {
+class HistoryRepositoryImpl(private val storage: HistoryStorage) : HistoryRepository {
+
     override fun saveTrack(track: Track) {
         storage.saveTrack(track)
     }

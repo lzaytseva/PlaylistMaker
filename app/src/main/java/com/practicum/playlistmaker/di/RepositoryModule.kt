@@ -17,7 +17,7 @@ val repositoryModule = module {
     }
 
     single<SearchRepository> {
-        SearchRepositoryImpl(networkClient = get())
+        SearchRepositoryImpl(networkClient = get(), mapper = get())
     }
 
     single<SharingRepository> {

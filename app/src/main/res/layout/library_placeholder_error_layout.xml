@@ -13,18 +13,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="@dimen/margin16dp"
         android:contentDescription="@string/placeholder_error_description"
         android:src="@drawable/ic_empty" />
 
     <TextView
         android:id="@+id/placeholder_message"
+        style="@style/medium_text_style"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/views_bottom_margin_search_history"
-        android:fontFamily="@font/ys_display_medium"
-        tools:text="@string/error_no_playlists"
-        android:textAlignment="center"
-        android:textColor="?attr/colorOnPrimary"
-        android:textSize="@dimen/placeholders_text_size" />
+        tools:text="@string/error_no_playlists" />
+
 </LinearLayout>

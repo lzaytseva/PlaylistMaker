@@ -21,7 +21,7 @@ class PlayerViewModel(
     private val handler = Handler(looper)
     private val timerRunnable = Runnable { updateTimer() }
 
-    private val _timeProgress = MutableLiveData<String>(INITIAL_TIME)
+    private val _timeProgress = MutableLiveData(INITIAL_TIME)
 
     init {
         playerInteractor.preparePlayer(trackUrl)
@@ -30,7 +30,6 @@ class PlayerViewModel(
     val timeProgress: LiveData<String>
         get() = _timeProgress
 
-
     private fun play() {
         playerInteractor.play()
     }
@@ -38,7 +37,6 @@ class PlayerViewModel(
     fun pause() {
         playerInteractor.pause()
     }
-
 
     private fun getFormattedCurrentPlayerPosition(): String {
         return SimpleDateFormat(

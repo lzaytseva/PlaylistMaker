@@ -9,7 +9,7 @@
     <ImageView
         android:id="@+id/arrow_back"
         style="@style/arrow_back_style"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="@dimen/margin20dp"
         android:layout_marginTop="20dp"
         android:contentDescription="@string/btn_back_description"
         android:src="@drawable/arrow_back"
@@ -63,7 +63,7 @@
         style="@style/regular_text_style"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="@dimen/margin12dp"
         app:layout_constraintBottom_toTopOf="@+id/btn_play"
         app:layout_constraintEnd_toStartOf="@id/right_guideline"
         app:layout_constraintStart_toEndOf="@id/left_guideline"
@@ -88,7 +88,7 @@
         android:layout_width="83dp"
         android:layout_height="83dp"
         android:layout_marginTop="32dp"
-        android:background="@drawable/white_round_button"
+        android:background="@drawable/round_button"
         android:contentDescription="@string/play_btn_description"
         android:src="@drawable/ic_play"
         app:layout_constraintBottom_toTopOf="@+id/tv_play_progress"
@@ -113,7 +113,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.04" />
+        app:layout_constraintGuide_end="395dp" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/right_info_guideline"
@@ -216,7 +216,7 @@
         style="@style/player_song_info_text_style"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="@dimen/margin8dp"
         android:ellipsize="end"
         android:gravity="end"
         android:maxLines="1"

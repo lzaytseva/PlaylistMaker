@@ -15,6 +15,7 @@ import com.practicum.playlistmaker.databinding.ActivityPlayerBinding
 import com.practicum.playlistmaker.player.domain.model.PlayerState
 import com.practicum.playlistmaker.player.ui.view_model.PlayerViewModel
 import com.practicum.playlistmaker.search.domain.model.Track
+import com.practicum.playlistmaker.util.setTextOrHide
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -75,27 +76,35 @@ class PlayerActivity : AppCompatActivity() {
         binding.btnPlay.setOnClickListener {
             showToast(getString(R.string.player_not_ready))
         }
-        binding.btnPlay.setImageResource(R.drawable.ic_play)
+        setIconPlay()
     }
 
     private fun showPlayBtn() {
         binding.btnPlay.setOnClickListener {
             viewModel.playbackControl()
         }
-        binding.btnPlay.setImageResource(R.drawable.ic_play)
+        setIconPlay()
     }
 
     private fun showPauseBtn() {
         binding.btnPlay.setOnClickListener {
             viewModel.playbackControl()
         }
-        binding.btnPlay.setImageResource(R.drawable.ic_btn_pause)
+        setIconPause()
     }
 
     private fun showError() {
         binding.btnPlay.setOnClickListener {
             showToast(getString(R.string.error_loading_preview))
         }
+        setIconPlay()
+    }
+
+    private fun setIconPause() {
+        binding.btnPlay.setImageResource(R.drawable.ic_btn_pause)
+    }
+
+    private fun setIconPlay() {
         binding.btnPlay.setImageResource(R.drawable.ic_play)
     }
 
@@ -106,7 +115,6 @@ class PlayerActivity : AppCompatActivity() {
             Toast.LENGTH_SHORT
         ).show()
     }
-
 
     private fun setTrackInfoToViews() {
         with(binding) {
@@ -132,14 +140,6 @@ class PlayerActivity : AppCompatActivity() {
         }
     }
 
-    private fun TextView.setTextOrHide(text: String, fieldLabel: TextView) {
-        if (text.isNotEmpty()) {
-            this.text = text
-        } else {
-            this.visibility = View.GONE
-            fieldLabel.visibility = View.GONE
-        }
-    }
 
     companion object {
         private const val EXTRA_KEY_TRACK = "extra_key_track"

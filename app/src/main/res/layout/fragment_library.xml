@@ -5,25 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="@dimen/margin16dp"
-    tools:context=".library.ui.activity.LibraryActivity">
+    android:padding="@dimen/root_layout_padding"
+    tools:context=".library.ui.fragment.LibraryFragment">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:ignore="UseCompoundDrawables">
-
-        <ImageView
-            android:id="@+id/btn_back"
-            style="@style/arrow_back_style"
-            android:contentDescription="@string/btn_back_description" />
-
-        <TextView
-            style="@style/header_style"
-            android:layout_marginStart="28dp"
-            android:text="@string/library" />
-
-    </LinearLayout>
+    <TextView
+        style="@style/header_style"
+        android:text="@string/library" />
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tab_layout"
@@ -38,6 +25,5 @@
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-
 
 </LinearLayout>

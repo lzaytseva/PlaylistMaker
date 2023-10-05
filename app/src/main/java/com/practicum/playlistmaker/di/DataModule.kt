@@ -61,5 +61,4 @@ val dataModule = module {
     factory {
         MediaPlayer()
     }
-
 }
