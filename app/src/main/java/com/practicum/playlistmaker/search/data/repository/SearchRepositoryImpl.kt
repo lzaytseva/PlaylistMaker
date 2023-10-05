@@ -8,27 +8,29 @@ import com.practicum.playlistmaker.search.domain.api.SearchRepository
 import com.practicum.playlistmaker.search.domain.model.Track
 import com.practicum.playlistmaker.util.ErrorType
 import com.practicum.playlistmaker.util.Resource
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 class SearchRepositoryImpl(
     private val networkClient: NetworkClient,
     private val mapper: TrackMapper
 ) : SearchRepository {
 
-    override fun searchTracks(expression: String): Resource<List<Track>> {
+    override suspend fun searchTracks(expression: String): Flow<Resource<List<Track>>> = flow {
         val response = networkClient.doRequest(TracksSearchRequest(expression))
-        return when (response.resultCode) {
+        when (response.resultCode) {
             -1 -> {
-                Resource.Error(ErrorType.NO_INTERNET)
+                emit(Resource.Error(ErrorType.NO_INTERNET))
             }
 
             200 -> {
-                Resource.Success((response as SearchTracksResponse).tracks.map {
+                emit(Resource.Success((response as SearchTracksResponse).tracks.map {
                     mapper.mapDtoToEntity(it)
-                })
+                }))
             }
 
             else -> {
-                Resource.Error(ErrorType.SERVER_ERROR)
+                emit(Resource.Error(ErrorType.SERVER_ERROR))
             }
         }
     }

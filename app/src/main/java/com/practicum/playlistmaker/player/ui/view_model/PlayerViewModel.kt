@@ -1,12 +1,14 @@
 package com.practicum.playlistmaker.player.ui.view_model
 
-import android.os.Handler
-import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.practicum.playlistmaker.player.domain.api.TrackPlayerInteractor
 import com.practicum.playlistmaker.player.domain.model.PlayerState
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -17,11 +19,8 @@ class PlayerViewModel(
 
     val playerState = playerInteractor.getState()
 
-    private val looper = Looper.getMainLooper()
-    private val handler = Handler(looper)
-    private val timerRunnable = Runnable { updateTimer() }
-
     private val _timeProgress = MutableLiveData(INITIAL_TIME)
+    private var timerJob: Job? = null
 
     init {
         playerInteractor.preparePlayer(trackUrl)
@@ -61,18 +60,24 @@ class PlayerViewModel(
     }
 
     private fun updateTimer() {
+        val time = getFormattedCurrentPlayerPosition()
+
         when (playerState.value) {
             PlayerState.PLAYING -> {
-                _timeProgress.value = getFormattedCurrentPlayerPosition()
-                handler.postDelayed(timerRunnable, UPDATE_TIMER_DELAY_IN_MILLIS)
+                _timeProgress.value = time
+                timerJob = viewModelScope.launch {
+                    delay(UPDATE_TIMER_DELAY_IN_MILLIS)
+                    updateTimer()
+                }
             }
 
             PlayerState.PAUSED -> {
-                handler.removeCallbacks(timerRunnable)
+                _timeProgress.value = time
+                timerJob?.cancel()
             }
 
             else -> {
-                handler.removeCallbacks(timerRunnable)
+                timerJob?.cancel()
                 _timeProgress.value = INITIAL_TIME
             }
         }
@@ -80,7 +85,6 @@ class PlayerViewModel(
 
     private fun releasePlayer() {
         playerInteractor.release()
-        updateTimer()
     }
 
     override fun onCleared() {
@@ -89,7 +93,7 @@ class PlayerViewModel(
     }
 
     companion object {
-        private const val UPDATE_TIMER_DELAY_IN_MILLIS = 500L
+        private const val UPDATE_TIMER_DELAY_IN_MILLIS = 300L
         private const val INITIAL_TIME = "00:00"
     }
 }
