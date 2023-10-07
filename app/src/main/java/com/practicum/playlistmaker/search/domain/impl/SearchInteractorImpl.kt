@@ -13,12 +13,7 @@ class SearchInteractorImpl(
     private val repository: SearchRepository
 ) : SearchInteractor {
 
-    override suspend fun searchTracks(expression: String): Flow<Pair<List<Track>?, ErrorType?>> {
-        return repository.searchTracks(expression).map { result ->
-            when (result) {
-                is Resource.Success -> Pair(result.data, null)
-                is Resource.Error -> Pair(null, result.errorType)
-            }
-        }
+    override suspend fun searchTracks(expression: String): Flow<Resource<List<Track>>> {
+        return repository.searchTracks(expression)
     }
 }

@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.practicum.playlistmaker.player.domain.api.TrackPlayerInteractor
 import com.practicum.playlistmaker.player.domain.model.PlayerState
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -64,21 +65,21 @@ class PlayerViewModel(
 
         when (playerState.value) {
             PlayerState.PLAYING -> {
-                _timeProgress.value = time
-                timerJob = viewModelScope.launch {
+                _timeProgress.postValue(time)
+                timerJob = viewModelScope.launch(Dispatchers.Default) {
                     delay(UPDATE_TIMER_DELAY_IN_MILLIS)
                     updateTimer()
                 }
             }
 
             PlayerState.PAUSED -> {
-                _timeProgress.value = time
+                _timeProgress.postValue(time)
                 timerJob?.cancel()
             }
 
             else -> {
                 timerJob?.cancel()
-                _timeProgress.value = INITIAL_TIME
+                _timeProgress.postValue(INITIAL_TIME)
             }
         }
     }

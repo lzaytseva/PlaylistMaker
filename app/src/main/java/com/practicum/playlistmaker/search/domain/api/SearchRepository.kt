@@ -6,5 +6,5 @@ import kotlinx.coroutines.flow.Flow
 
 
 interface SearchRepository {
-    suspend fun searchTracks(expression: String): Flow<Resource<List<Track>>>
+    fun searchTracks(expression: String): Flow<Resource<List<Track>>>
 }

@@ -16,7 +16,7 @@ class SearchRepositoryImpl(
     private val mapper: TrackMapper
 ) : SearchRepository {
 
-    override suspend fun searchTracks(expression: String): Flow<Resource<List<Track>>> = flow {
+    override fun searchTracks(expression: String): Flow<Resource<List<Track>>> = flow {
         val response = networkClient.doRequest(TracksSearchRequest(expression))
         when (response.resultCode) {
             -1 -> {

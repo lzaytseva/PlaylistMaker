@@ -49,8 +49,8 @@ class SearchViewModel(
                     .searchTracks(newSearchText)
                     .collect {
                         processResult(
-                            foundTracks = it.first,
-                            errorType = it.second
+                            foundTracks = it.data,
+                            errorType = it.errorType
                         )
                     }
             }
