@@ -10,6 +10,7 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentSearchBinding
@@ -18,6 +19,7 @@ import com.practicum.playlistmaker.search.domain.model.SearchActivityState
 import com.practicum.playlistmaker.search.domain.model.Track
 import com.practicum.playlistmaker.search.ui.adapters.TrackAdapter
 import com.practicum.playlistmaker.search.ui.view_model.SearchViewModel
+import com.practicum.playlistmaker.util.debounce
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchFragment : Fragment() {
@@ -125,16 +127,19 @@ class SearchFragment : Fragment() {
     }
 
     private fun initAdapters() {
-        val itemClickListener: (Track) -> Unit = {
-            if (viewModel.clickDebounce()) {
-                viewModel.saveTrack(it)
-                PlayerActivity.newIntent(requireContext(), it).apply {
-                    startActivity(this)
-                }
+        val onTrackClickDebounce = debounce<Track>(
+            CLICK_DEBOUNCE_DELAY_IN_MILLIS,
+            viewLifecycleOwner.lifecycleScope,
+            false
+        ) { track ->
+            viewModel.saveTrack(track)
+            PlayerActivity.newIntent(requireContext(), track).apply {
+                startActivity(this)
             }
         }
-        adapter = TrackAdapter(itemClickListener)
-        searchHistoryAdapter = TrackAdapter(itemClickListener)
+
+        adapter = TrackAdapter(onTrackClickDebounce)
+        searchHistoryAdapter = TrackAdapter(onTrackClickDebounce)
     }
 
     private fun setupBtnClearHistoryClickListener() {
@@ -203,9 +208,11 @@ class SearchFragment : Fragment() {
     private fun setupFocusChangeListener() {
         binding.searchEditText.setOnFocusChangeListener { _, hasFocus ->
             binding.viewGroupHistorySearch.visibility =
-                if (hasFocus && binding.searchEditText.text.isEmpty() && tracksInHistory.isNotEmpty())
+                if (hasFocus && binding.searchEditText.text.isEmpty() && tracksInHistory.isNotEmpty()) {
                     View.VISIBLE
-                else View.GONE
+                } else {
+                    View.GONE
+                }
         }
     }
 
@@ -242,5 +249,9 @@ class SearchFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    companion object {
+        private const val CLICK_DEBOUNCE_DELAY_IN_MILLIS = 1000L
     }
 }
