@@ -1,5 +1,7 @@
 package com.practicum.playlistmaker.di
 
+import com.practicum.playlistmaker.library.data.db.repository.FavTracksRepositoryImpl
+import com.practicum.playlistmaker.library.domain.api.FavTracksRepository
 import com.practicum.playlistmaker.search.data.repository.HistoryRepositoryImpl
 import com.practicum.playlistmaker.search.data.repository.SearchRepositoryImpl
 import com.practicum.playlistmaker.search.domain.api.HistoryRepository
@@ -21,10 +23,14 @@ val repositoryModule = module {
     }
 
     single<SharingRepository> {
-        SharingRepositoryImpl(externalNavigator = get(), context =  androidContext())
+        SharingRepositoryImpl(externalNavigator = get(), context = androidContext())
     }
 
     single<SettingsRepository> {
         SettingsRepositoryImpl(androidContext())
+    }
+
+    single<FavTracksRepository> {
+        FavTracksRepositoryImpl(database = get(), trackDbMapper = get())
     }
 }
