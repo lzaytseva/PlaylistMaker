@@ -3,6 +3,7 @@ package com.practicum.playlistmaker.di
 import com.practicum.playlistmaker.library.ui.view_model.FavouriteTracksViewModel
 import com.practicum.playlistmaker.library.ui.view_model.PlaylistsViewModel
 import com.practicum.playlistmaker.player.ui.view_model.PlayerViewModel
+import com.practicum.playlistmaker.search.domain.model.Track
 import com.practicum.playlistmaker.search.ui.view_model.SearchViewModel
 import com.practicum.playlistmaker.settings.ui.view_model.SettingsViewModel
 import org.koin.android.ext.koin.androidApplication
@@ -25,12 +26,12 @@ val viewModelModule = module {
             settingsRepository = get()
         )
     }
-    viewModel { (trackUrl: String) ->
-        PlayerViewModel(trackUrl = trackUrl, playerInteractor = get())
+    viewModel { (track: Track) ->
+        PlayerViewModel(track = track, playerInteractor = get(), favTracksInteractor = get())
     }
 
     viewModel {
-        FavouriteTracksViewModel()
+        FavouriteTracksViewModel(favTracksInteractor = get())
     }
 
     viewModel {

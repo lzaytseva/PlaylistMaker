@@ -30,7 +30,7 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private val viewModel: PlayerViewModel by viewModel {
-        parametersOf(track.previewUrl)
+        parametersOf(track)
     }
 
 

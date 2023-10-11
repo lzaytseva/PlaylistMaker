@@ -15,7 +15,7 @@ interface FavTracksDao {
     suspend fun getAllTracks(): List<TrackEntity>
 
     @Delete
-    suspend fun deleteTrack(trackId: Int)
+    suspend fun deleteTrack(track: TrackEntity)
 
     @Query("SELECT trackId FROM fav_tracks_table")
     suspend fun getIds(): List<Int>

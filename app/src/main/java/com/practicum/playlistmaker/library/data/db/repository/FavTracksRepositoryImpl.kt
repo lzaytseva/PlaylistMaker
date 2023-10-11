@@ -15,8 +15,8 @@ class FavTracksRepositoryImpl(
         database.favTracksDao().addTrack(trackDbMapper.mapDomainToEntity(track))
     }
 
-    override suspend fun deleteTrack(trackId: Int) {
-        database.favTracksDao().deleteTrack(trackId)
+    override suspend fun deleteTrack(track: Track) {
+        database.favTracksDao().deleteTrack(trackDbMapper.mapDomainToEntity(track))
     }
 
     override fun getAllTracks(): Flow<List<Track>> = flow {
