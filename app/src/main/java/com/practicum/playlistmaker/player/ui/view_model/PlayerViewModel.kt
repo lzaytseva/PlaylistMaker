@@ -25,7 +25,7 @@ class PlayerViewModel(
 
     private val _timeProgress = MutableLiveData(INITIAL_TIME)
     private val _isFavorite = MutableLiveData<Boolean>()
-    private val isFavorite: LiveData<Boolean>
+    val isFavorite: LiveData<Boolean>
         get() = _isFavorite
 
     private var timerJob: Job? = null

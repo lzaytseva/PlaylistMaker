@@ -7,4 +7,9 @@
         android:id="@+id/placeholder_error_layout"
         layout="@layout/library_placeholder_error_layout" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/fav_tracks_rv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
 </FrameLayout>

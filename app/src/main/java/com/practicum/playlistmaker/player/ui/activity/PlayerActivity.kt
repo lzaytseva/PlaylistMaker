@@ -3,10 +3,9 @@ package com.practicum.playlistmaker.player.ui.activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.content.res.AppCompatResources
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -47,6 +46,10 @@ class PlayerActivity : AppCompatActivity() {
         binding.btnPlay.setOnClickListener {
             viewModel.playbackControl()
         }
+
+        binding.btnAddToFavs.setOnClickListener {
+            viewModel.onFavoriteClicked()
+        }
     }
 
     override fun onPause() {
@@ -60,6 +63,15 @@ class PlayerActivity : AppCompatActivity() {
         }
         viewModel.timeProgress.observe(this) {
             binding.tvPlayProgress.text = it
+        }
+        viewModel.isFavorite.observe(this) {
+            if (it) {
+                binding.btnAddToFavs.background =
+                    AppCompatResources.getDrawable(this, R.drawable.ic_add_to_favs_activated)
+            } else {
+                binding.btnAddToFavs.background =
+                    AppCompatResources.getDrawable(this, R.drawable.ic_add_to_favs)
+            }
         }
     }
 

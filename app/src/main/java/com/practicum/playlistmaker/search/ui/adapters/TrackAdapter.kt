@@ -14,7 +14,7 @@ import com.practicum.playlistmaker.util.setTextOrHide
 class TrackAdapter(private val onTrackClicked: (Track) -> Unit) :
     RecyclerView.Adapter<TrackAdapter.TrackViewHolder>() {
 
-    var tracksList = ArrayList<Track>()
+    var tracksList = mutableListOf<Track>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
         val binding = TrackViewBinding.inflate(
