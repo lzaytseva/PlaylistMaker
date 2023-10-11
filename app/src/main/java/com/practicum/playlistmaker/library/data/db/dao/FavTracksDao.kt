@@ -9,7 +9,7 @@ import com.practicum.playlistmaker.library.data.db.entity.TrackEntity
 interface FavTracksDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun saveTrack(track: TrackEntity)
+    suspend fun addTrack(track: TrackEntity)
 
     @Query("SELECT * FROM fav_tracks_table")
     suspend fun getAllTracks(): List<TrackEntity>
