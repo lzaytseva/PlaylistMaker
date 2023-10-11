@@ -7,7 +7,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class TrackMapper(private val gson: Gson) {
-    fun mapDtoToEntity(dto: TrackDto) = Track(
+    fun mapDtoToEntity(dto: TrackDto, isFavourite: Boolean) = Track(
         trackId = dto.trackId,
         trackName = dto.trackName,
         artistName = dto.artistName,
@@ -17,7 +17,8 @@ class TrackMapper(private val gson: Gson) {
         year = dto.releaseDate?.let { getYear(it) }.orEmpty(),
         primaryGenreName = dto.primaryGenreName.orEmpty(),
         country = dto.country.orEmpty(),
-        previewUrl = dto.previewUrl.orEmpty()
+        previewUrl = dto.previewUrl.orEmpty(),
+        isFavorite = isFavourite
     )
 
     private fun getDuration(trackTimeMillis: Long): String =

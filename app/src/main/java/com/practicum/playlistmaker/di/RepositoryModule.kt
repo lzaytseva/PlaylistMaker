@@ -15,11 +15,11 @@ import org.koin.dsl.module
 
 val repositoryModule = module {
     single<HistoryRepository> {
-        HistoryRepositoryImpl(storage = get())
+        HistoryRepositoryImpl(storage = get(), database = get())
     }
 
     single<SearchRepository> {
-        SearchRepositoryImpl(networkClient = get(), mapper = get())
+        SearchRepositoryImpl(networkClient = get(), mapper = get(), database = get())
     }
 
     single<SharingRepository> {
