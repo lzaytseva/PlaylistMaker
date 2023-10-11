@@ -40,7 +40,10 @@ class SearchViewModel(
 
     private fun searchRequest(newSearchText: String) {
         if (newSearchText.isBlank()) {
-            _state.value = SearchActivityState.SearchHistory(getHistory())
+            viewModelScope.launch {
+                _state.value = SearchActivityState.SearchHistory(getHistory())
+            }
+
         } else {
             renderState(SearchActivityState.Loading)
 
@@ -108,12 +111,14 @@ class SearchViewModel(
     }
 
     fun showHistory() {
-        _state.value = SearchActivityState.SearchHistory(
-            getHistory()
-        )
+        viewModelScope.launch {
+            _state.value = SearchActivityState.SearchHistory(
+                getHistory()
+            )
+        }
     }
 
-    private fun getHistory() = historyInteractor.getAllTracks()
+    private suspend fun getHistory() = historyInteractor.getAllTracks()
 
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY_IN_MILLIS = 2000L

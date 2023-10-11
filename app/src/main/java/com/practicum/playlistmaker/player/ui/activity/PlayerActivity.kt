@@ -66,11 +66,13 @@ class PlayerActivity : AppCompatActivity() {
         }
         viewModel.isFavorite.observe(this) {
             if (it) {
-                binding.btnAddToFavs.background =
+                binding.btnAddToFavs.setImageDrawable(
                     AppCompatResources.getDrawable(this, R.drawable.ic_add_to_favs_activated)
+                )
             } else {
-                binding.btnAddToFavs.background =
+                binding.btnAddToFavs.setImageDrawable(
                     AppCompatResources.getDrawable(this, R.drawable.ic_add_to_favs)
+                )
             }
         }
     }
