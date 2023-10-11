@@ -10,7 +10,7 @@ class HistoryInteractorImpl(private val repository: HistoryRepository) : History
         repository.saveTrack(track)
     }
 
-    override fun getAllTracks(): List<Track> {
+    override suspend fun getAllTracks(): List<Track> {
         return repository.getAllTracks()
     }
 
