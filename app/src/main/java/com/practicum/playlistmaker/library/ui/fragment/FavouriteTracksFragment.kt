@@ -14,7 +14,6 @@ import com.practicum.playlistmaker.library.ui.view_model.FavouriteTracksViewMode
 import com.practicum.playlistmaker.player.ui.activity.PlayerActivity
 import com.practicum.playlistmaker.search.domain.model.Track
 import com.practicum.playlistmaker.search.ui.adapters.TrackAdapter
-import com.practicum.playlistmaker.search.ui.fragment.SearchFragment
 import com.practicum.playlistmaker.util.debounce
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -25,7 +24,6 @@ class FavouriteTracksFragment : Fragment() {
 
     private val viewModel: FavouriteTracksViewModel by viewModel()
 
-    private val favTracks = mutableListOf<Track>()
     private lateinit var adapter: TrackAdapter
 
     override fun onCreateView(
@@ -39,12 +37,21 @@ class FavouriteTracksFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initAdapter()
-        binding.favTracksRv.layoutManager = LinearLayoutManager(requireContext())
-        adapter.tracksList = favTracks
+        initRecyclerView()
         viewModel.state.observe(viewLifecycleOwner) {
             renderState(it)
         }
+    }
+
+    private fun initRecyclerView() {
+        initAdapter()
+        binding.favTracksRv.layoutManager = LinearLayoutManager(requireContext())
+        binding.favTracksRv.adapter = adapter
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.getFavTracks()
     }
 
     private fun initAdapter() {
@@ -69,6 +76,8 @@ class FavouriteTracksFragment : Fragment() {
     }
 
     private fun showEmpty() {
+        adapter.tracksList.clear()
+        adapter.notifyDataSetChanged()
         binding.favTracksRv.visibility = View.INVISIBLE
         binding.placeholderErrorLayout.root.visibility = View.VISIBLE
         binding.placeholderErrorLayout.placeholderMessage.text =
@@ -78,8 +87,8 @@ class FavouriteTracksFragment : Fragment() {
     private fun showContent(favTracks: List<Track>) {
         binding.placeholderErrorLayout.root.visibility = View.INVISIBLE
         binding.favTracksRv.visibility = View.VISIBLE
-        this.favTracks.clear()
-        this.favTracks.addAll(favTracks)
+        adapter.tracksList.clear()
+        adapter.tracksList.addAll(favTracks)
         adapter.notifyDataSetChanged()
     }
 

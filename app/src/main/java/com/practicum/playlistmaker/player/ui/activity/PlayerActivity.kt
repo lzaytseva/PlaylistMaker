@@ -41,6 +41,8 @@ class PlayerActivity : AppCompatActivity() {
 
         observeViewModel()
 
+        setFavsBtnImage(track.isFavorite)
+
         binding.arrowBack.setOnClickListener { finish() }
 
         binding.btnPlay.setOnClickListener {
@@ -65,15 +67,19 @@ class PlayerActivity : AppCompatActivity() {
             binding.tvPlayProgress.text = it
         }
         viewModel.isFavorite.observe(this) {
-            if (it) {
-                binding.btnAddToFavs.setImageDrawable(
-                    AppCompatResources.getDrawable(this, R.drawable.ic_add_to_favs_activated)
-                )
-            } else {
-                binding.btnAddToFavs.setImageDrawable(
-                    AppCompatResources.getDrawable(this, R.drawable.ic_add_to_favs)
-                )
-            }
+            setFavsBtnImage(it)
+        }
+    }
+
+    private fun setFavsBtnImage(isFavorite: Boolean) {
+        if (isFavorite) {
+            binding.btnAddToFavs.setImageDrawable(
+                AppCompatResources.getDrawable(this, R.drawable.ic_add_to_favs_activated)
+            )
+        } else {
+            binding.btnAddToFavs.setImageDrawable(
+                AppCompatResources.getDrawable(this, R.drawable.ic_add_to_favs)
+            )
         }
     }
 

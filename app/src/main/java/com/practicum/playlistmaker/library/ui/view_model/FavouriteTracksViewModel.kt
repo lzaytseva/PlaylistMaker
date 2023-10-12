@@ -9,13 +9,13 @@ import com.practicum.playlistmaker.library.ui.FavTracksState
 import kotlinx.coroutines.launch
 
 class FavouriteTracksViewModel(
-    favTracksInteractor: FavTracksInteractor
+    private val favTracksInteractor: FavTracksInteractor
 ) : ViewModel() {
     private val _state = MutableLiveData<FavTracksState>()
     val state: LiveData<FavTracksState>
         get() = _state
 
-    init {
+    fun getFavTracks() {
         viewModelScope.launch {
             favTracksInteractor.getAllTracks().collect {
                 if (it.isEmpty()) {
