@@ -69,6 +69,7 @@ val dataModule = module {
         Room.databaseBuilder(androidContext(), AppDatabase::class.java, "database.db")
             .fallbackToDestructiveMigration()
             .build()
+            .favTracksDao()
     }
 
     factory {

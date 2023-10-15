@@ -19,7 +19,7 @@ val repositoryModule = module {
     }
 
     single<SearchRepository> {
-        SearchRepositoryImpl(networkClient = get(), mapper = get(), database = get())
+        SearchRepositoryImpl(networkClient = get(), mapper = get(), favTracksDao = get())
     }
 
     single<SharingRepository> {
@@ -31,6 +31,6 @@ val repositoryModule = module {
     }
 
     single<FavTracksRepository> {
-        FavTracksRepositoryImpl(database = get(), trackDbMapper = get())
+        FavTracksRepositoryImpl(favTracksDao = get(), trackDbMapper = get())
     }
 }
