@@ -34,7 +34,8 @@ class TrackDbMapper {
                 year,
                 primaryGenreName,
                 country,
-                previewUrl
+                previewUrl,
+                timestamp = System.currentTimeMillis()
             )
         }
     }

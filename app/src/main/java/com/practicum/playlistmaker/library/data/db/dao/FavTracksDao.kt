@@ -13,7 +13,7 @@ interface FavTracksDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addTrack(track: TrackEntity)
 
-    @Query("SELECT * FROM fav_tracks_table")
+    @Query("SELECT * FROM fav_tracks_table ORDER BY timestamp")
     suspend fun getAllTracks(): List<TrackEntity>
 
     @Delete

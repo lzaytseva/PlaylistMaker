@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "fav_tracks_table")
 data class TrackEntity(
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     val trackId: Int,
     val trackName: String,
     val artistName: String,
@@ -15,8 +15,6 @@ data class TrackEntity(
     val year: String,
     val primaryGenreName: String,
     val country: String,
-    val previewUrl: String
-) {
-    val artworkUrl512
-        get() = artworkUrl100.replaceAfterLast('/', "512x512bb.jpg")
-}
+    val previewUrl: String,
+    val timestamp: Long
+)
