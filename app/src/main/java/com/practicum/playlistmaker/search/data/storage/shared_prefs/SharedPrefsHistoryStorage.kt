@@ -13,6 +13,11 @@ class SharedPrefsHistoryStorage(
     private var savedTracks = mutableListOf<Track>()
 
     override fun saveTrack(track: Track) {
+        addTrack(track)
+        updateSP()
+    }
+
+    private fun addTrack(track: Track) {
         savedTracks = savedTracks.filterNot {
             it.trackId == track.trackId
         }.toMutableList()
@@ -22,7 +27,9 @@ class SharedPrefsHistoryStorage(
         }
 
         savedTracks.add(0, track)
+    }
 
+    private fun updateSP() {
         sharedPrefs.edit()
             .putString(
                 HISTORY_LIST_KEY,

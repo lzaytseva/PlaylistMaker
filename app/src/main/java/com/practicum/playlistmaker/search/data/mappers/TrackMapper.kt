@@ -7,6 +7,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class TrackMapper(private val gson: Gson) {
+
     fun mapDtoToEntity(dto: TrackDto, isFavourite: Boolean) = Track(
         trackId = dto.trackId,
         trackName = dto.trackName,

@@ -20,9 +20,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         installSplashScreen()
-
         setContentView(binding.root)
-
         setupBottomNavigationView()
     }
 

@@ -4,6 +4,7 @@ import com.practicum.playlistmaker.library.data.db.entity.TrackEntity
 import com.practicum.playlistmaker.search.domain.model.Track
 
 class TrackDbMapper {
+
     private fun mapEntityToDomain(trackEntity: TrackEntity): Track {
         return with(trackEntity) {
             Track(

@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.flow
 class FavTracksInteractorImpl(
     val repository: FavTracksRepository
 ) : FavTracksInteractor {
+
     override suspend fun addTrack(track: Track) {
         repository.addTrack(track)
     }

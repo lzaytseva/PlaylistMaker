@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.search.domain.api.HistoryInteractor
 import com.practicum.playlistmaker.search.domain.api.SearchInteractor
-import com.practicum.playlistmaker.search.domain.model.SearchActivityState
+import com.practicum.playlistmaker.search.domain.model.SearchScreenState
 import com.practicum.playlistmaker.search.domain.model.Track
 import com.practicum.playlistmaker.util.ErrorType
 import com.practicum.playlistmaker.util.debounce
@@ -26,8 +26,8 @@ class SearchViewModel(
             searchRequest(changedText)
         }
 
-    private val _state = MutableLiveData<SearchActivityState>()
-    val state: LiveData<SearchActivityState>
+    private val _state = MutableLiveData<SearchScreenState>()
+    val state: LiveData<SearchScreenState>
         get() = _state
 
 
@@ -41,11 +41,10 @@ class SearchViewModel(
     private fun searchRequest(newSearchText: String) {
         if (newSearchText.isBlank()) {
             viewModelScope.launch {
-                _state.value = SearchActivityState.SearchHistory(getHistory())
+                _state.value = SearchScreenState.SearchHistory(getHistory())
             }
-
         } else {
-            renderState(SearchActivityState.Loading)
+            renderState(SearchScreenState.Loading)
 
             viewModelScope.launch {
                 searchInteractor
@@ -70,7 +69,7 @@ class SearchViewModel(
         when {
             errorType != null -> {
                 renderState(
-                    SearchActivityState.Error(
+                    SearchScreenState.Error(
                         errorMessage = application.getString(R.string.check_connection),
                     )
                 )
@@ -78,7 +77,7 @@ class SearchViewModel(
 
             tracks.isEmpty() -> {
                 renderState(
-                    SearchActivityState.Empty(
+                    SearchScreenState.Empty(
                         message = application.getString(R.string.nothing_found),
                     )
                 )
@@ -86,16 +85,15 @@ class SearchViewModel(
 
             else -> {
                 renderState(
-                    SearchActivityState.Content(
+                    SearchScreenState.Content(
                         tracks = tracks,
                     )
                 )
             }
         }
-
     }
 
-    private fun renderState(state: SearchActivityState) {
+    private fun renderState(state: SearchScreenState) {
         _state.postValue(state)
     }
 
@@ -106,14 +104,14 @@ class SearchViewModel(
 
     fun clearHistory() {
         historyInteractor.clearHistory()
-        _state.value = SearchActivityState.SearchHistory(
+        _state.value = SearchScreenState.SearchHistory(
             emptyList()
         )
     }
 
     fun showHistory() {
         viewModelScope.launch {
-            _state.value = SearchActivityState.SearchHistory(
+            _state.value = SearchScreenState.SearchHistory(
                 getHistory()
             )
         }

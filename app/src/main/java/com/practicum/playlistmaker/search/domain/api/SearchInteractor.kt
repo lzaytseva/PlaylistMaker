@@ -6,6 +6,6 @@ import com.practicum.playlistmaker.util.Resource
 import kotlinx.coroutines.flow.Flow
 
 interface SearchInteractor {
-    suspend fun searchTracks(expression: String): Flow<Resource<List<Track>>>
 
+    suspend fun searchTracks(expression: String): Flow<Resource<List<Track>>>
 }

@@ -26,6 +26,7 @@ val viewModelModule = module {
             settingsRepository = get()
         )
     }
+
     viewModel { (track: Track) ->
         PlayerViewModel(track = track, playerInteractor = get(), favTracksInteractor = get())
     }

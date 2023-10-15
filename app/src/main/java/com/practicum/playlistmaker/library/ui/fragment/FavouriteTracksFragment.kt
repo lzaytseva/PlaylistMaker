@@ -9,7 +9,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentFavouriteTracksBinding
-import com.practicum.playlistmaker.library.ui.FavTracksState
+import com.practicum.playlistmaker.library.domain.model.FavTracksState
 import com.practicum.playlistmaker.library.ui.view_model.FavouriteTracksViewModel
 import com.practicum.playlistmaker.player.ui.fragment.PlayerFragment
 import com.practicum.playlistmaker.search.domain.model.Track
@@ -19,7 +19,6 @@ import com.practicum.playlistmaker.util.debounce
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FavouriteTracksFragment : BindingFragment<FragmentFavouriteTracksBinding>() {
-
 
     private val viewModel: FavouriteTracksViewModel by viewModel()
 
@@ -63,7 +62,6 @@ class FavouriteTracksFragment : BindingFragment<FragmentFavouriteTracksBinding>(
                 PlayerFragment.createArgs(track)
             )
         }
-
         adapter = TrackAdapter(onTrackClickDebounce)
     }
 

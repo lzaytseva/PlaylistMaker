@@ -5,12 +5,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.practicum.playlistmaker.library.domain.api.FavTracksInteractor
-import com.practicum.playlistmaker.library.ui.FavTracksState
+import com.practicum.playlistmaker.library.domain.model.FavTracksState
 import kotlinx.coroutines.launch
 
 class FavouriteTracksViewModel(
     private val favTracksInteractor: FavTracksInteractor
 ) : ViewModel() {
+
     private val _state = MutableLiveData<FavTracksState>()
     val state: LiveData<FavTracksState>
         get() = _state

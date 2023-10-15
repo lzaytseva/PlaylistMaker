@@ -11,6 +11,7 @@ class FavTracksRepositoryImpl(
     private val favTracksDao: FavTracksDao,
     private val trackDbMapper: TrackDbMapper
 ) : FavTracksRepository {
+
     override suspend fun addTrack(track: Track) {
         favTracksDao.addTrack(trackDbMapper.mapDomainToEntity(track))
     }

@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentSearchBinding
 import com.practicum.playlistmaker.player.ui.fragment.PlayerFragment
-import com.practicum.playlistmaker.search.domain.model.SearchActivityState
+import com.practicum.playlistmaker.search.domain.model.SearchScreenState
 import com.practicum.playlistmaker.search.domain.model.Track
 import com.practicum.playlistmaker.search.ui.adapters.TrackAdapter
 import com.practicum.playlistmaker.search.ui.view_model.SearchViewModel
@@ -24,6 +24,7 @@ import com.practicum.playlistmaker.util.debounce
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class SearchFragment : BindingFragment<FragmentSearchBinding>() {
+
     private val viewModel: SearchViewModel by viewModel()
 
     private lateinit var adapter: TrackAdapter
@@ -60,13 +61,13 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         }
     }
 
-    private fun renderState(it: SearchActivityState) {
+    private fun renderState(it: SearchScreenState) {
         when (it) {
-            is SearchActivityState.Loading -> showLoading()
-            is SearchActivityState.Content -> showFoundTracks(it.tracks)
-            is SearchActivityState.Empty -> showEmpty(it.message)
-            is SearchActivityState.Error -> showError(it.errorMessage)
-            is SearchActivityState.SearchHistory -> showHistory(it.tracks)
+            is SearchScreenState.Loading -> showLoading()
+            is SearchScreenState.Content -> showFoundTracks(it.tracks)
+            is SearchScreenState.Empty -> showEmpty(it.message)
+            is SearchScreenState.Error -> showError(it.errorMessage)
+            is SearchScreenState.SearchHistory -> showHistory(it.tracks)
         }
     }
 
@@ -145,12 +146,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
     private fun setupBtnClearSearchClickListener() {
         binding.btnClear.setOnClickListener {
             binding.searchEditText.setText("")
-
-            val keyboard =
-                requireActivity().getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager
-            keyboard.hideSoftInputFromWindow(
-                binding.searchEditText.windowToken, 0
-            )
+            hideKeyboard()
             binding.searchEditText.clearFocus()
 
             adapter.submitList(emptyList())
@@ -161,6 +157,14 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
                 binding.viewGroupHistorySearch.visibility = View.VISIBLE
             }
         }
+    }
+
+    private fun hideKeyboard() {
+        val keyboard =
+            requireActivity().getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager
+        keyboard.hideSoftInputFromWindow(
+            binding.searchEditText.windowToken, 0
+        )
     }
 
     private fun setupSearchEditText() {
