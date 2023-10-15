@@ -9,36 +9,31 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentSearchBinding
-import com.practicum.playlistmaker.player.ui.activity.PlayerActivity
+import com.practicum.playlistmaker.player.ui.fragment.PlayerFragment
 import com.practicum.playlistmaker.search.domain.model.SearchActivityState
 import com.practicum.playlistmaker.search.domain.model.Track
 import com.practicum.playlistmaker.search.ui.adapters.TrackAdapter
 import com.practicum.playlistmaker.search.ui.view_model.SearchViewModel
+import com.practicum.playlistmaker.util.BindingFragment
 import com.practicum.playlistmaker.util.debounce
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SearchFragment : Fragment() {
-
-    private var _binding: FragmentSearchBinding? = null
-    private val binding get() = _binding!!
-
+class SearchFragment : BindingFragment<FragmentSearchBinding>() {
     private val viewModel: SearchViewModel by viewModel()
 
     private lateinit var adapter: TrackAdapter
     private lateinit var searchHistoryAdapter: TrackAdapter
 
-    override fun onCreateView(
+    override fun createBinding(
         inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentSearchBinding.inflate(inflater, container, false)
-        return binding.root
+        container: ViewGroup?
+    ): FragmentSearchBinding {
+        return FragmentSearchBinding.inflate(inflater, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -130,9 +125,10 @@ class SearchFragment : Fragment() {
             false
         ) { track ->
             viewModel.saveTrack(track)
-            PlayerActivity.newIntent(requireContext(), track).apply {
-                startActivity(this)
-            }
+            findNavController().navigate(
+                R.id.action_searchFragment_to_playerFragment,
+                PlayerFragment.createArgs(track)
+            )
         }
 
         adapter = TrackAdapter(onTrackClickDebounce)
@@ -238,11 +234,6 @@ class SearchFragment : Fragment() {
         binding.btnRefresh.setOnClickListener {
             search()
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     companion object {

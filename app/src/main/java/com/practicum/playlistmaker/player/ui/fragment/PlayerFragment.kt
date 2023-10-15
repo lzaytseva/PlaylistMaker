@@ -1,41 +1,46 @@
-package com.practicum.playlistmaker.player.ui.activity
+package com.practicum.playlistmaker.player.ui.fragment
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.os.bundleOf
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.databinding.ActivityPlayerBinding
+import com.practicum.playlistmaker.databinding.FragmentPlayerBinding
 import com.practicum.playlistmaker.player.domain.model.PlayerState
 import com.practicum.playlistmaker.player.ui.view_model.PlayerViewModel
 import com.practicum.playlistmaker.search.domain.model.Track
+import com.practicum.playlistmaker.util.BindingFragment
 import com.practicum.playlistmaker.util.setTextOrHide
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
-class PlayerActivity : AppCompatActivity() {
+class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
 
-    private val binding by lazy {
-        ActivityPlayerBinding.inflate(layoutInflater)
-    }
-
-    private val track by lazy {
-        intent.extras?.get(EXTRA_KEY_TRACK) as Track
-    }
+    private lateinit var track: Track
 
     private val viewModel: PlayerViewModel by viewModel {
         parametersOf(track)
     }
 
+    override fun createBinding(
+        inflater: LayoutInflater,
+        container: ViewGroup?
+    ): FragmentPlayerBinding {
+        return FragmentPlayerBinding.inflate(inflater, container, false)
+    }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(binding.root)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        requireArguments().let {
+            track = it.getParcelable(ARGS_TRACK)!!
+        }
 
         setTrackInfoToViews()
 
@@ -43,7 +48,9 @@ class PlayerActivity : AppCompatActivity() {
 
         setFavsBtnImage(track.isFavorite)
 
-        binding.arrowBack.setOnClickListener { finish() }
+        binding.arrowBack.setOnClickListener {
+            findNavController().navigateUp()
+        }
 
         binding.btnPlay.setOnClickListener {
             viewModel.playbackControl()
@@ -52,6 +59,7 @@ class PlayerActivity : AppCompatActivity() {
         binding.btnAddToFavs.setOnClickListener {
             viewModel.onFavoriteClicked()
         }
+
     }
 
     override fun onPause() {
@@ -60,13 +68,13 @@ class PlayerActivity : AppCompatActivity() {
     }
 
     private fun observeViewModel() {
-        viewModel.playerState.observe(this) {
+        viewModel.playerState.observe(viewLifecycleOwner) {
             renderState(it)
         }
-        viewModel.timeProgress.observe(this) {
+        viewModel.timeProgress.observe(viewLifecycleOwner) {
             binding.tvPlayProgress.text = it
         }
-        viewModel.isFavorite.observe(this) {
+        viewModel.isFavorite.observe(viewLifecycleOwner) {
             setFavsBtnImage(it)
         }
     }
@@ -74,11 +82,14 @@ class PlayerActivity : AppCompatActivity() {
     private fun setFavsBtnImage(isFavorite: Boolean) {
         if (isFavorite) {
             binding.btnAddToFavs.setImageDrawable(
-                AppCompatResources.getDrawable(this, R.drawable.ic_add_to_favs_activated)
+                AppCompatResources.getDrawable(
+                    requireContext(),
+                    R.drawable.ic_add_to_favs_activated
+                )
             )
         } else {
             binding.btnAddToFavs.setImageDrawable(
-                AppCompatResources.getDrawable(this, R.drawable.ic_add_to_favs)
+                AppCompatResources.getDrawable(requireContext(), R.drawable.ic_add_to_favs)
             )
         }
     }
@@ -130,7 +141,7 @@ class PlayerActivity : AppCompatActivity() {
 
     private fun showToast(message: String) {
         Toast.makeText(
-            this,
+            requireContext(),
             message,
             Toast.LENGTH_SHORT
         ).show()
@@ -139,7 +150,7 @@ class PlayerActivity : AppCompatActivity() {
     private fun setTrackInfoToViews() {
         with(binding) {
             with(track) {
-                Glide.with(this@PlayerActivity)
+                Glide.with(requireContext())
                     .load(artworkUrl512)
                     .placeholder(R.drawable.album_placeholder_big)
                     .transform(
@@ -160,14 +171,13 @@ class PlayerActivity : AppCompatActivity() {
         }
     }
 
-
     companion object {
-        private const val EXTRA_KEY_TRACK = "extra_key_track"
+        private const val ARGS_TRACK = "track"
 
-        fun newIntent(context: Context, track: Track): Intent {
-            return Intent(context, PlayerActivity::class.java).apply {
-                putExtra(EXTRA_KEY_TRACK, track)
-            }
+        fun createArgs(track: Track): Bundle {
+            return bundleOf(
+                ARGS_TRACK to track
+            )
         }
     }
 }

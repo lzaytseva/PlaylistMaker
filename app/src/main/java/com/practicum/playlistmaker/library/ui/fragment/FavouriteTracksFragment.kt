@@ -4,35 +4,32 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentFavouriteTracksBinding
 import com.practicum.playlistmaker.library.ui.FavTracksState
 import com.practicum.playlistmaker.library.ui.view_model.FavouriteTracksViewModel
-import com.practicum.playlistmaker.player.ui.activity.PlayerActivity
+import com.practicum.playlistmaker.player.ui.fragment.PlayerFragment
 import com.practicum.playlistmaker.search.domain.model.Track
 import com.practicum.playlistmaker.search.ui.adapters.TrackAdapter
+import com.practicum.playlistmaker.util.BindingFragment
 import com.practicum.playlistmaker.util.debounce
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class FavouriteTracksFragment : Fragment() {
+class FavouriteTracksFragment : BindingFragment<FragmentFavouriteTracksBinding>() {
 
-    private var _binding: FragmentFavouriteTracksBinding? = null
-    private val binding get() = _binding!!
 
     private val viewModel: FavouriteTracksViewModel by viewModel()
 
     private lateinit var adapter: TrackAdapter
 
-    override fun onCreateView(
+    override fun createBinding(
         inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentFavouriteTracksBinding.inflate(inflater, container, false)
-        return binding.root
+        container: ViewGroup?
+    ): FragmentFavouriteTracksBinding {
+        return FragmentFavouriteTracksBinding.inflate(inflater, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -61,9 +58,10 @@ class FavouriteTracksFragment : Fragment() {
             viewLifecycleOwner.lifecycleScope,
             false
         ) { track ->
-            PlayerActivity.newIntent(requireContext(), track).apply {
-                startActivity(this)
-            }
+            findNavController().navigate(
+                R.id.action_libraryFragment_to_playerFragment,
+                PlayerFragment.createArgs(track)
+            )
         }
 
         adapter = TrackAdapter(onTrackClickDebounce)
@@ -88,11 +86,6 @@ class FavouriteTracksFragment : Fragment() {
         binding.placeholderErrorLayout.root.visibility = View.INVISIBLE
         binding.favTracksRv.visibility = View.VISIBLE
         adapter.submitList(favTracks)
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     companion object {
