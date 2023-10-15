@@ -2,6 +2,7 @@ package com.practicum.playlistmaker.search.ui.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
@@ -12,9 +13,8 @@ import com.practicum.playlistmaker.search.domain.model.Track
 import com.practicum.playlistmaker.util.setTextOrHide
 
 class TrackAdapter(private val onTrackClicked: (Track) -> Unit) :
-    RecyclerView.Adapter<TrackAdapter.TrackViewHolder>() {
+    ListAdapter<Track, TrackAdapter.TrackViewHolder>(TrackDiffCallback) {
 
-    var tracksList = mutableListOf<Track>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
         val binding = TrackViewBinding.inflate(
@@ -25,13 +25,12 @@ class TrackAdapter(private val onTrackClicked: (Track) -> Unit) :
         return TrackViewHolder(binding)
     }
 
-    override fun getItemCount() = tracksList.size
 
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
-        holder.bind(tracksList[position])
+        holder.bind(getItem(position))
 
         holder.itemView.setOnClickListener {
-            onTrackClicked.invoke(tracksList[position])
+            onTrackClicked.invoke(getItem(position))
         }
     }
 

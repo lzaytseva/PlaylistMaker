@@ -29,8 +29,6 @@ class SearchFragment : Fragment() {
 
     private val viewModel: SearchViewModel by viewModel()
 
-    private val tracksInHistory = ArrayList<Track>()
-    private val tracksList = ArrayList<Track>()
     private lateinit var adapter: TrackAdapter
     private lateinit var searchHistoryAdapter: TrackAdapter
 
@@ -78,15 +76,16 @@ class SearchFragment : Fragment() {
     }
 
     private fun showHistory(tracks: List<Track>) {
-        tracksInHistory.clear()
-        tracksInHistory.addAll(tracks)
-        binding.placeholderError.visibility = View.GONE
-        binding.progressBar.visibility = View.GONE
-        binding.recyclerView.visibility = View.GONE
-        if (tracksInHistory.isNotEmpty()) {
-            binding.viewGroupHistorySearch.visibility = View.VISIBLE
-            searchHistoryAdapter.notifyDataSetChanged()
+        if (binding.searchEditText.text.isEmpty()) {
+            binding.placeholderError.visibility = View.GONE
+            binding.progressBar.visibility = View.GONE
+            binding.recyclerView.visibility = View.GONE
+            if (tracks.isNotEmpty()) {
+                binding.viewGroupHistorySearch.visibility = View.VISIBLE
+
+            }
         }
+        searchHistoryAdapter.submitList(tracks)
     }
 
     private fun showError(errorMessage: String) {
@@ -114,9 +113,7 @@ class SearchFragment : Fragment() {
         binding.placeholderError.visibility = View.GONE
         binding.progressBar.visibility = View.GONE
         binding.recyclerView.visibility = View.VISIBLE
-        tracksList.clear()
-        tracksList.addAll(foundTracks)
-        adapter.notifyDataSetChanged()
+        adapter.submitList(foundTracks)
     }
 
     private fun showLoading() {
@@ -146,7 +143,6 @@ class SearchFragment : Fragment() {
         binding.btnClearHistory.setOnClickListener {
             viewModel.clearHistory()
             binding.viewGroupHistorySearch.visibility = View.GONE
-            searchHistoryAdapter.notifyDataSetChanged()
         }
     }
 
@@ -161,12 +157,11 @@ class SearchFragment : Fragment() {
             )
             binding.searchEditText.clearFocus()
 
-            tracksList.clear()
-            adapter.notifyDataSetChanged()
-
+            adapter.submitList(emptyList())
             binding.placeholderError.visibility = View.GONE
+            binding.recyclerView.visibility = View.GONE
 
-            if (tracksInHistory.isNotEmpty()) {
+            if (searchHistoryAdapter.currentList.isNotEmpty()) {
                 binding.viewGroupHistorySearch.visibility = View.VISIBLE
             }
         }
@@ -208,7 +203,7 @@ class SearchFragment : Fragment() {
     private fun setupFocusChangeListener() {
         binding.searchEditText.setOnFocusChangeListener { _, hasFocus ->
             binding.viewGroupHistorySearch.visibility =
-                if (hasFocus && binding.searchEditText.text.isEmpty() && tracksInHistory.isNotEmpty()) {
+                if (hasFocus && binding.searchEditText.text.isEmpty() && searchHistoryAdapter.currentList.isNotEmpty()) {
                     View.VISIBLE
                 } else {
                     View.GONE
@@ -218,13 +213,12 @@ class SearchFragment : Fragment() {
 
     private fun buildSearchRecyclerView() {
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
-        adapter.tracksList = tracksList
         binding.recyclerView.adapter = adapter
+        binding.recyclerView.itemAnimator = null
     }
 
     private fun buildHistoryRecyclerView() {
         binding.recyclerViewHistory.layoutManager = LinearLayoutManager(requireContext())
-        searchHistoryAdapter.tracksList = tracksInHistory
         binding.recyclerViewHistory.adapter = searchHistoryAdapter
     }
 

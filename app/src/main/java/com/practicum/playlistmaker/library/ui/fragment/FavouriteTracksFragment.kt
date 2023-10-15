@@ -47,6 +47,7 @@ class FavouriteTracksFragment : Fragment() {
         initAdapter()
         binding.favTracksRv.layoutManager = LinearLayoutManager(requireContext())
         binding.favTracksRv.adapter = adapter
+        binding.favTracksRv.itemAnimator = null
     }
 
     override fun onResume() {
@@ -76,8 +77,7 @@ class FavouriteTracksFragment : Fragment() {
     }
 
     private fun showEmpty() {
-        adapter.tracksList.clear()
-        adapter.notifyDataSetChanged()
+        adapter.submitList(emptyList())
         binding.favTracksRv.visibility = View.INVISIBLE
         binding.placeholderErrorLayout.root.visibility = View.VISIBLE
         binding.placeholderErrorLayout.placeholderMessage.text =
@@ -87,9 +87,7 @@ class FavouriteTracksFragment : Fragment() {
     private fun showContent(favTracks: List<Track>) {
         binding.placeholderErrorLayout.root.visibility = View.INVISIBLE
         binding.favTracksRv.visibility = View.VISIBLE
-        adapter.tracksList.clear()
-        adapter.tracksList.addAll(favTracks)
-        adapter.notifyDataSetChanged()
+        adapter.submitList(favTracks)
     }
 
     override fun onDestroyView() {

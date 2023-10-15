@@ -101,6 +101,7 @@ class SearchViewModel(
 
     fun saveTrack(track: Track) {
         historyInteractor.saveTrack(track)
+        showHistory()
     }
 
     fun clearHistory() {
