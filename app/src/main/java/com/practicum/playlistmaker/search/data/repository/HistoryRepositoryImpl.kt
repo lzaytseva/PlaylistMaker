@@ -1,6 +1,5 @@
 package com.practicum.playlistmaker.search.data.repository
 
-import com.practicum.playlistmaker.library.data.db.AppDatabase
 import com.practicum.playlistmaker.library.data.db.dao.FavTracksDao
 import com.practicum.playlistmaker.search.data.storage.HistoryStorage
 import com.practicum.playlistmaker.search.domain.api.HistoryRepository
@@ -16,7 +15,7 @@ class HistoryRepositoryImpl(
     }
 
     override suspend fun getAllTracks(): List<Track> {
-        val tracks =  storage.getAllTracks()
+        val tracks = storage.getAllTracks()
         val favTracksIds = favTracksDao.getIds()
         return tracks.map {
             it.copy(
