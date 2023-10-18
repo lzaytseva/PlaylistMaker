@@ -26,10 +26,10 @@ class TrackAdapter(
     }
 
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        holder.bind(getItem(holder.adapterPosition))
 
         holder.itemView.setOnClickListener {
-            onTrackClicked.invoke(getItem(position))
+            onTrackClicked.invoke(getItem(holder.adapterPosition))
         }
     }
 
