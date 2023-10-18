@@ -54,6 +54,13 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (binding.searchEditText.text.isEmpty()) {
+            viewModel.showHistory()
+        }
+    }
+
     override fun onStop() {
         super.onStop()
         binding.searchEditText.setText("")
