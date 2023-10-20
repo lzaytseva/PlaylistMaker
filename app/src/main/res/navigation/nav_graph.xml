@@ -23,6 +23,9 @@
         <action
             android:id="@+id/action_libraryFragment_to_playerFragment"
             app:destination="@id/playerFragment" />
+        <action
+            android:id="@+id/action_libraryFragment_to_createPlaylistFragment"
+            app:destination="@id/createPlaylistFragment" />
     </fragment>
 
     <fragment
@@ -34,5 +37,9 @@
         android:id="@+id/playerFragment"
         android:name="com.practicum.playlistmaker.player.ui.fragment.PlayerFragment"
         android:label="PlayerFragment" />
+    <fragment
+        android:id="@+id/createPlaylistFragment"
+        android:name="com.practicum.playlistmaker.library.ui.fragment.CreatePlaylistFragment"
+        android:label="CreatePlaylistFragment" />
 
 </navigation>

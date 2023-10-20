@@ -41,4 +41,8 @@
     <string name="new_playlist">Новый плейлист</string>
     <string name="favourite_tracks">Избранные треки</string>
     <string name="playlists">Плейлисты</string>
+    <string name="new_playlist_header">Новый плейлист</string>
+    <string name="hint_title">Название*</string>
+    <string name="hint_description">Описание</string>
+    <string name="label_create">Создать</string>
 </resources>

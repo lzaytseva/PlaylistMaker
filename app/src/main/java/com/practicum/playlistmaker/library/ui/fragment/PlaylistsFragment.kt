@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentPlaylistsBinding
 import com.practicum.playlistmaker.library.ui.view_model.PlaylistsViewModel
@@ -23,6 +24,11 @@ class PlaylistsFragment : BindingFragment<FragmentPlaylistsBinding>() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.btnCreatePlaylist.setOnClickListener {
+            findNavController().navigate(R.id.action_libraryFragment_to_createPlaylistFragment)
+        }
+
         binding.placeholderErrorLayout.placeholderMessage.text =
             getString(R.string.error_no_playlists)
     }

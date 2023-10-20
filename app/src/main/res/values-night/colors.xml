@@ -10,5 +10,6 @@
     <color name="regular_text_color">@color/white</color>
     <color name="settings_icons_tint">@color/white</color>
     <color name="search_ic_tint">@color/black</color>
+    <color name="et_borders">@color/white</color>
 
 </resources>
