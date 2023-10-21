@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingEnd="@dimen/margin8dp"
+    android:paddingBottom="@dimen/margin16dp">
+
+    <ImageView
+        android:id="@+id/iv_playlist_cover"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:src="@drawable/album_placeholder"
+        app:layout_constraintDimensionRatio="w, 1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_playlist_title"
+        style="@style/playlist_desc_text_style"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv_playlist_cover"
+        tools:text="BeSt SoNg EvEr!" />
+
+    <TextView
+        android:id="@+id/tv_num_of_tracks"
+        style="@style/playlist_desc_text_style"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_playlist_title"
+        tools:text="1 трек" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
