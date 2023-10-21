@@ -45,4 +45,9 @@
     <string name="hint_title">Название*</string>
     <string name="hint_description">Описание</string>
     <string name="label_create">Создать</string>
+    <string name="playlist_created">Плейлист %1$s создан</string>
+    <string name="finish_creating_dialog_title">Завершить создание плейлиста?</string>
+    <string name="finish_creating_dialog_message">Все несохраненные данные будут потеряны</string>
+    <string name="finish_creating_dialog_btn_positive">Завершить</string>
+    <string name="finish_creating_dialog_btn_negative">Отмена</string>
 </resources>

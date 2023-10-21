@@ -1,6 +1,6 @@
 package com.practicum.playlistmaker.search.data.repository
 
-import com.practicum.playlistmaker.library.data.db.dao.FavTracksDao
+import com.practicum.playlistmaker.library.data.db.AppDatabase
 import com.practicum.playlistmaker.search.data.dto.SearchTracksResponse
 import com.practicum.playlistmaker.search.data.dto.TracksSearchRequest
 import com.practicum.playlistmaker.search.data.mappers.TrackMapper
@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.flow
 class SearchRepositoryImpl(
     private val networkClient: NetworkClient,
     private val mapper: TrackMapper,
-    private val favTracksDao: FavTracksDao
+    private val db: AppDatabase
 ) : SearchRepository {
 
     override fun searchTracks(expression: String): Flow<Resource<List<Track>>> = flow {
@@ -28,7 +28,7 @@ class SearchRepositoryImpl(
             }
 
             RetrofitNetworkClient.RC_SUCCESS -> {
-                val favTracksIds = favTracksDao.getIds()
+                val favTracksIds = db.favTracksDao().getIds()
                 emit(Resource.Success((response as SearchTracksResponse).tracks.map {
                     mapper.mapDtoToEntity(
                         dto = it,

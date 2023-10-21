@@ -82,6 +82,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_create"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/create_playlist_btn_background"
@@ -90,6 +91,7 @@
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:textSize="16sp"
+        android:enabled="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
