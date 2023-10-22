@@ -1,11 +1,11 @@
 package com.practicum.playlistmaker.library.data.db.repository
 
 import android.app.Application
+import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Environment
-import androidx.core.net.toUri
 import com.practicum.playlistmaker.library.data.db.AppDatabase
 import com.practicum.playlistmaker.library.data.db.mapper.PlaylistDbMapper
 import com.practicum.playlistmaker.library.domain.api.PlaylistsRepository
@@ -18,7 +18,8 @@ import java.io.FileOutputStream
 class PlaylistsRepositoryImpl(
     private val application: Application,
     private val db: AppDatabase,
-    private val mapper: PlaylistDbMapper
+    private val mapper: PlaylistDbMapper,
+    private val sharedPrefs: SharedPreferences
 ) : PlaylistsRepository {
     override suspend fun savePlaylist(playlist: Playlist) {
         db.playlistsDao().savePlaylist(mapper.mapDomainToEntity(playlist))
@@ -42,24 +43,41 @@ class PlaylistsRepositoryImpl(
             filePath.mkdirs()
         }
 
-        //дичь какая-то
-        var suffix = filePath.listFiles()?.last()?.name
-            ?.substringAfter("playlist_cover")
-            ?.substringBefore(".jpg")
-            ?.toInt() ?: 0
+        var coverNumber = getCoverNumber()
 
-        val file = File(filePath, String.format(FILE_NAME, ++suffix))
+        val file = File(
+            filePath, String.format(
+                FILE_NAME,
+                if (coverNumber == 0) "" else coverNumber
+            )
+        )
 
         val inputStream = application.contentResolver.openInputStream(uri)
         val outputStream = FileOutputStream(file)
         BitmapFactory
             .decodeStream(inputStream)
             .compress(Bitmap.CompressFormat.JPEG, 30, outputStream)
-        return file.absolutePath.toUri()
+
+        setCoverNumber(++coverNumber)
+
+        return Uri.fromFile(file)
     }
+
+    private fun getCoverNumber(): Int {
+        return sharedPrefs.getInt(COVERS_COUNT_KEY, 0)
+    }
+
+    private fun setCoverNumber(count: Int) {
+        sharedPrefs
+            .edit()
+            .putInt(COVERS_COUNT_KEY, count)
+            .apply()
+    }
+
 
     companion object {
         private const val DIRECTORY_NAME = "playlist_covers"
-        private const val FILE_NAME = "playlist_cover%d.jpg"
+        private const val FILE_NAME = "playlist_cover%s.jpg"
+        private const val COVERS_COUNT_KEY = "covers_count"
     }
 }

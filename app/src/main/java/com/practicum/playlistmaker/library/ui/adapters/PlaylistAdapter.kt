@@ -33,14 +33,19 @@ class PlaylistAdapter :
             with(binding) {
                 with(playlist) {
                     tvPlaylistTitle.text = name
-                    tvNumOfTracks.text = playlist.tracks.size.toString()
+                    val numOfTracks = itemView.resources.getQuantityString(
+                        R.plurals.track_amount,
+                        tracks.size,
+                        tracks.size
+                    )
+                    tvNumOfTracks.text = numOfTracks
                     Glide.with(itemView)
                         .load(coverUri)
-                        .placeholder(R.drawable.album_placeholder)
+                        .placeholder(R.drawable.cover_placeholder)
                         .transform(
                             CenterCrop(),
                             RoundedCorners(
-                                itemView.resources.getDimensionPixelSize(R.dimen.album_cover_corner_radius)
+                                itemView.resources.getDimensionPixelSize(R.dimen.album_cover_corner_radius_player)
                             ),
                         )
                         .into(ivPlaylistCover)
