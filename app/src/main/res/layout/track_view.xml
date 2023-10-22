@@ -12,7 +12,7 @@
         android:layout_height="45dp"
         android:layout_gravity="center_vertical"
         android:contentDescription="@string/album_cover_description"
-        android:src="@drawable/album_placeholder" />
+        android:src="@drawable/cover_placeholder" />
 
     <LinearLayout
         android:layout_width="0dp"

@@ -44,7 +44,7 @@ class TrackAdapter(
                     tvDuration.setTextOrHide(duration, ellipse)
                     Glide.with(itemView)
                         .load(artworkUrl100)
-                        .placeholder(R.drawable.album_placeholder)
+                        .placeholder(R.drawable.cover_placeholder)
                         .transform(
                             CenterCrop(),
                             RoundedCorners(
