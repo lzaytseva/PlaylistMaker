@@ -76,11 +76,23 @@ class PlayerFragment() : BindingFragment<FragmentPlayerBinding>() {
         }
 
         binding.btnAddToPlaylist.setOnClickListener {
-            viewModel.getAllPlaylists()
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
         }
 
+        binding.btnCreatePlaylist.setOnClickListener {
+            findNavController().navigate(R.id.action_playerFragment_to_createPlaylistFragment)
+        }
+
         observeViewModel()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.getAllPlaylists()
+
+        if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_COLLAPSED) {
+            binding.overlay.visibility = View.VISIBLE
+        }
     }
 
     override fun onPause() {
