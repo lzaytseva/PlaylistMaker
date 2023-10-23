@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.os.bundleOf
@@ -33,11 +34,7 @@ class PlayerFragment() : BindingFragment<FragmentPlayerBinding>() {
         parametersOf(track)
     }
 
-    private val bottomSheetBehavior by lazy {
-        BottomSheetBehavior.from(binding.playlistsBottomSheet).apply {
-            state = BottomSheetBehavior.STATE_HIDDEN
-        }
-    }
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<LinearLayout>
 
     private lateinit var adapter: PlaylistBSAdapter
 
@@ -59,7 +56,7 @@ class PlayerFragment() : BindingFragment<FragmentPlayerBinding>() {
 
         initPlaylistsRv()
 
-        setBottomSheetCallback()
+        initBottomSheet()
 
         setFavsBtnImage(track.isFavorite)
 
@@ -76,6 +73,7 @@ class PlayerFragment() : BindingFragment<FragmentPlayerBinding>() {
         }
 
         binding.btnAddToPlaylist.setOnClickListener {
+            viewModel.getAllPlaylists()
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
         }
 
@@ -86,18 +84,14 @@ class PlayerFragment() : BindingFragment<FragmentPlayerBinding>() {
         observeViewModel()
     }
 
-    override fun onResume() {
-        super.onResume()
-        viewModel.getAllPlaylists()
-
-        if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_COLLAPSED) {
-            binding.overlay.visibility = View.VISIBLE
-        }
-    }
-
     override fun onPause() {
         super.onPause()
         viewModel.pause()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
     }
 
     private fun observeViewModel() {
@@ -229,7 +223,11 @@ class PlayerFragment() : BindingFragment<FragmentPlayerBinding>() {
         }
     }
 
-    private fun setBottomSheetCallback() {
+    private fun initBottomSheet() {
+        bottomSheetBehavior = BottomSheetBehavior.from(binding.playlistsBottomSheet).apply {
+            state = BottomSheetBehavior.STATE_HIDDEN
+        }
+
         bottomSheetBehavior.addBottomSheetCallback(object :
             BottomSheetBehavior.BottomSheetCallback() {
 

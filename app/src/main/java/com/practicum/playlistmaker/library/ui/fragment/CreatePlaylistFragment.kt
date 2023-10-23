@@ -111,9 +111,9 @@ class CreatePlaylistFragment() : BindingFragment<FragmentCreatePlaylistBinding>(
             .setTitle(getString(R.string.finish_creating_dialog_title))
             .setMessage(getString(R.string.finish_creating_dialog_message))
             .setPositiveButton(getString(R.string.finish_creating_dialog_btn_positive))
-            { dialog, which -> closeScreen() }
+            { _, _ -> closeScreen() }
             .setNegativeButton(getString(R.string.finish_creating_dialog_btn_negative))
-            { dialog, which -> }
+            { _, _ -> }
             .show()
     }
 
