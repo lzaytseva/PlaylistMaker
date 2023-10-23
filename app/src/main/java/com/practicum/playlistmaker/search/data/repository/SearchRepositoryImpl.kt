@@ -1,9 +1,11 @@
 package com.practicum.playlistmaker.search.data.repository
 
+import com.practicum.playlistmaker.library.data.db.dao.FavTracksDao
 import com.practicum.playlistmaker.search.data.dto.SearchTracksResponse
 import com.practicum.playlistmaker.search.data.dto.TracksSearchRequest
 import com.practicum.playlistmaker.search.data.mappers.TrackMapper
 import com.practicum.playlistmaker.search.data.network.NetworkClient
+import com.practicum.playlistmaker.search.data.network.RetrofitNetworkClient
 import com.practicum.playlistmaker.search.domain.api.SearchRepository
 import com.practicum.playlistmaker.search.domain.model.Track
 import com.practicum.playlistmaker.util.ErrorType
@@ -13,19 +15,25 @@ import kotlinx.coroutines.flow.flow
 
 class SearchRepositoryImpl(
     private val networkClient: NetworkClient,
-    private val mapper: TrackMapper
+    private val mapper: TrackMapper,
+    private val favTracksDao: FavTracksDao
 ) : SearchRepository {
 
     override fun searchTracks(expression: String): Flow<Resource<List<Track>>> = flow {
         val response = networkClient.doRequest(TracksSearchRequest(expression))
+
         when (response.resultCode) {
-            -1 -> {
+            RetrofitNetworkClient.RC_NO_INTERNET -> {
                 emit(Resource.Error(ErrorType.NO_INTERNET))
             }
 
-            200 -> {
+            RetrofitNetworkClient.RC_SUCCESS -> {
+                val favTracksIds = favTracksDao.getIds()
                 emit(Resource.Success((response as SearchTracksResponse).tracks.map {
-                    mapper.mapDtoToEntity(it)
+                    mapper.mapDtoToEntity(
+                        dto = it,
+                        isFavourite = favTracksIds.contains(it.trackId)
+                    )
                 }))
             }
 

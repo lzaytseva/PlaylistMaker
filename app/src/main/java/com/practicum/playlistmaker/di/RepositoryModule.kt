@@ -1,5 +1,7 @@
 package com.practicum.playlistmaker.di
 
+import com.practicum.playlistmaker.library.data.db.repository.FavTracksRepositoryImpl
+import com.practicum.playlistmaker.library.domain.api.FavTracksRepository
 import com.practicum.playlistmaker.search.data.repository.HistoryRepositoryImpl
 import com.practicum.playlistmaker.search.data.repository.SearchRepositoryImpl
 import com.practicum.playlistmaker.search.domain.api.HistoryRepository
@@ -13,18 +15,22 @@ import org.koin.dsl.module
 
 val repositoryModule = module {
     single<HistoryRepository> {
-        HistoryRepositoryImpl(storage = get())
+        HistoryRepositoryImpl(storage = get(), favTracksDao = get())
     }
 
     single<SearchRepository> {
-        SearchRepositoryImpl(networkClient = get(), mapper = get())
+        SearchRepositoryImpl(networkClient = get(), mapper = get(), favTracksDao = get())
     }
 
     single<SharingRepository> {
-        SharingRepositoryImpl(externalNavigator = get(), context =  androidContext())
+        SharingRepositoryImpl(externalNavigator = get(), context = androidContext())
     }
 
     single<SettingsRepository> {
         SettingsRepositoryImpl(androidContext())
+    }
+
+    single<FavTracksRepository> {
+        FavTracksRepositoryImpl(favTracksDao = get(), trackDbMapper = get())
     }
 }

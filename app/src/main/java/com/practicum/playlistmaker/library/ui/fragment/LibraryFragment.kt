@@ -4,26 +4,21 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import com.google.android.material.tabs.TabLayoutMediator
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentLibraryBinding
 import com.practicum.playlistmaker.library.ui.adapters.LibraryPagerAdapter
+import com.practicum.playlistmaker.util.BindingFragment
 
-class LibraryFragment : Fragment() {
-
-    private var _binding: FragmentLibraryBinding? = null
-    private val binding get() = _binding!!
+class LibraryFragment : BindingFragment<FragmentLibraryBinding>() {
 
     private var tabMediator: TabLayoutMediator? = null
 
-    override fun onCreateView(
+    override fun createBinding(
         inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentLibraryBinding.inflate(inflater, container, false)
-        return binding.root
+        container: ViewGroup?
+    ): FragmentLibraryBinding {
+        return FragmentLibraryBinding.inflate(inflater, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -46,10 +41,5 @@ class LibraryFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         tabMediator?.detach()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 }

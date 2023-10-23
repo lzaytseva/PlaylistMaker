@@ -10,19 +10,26 @@ class SharedPrefsHistoryStorage(
     private val mapper: TrackMapper
 ) : HistoryStorage {
 
-    private val savedTracks = mutableListOf<Track>()
+    private var savedTracks = mutableListOf<Track>()
 
     override fun saveTrack(track: Track) {
-        if (savedTracks.contains(track)) {
-            savedTracks.remove(track)
-        }
+        addTrack(track)
+        updateSP()
+    }
+
+    private fun addTrack(track: Track) {
+        savedTracks = savedTracks.filterNot {
+            it.trackId == track.trackId
+        }.toMutableList()
 
         if (savedTracks.size == MAX_NUMBER_OF_TRACKS) {
             savedTracks.removeLast()
         }
 
         savedTracks.add(0, track)
+    }
 
+    private fun updateSP() {
         sharedPrefs.edit()
             .putString(
                 HISTORY_LIST_KEY,

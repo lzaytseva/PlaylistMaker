@@ -16,18 +16,18 @@ class RetrofitNetworkClient(
 
     override suspend fun doRequest(dto: Any): Response {
         if (!isConnected()) {
-            return Response().apply { resultCode = -1 }
+            return Response().apply { resultCode = RC_NO_INTERNET }
         }
         if (dto !is TracksSearchRequest) {
-            return Response().apply { resultCode = 400 }
+            return Response().apply { resultCode = RC_WRONG_REQUEST }
         }
 
         return withContext(Dispatchers.IO) {
             try {
                 val response = itunesService.search(dto.expression)
-                response.apply { resultCode = 200 }
+                response.apply { resultCode = RC_SUCCESS }
             } catch (e: Throwable) {
-                Response().apply { resultCode = 500 }
+                Response().apply { resultCode = RC_FAILURE }
             }
         }
     }
@@ -50,6 +50,11 @@ class RetrofitNetworkClient(
     }
 
     companion object {
+        const val RC_SUCCESS = 200
+        const val RC_NO_INTERNET = -1
+        const val RC_WRONG_REQUEST = 400
+        const val RC_FAILURE = 500
+
         const val ITUNES_BASE_URL = "https://itunes.apple.com/"
     }
 }
