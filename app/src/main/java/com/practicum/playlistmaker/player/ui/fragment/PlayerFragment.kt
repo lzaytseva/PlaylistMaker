@@ -106,7 +106,13 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
 
     private fun renderAddTrackState(state: AddTrackToPlaylistState) {
         when (state) {
-            is AddTrackToPlaylistState.AlreadyPresent -> showToast("Трек уже добавлен в плейлист ${state.playlistName}")
+            is AddTrackToPlaylistState.AlreadyPresent -> showToast(
+                getString(
+                    R.string.track_already_present,
+                    state.playlistName
+                )
+            )
+
             is AddTrackToPlaylistState.WasAdded -> showTrackAdded(state.playlistName)
             is AddTrackToPlaylistState.ShowPlaylists -> adapter.submitList(state.playlists)
         }
@@ -114,7 +120,7 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
 
     private fun showTrackAdded(playlistName: String) {
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-        showToast("Добавлено в плейлист $playlistName")
+        showToast(getString(R.string.track_added_in_playlist, playlistName))
     }
 
     private fun initPlaylistsRv() {
