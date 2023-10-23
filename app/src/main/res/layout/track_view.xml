@@ -41,7 +41,7 @@
 
             <TextView
                 android:id="@+id/tv_artist"
-                style="@style/SongDescTextStyle"
+                style="@style/song_desc_text_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin8dp"
@@ -63,7 +63,7 @@
 
             <TextView
                 android:id="@+id/tv_duration"
-                style="@style/SongDescTextStyle"
+                style="@style/song_desc_text_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"

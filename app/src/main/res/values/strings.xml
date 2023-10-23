@@ -51,4 +51,5 @@
     <string name="finish_creating_dialog_btn_positive">Завершить</string>
     <string name="finish_creating_dialog_btn_negative">Отмена</string>
     <string name="playlist_cover_content_desc">Изображение обложки плейлиста</string>
+    <string name="add_to_playlist_header">Добавить в плейлист</string>
 </resources>

@@ -8,8 +8,10 @@ import android.net.Uri
 import android.os.Environment
 import com.practicum.playlistmaker.library.data.db.AppDatabase
 import com.practicum.playlistmaker.library.data.db.mapper.PlaylistDbMapper
+import com.practicum.playlistmaker.library.data.db.mapper.TrackDbMapper
 import com.practicum.playlistmaker.library.domain.api.PlaylistsRepository
 import com.practicum.playlistmaker.library.domain.model.Playlist
+import com.practicum.playlistmaker.search.domain.model.Track
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import java.io.File
@@ -18,16 +20,27 @@ import java.io.FileOutputStream
 class PlaylistsRepositoryImpl(
     private val application: Application,
     private val db: AppDatabase,
-    private val mapper: PlaylistDbMapper,
+    private val playlistMapper: PlaylistDbMapper,
+    private val trackMapper: TrackDbMapper,
     private val sharedPrefs: SharedPreferences
 ) : PlaylistsRepository {
     override suspend fun savePlaylist(playlist: Playlist) {
-        db.playlistsDao().savePlaylist(mapper.mapDomainToEntity(playlist))
+        db.playlistsDao().savePlaylist(playlistMapper.mapDomainToEntity(playlist))
     }
 
     override fun getAllPlaylists(): Flow<List<Playlist>> = flow {
-        emit(mapper.mapEntityListToDomain(db.playlistsDao().getAllPlaylists()))
+        emit(playlistMapper.mapEntityListToDomain(db.playlistsDao().getAllPlaylists()))
     }
+
+
+    override suspend fun updatePlaylist(playlist: Playlist) {
+        db.playlistsDao().updateTracksInPlaylist(playlistMapper.mapDomainToEntity(playlist))
+    }
+
+    override suspend fun addTrack(track: Track) {
+        db.tracksDao().addTrack(trackMapper.mapDomainToPlaylistTrack(track))
+    }
+
 
     override fun saveCoverToStorage(uri: Uri?): Uri {
         if (uri == null) {
@@ -62,6 +75,7 @@ class PlaylistsRepositoryImpl(
 
         return Uri.fromFile(file)
     }
+
 
     private fun getCoverNumber(): Int {
         return sharedPrefs.getInt(COVERS_COUNT_KEY, 0)

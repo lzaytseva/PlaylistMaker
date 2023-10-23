@@ -41,7 +41,8 @@ val repositoryModule = module {
         PlaylistsRepositoryImpl(
             application = androidApplication(),
             db = get(),
-            mapper = get(),
+            playlistMapper = get(),
+            trackMapper = get(),
             sharedPrefs = get()
         )
     }

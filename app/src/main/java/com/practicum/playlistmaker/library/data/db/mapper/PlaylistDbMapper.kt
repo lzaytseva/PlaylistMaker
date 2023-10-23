@@ -13,8 +13,8 @@ class PlaylistDbMapper {
                 name = name,
                 description = description,
                 coverUri = coverUri.toString(),
-                numberOfTracks = 0,
-                tracksId = ""
+                numberOfTracks = numberOfTracks,
+                tracksId = tracksId.joinToString(" ")
             )
         }
     }
@@ -25,8 +25,18 @@ class PlaylistDbMapper {
                 id = id,
                 name = name,
                 description = description,
-                coverUri = Uri.parse(coverUri)
+                coverUri = Uri.parse(coverUri),
+                numberOfTracks = numberOfTracks,
+                tracksId = tracksId.mapStringToListInt()
             )
+        }
+    }
+
+    private fun String.mapStringToListInt(): List<Int> {
+        return if (isEmpty()) {
+            emptyList()
+        } else {
+            split(" ").map { it.toInt() }
         }
     }
 

@@ -11,5 +11,7 @@
     <color name="settings_icons_tint">@color/white</color>
     <color name="search_ic_tint">@color/black</color>
     <color name="et_borders">@color/white</color>
+    <color name="rect_background">@color/white</color>
+    <color name="playlist_desc_text_color">@color/white</color>
 
 </resources>

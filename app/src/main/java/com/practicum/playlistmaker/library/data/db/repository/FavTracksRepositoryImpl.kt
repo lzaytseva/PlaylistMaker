@@ -13,15 +13,15 @@ class FavTracksRepositoryImpl(
 ) : FavTracksRepository {
 
     override suspend fun addTrack(track: Track) {
-        db.favTracksDao().addTrack(mapper.mapDomainToEntity(track))
+        db.favTracksDao().addTrack(mapper.mapDomainToTrackEntity(track))
     }
 
     override suspend fun deleteTrack(track: Track) {
-        db.favTracksDao().deleteTrack(mapper.mapDomainToEntity(track))
+        db.favTracksDao().deleteTrack(mapper.mapDomainToTrackEntity(track))
     }
 
     override fun getAllTracks(): Flow<List<Track>> = flow {
         val tracks = db.favTracksDao().getAllTracks()
-        emit(mapper.mapEntityListToDomain(tracks))
+        emit(mapper.mapTrackEntityListToDomain(tracks))
     }
 }

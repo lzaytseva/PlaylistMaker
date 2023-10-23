@@ -5,7 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.practicum.playlistmaker.library.domain.api.FavTracksInteractor
+import com.practicum.playlistmaker.library.domain.api.PlaylistsInteractor
+import com.practicum.playlistmaker.library.domain.model.Playlist
 import com.practicum.playlistmaker.player.domain.api.TrackPlayerInteractor
+import com.practicum.playlistmaker.player.domain.model.AddTrackToPlaylistState
 import com.practicum.playlistmaker.player.domain.model.PlayerState
 import com.practicum.playlistmaker.search.domain.model.Track
 import kotlinx.coroutines.Dispatchers
@@ -18,24 +21,29 @@ import java.util.Locale
 class PlayerViewModel(
     private val track: Track,
     private val playerInteractor: TrackPlayerInteractor,
-    private val favTracksInteractor: FavTracksInteractor
+    private val favTracksInteractor: FavTracksInteractor,
+    private val playlistsInteractor: PlaylistsInteractor
 ) : ViewModel() {
 
     val playerState = playerInteractor.getState()
 
     private val _timeProgress = MutableLiveData(INITIAL_TIME)
+    val timeProgress: LiveData<String>
+        get() = _timeProgress
+
     private val _isFavorite = MutableLiveData<Boolean>()
     val isFavorite: LiveData<Boolean>
         get() = _isFavorite
+
+    private val _addTrackState = MutableLiveData<AddTrackToPlaylistState>()
+    val addTrackState: LiveData<AddTrackToPlaylistState>
+        get() = _addTrackState
 
     private var timerJob: Job? = null
 
     init {
         playerInteractor.preparePlayer(track.previewUrl)
     }
-
-    val timeProgress: LiveData<String>
-        get() = _timeProgress
 
     private fun play() {
         playerInteractor.play()
@@ -116,6 +124,27 @@ class PlayerViewModel(
         super.onCleared()
         releasePlayer()
     }
+
+    fun addTrackToPlaylist(playlist: Playlist) {
+        if (playlist.tracksId.contains(track.trackId)) {
+            _addTrackState.value = AddTrackToPlaylistState.AlreadyPresent(playlist.name)
+        } else {
+            viewModelScope.launch {
+                playlistsInteractor.addTrackToPlaylist(track, playlist)
+                _addTrackState.postValue(AddTrackToPlaylistState.WasAdded(playlist.name))
+            }
+
+        }
+    }
+
+    fun getAllPlaylists() {
+        viewModelScope.launch {
+            playlistsInteractor.getAllPlaylists().collect {
+                _addTrackState.postValue(AddTrackToPlaylistState.ShowPlaylists(it))
+            }
+        }
+    }
+
 
     companion object {
         private const val UPDATE_TIMER_DELAY_IN_MILLIS = 300L

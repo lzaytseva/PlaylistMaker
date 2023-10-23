@@ -8,25 +8,32 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.databinding.PlaylistViewBinding
+import com.practicum.playlistmaker.databinding.PlaylistBotomsheetViewBinding
 import com.practicum.playlistmaker.library.domain.model.Playlist
 
-class PlaylistAdapter :
-    ListAdapter<Playlist, PlaylistAdapter.PlaylistViewHolder>(PlaylistDiffCallback) {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaylistViewHolder {
-        val binding = PlaylistViewBinding.inflate(
+class PlaylistBSAdapter(
+    private val onPlaylistClicked: (Playlist) -> Unit
+) :
+    ListAdapter<Playlist, PlaylistBSAdapter.PlaylistBSViewHolder>(PlaylistDiffCallback) {
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaylistBSViewHolder {
+        val binding = PlaylistBotomsheetViewBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
             false
         )
-        return PlaylistViewHolder(binding)
+        return PlaylistBSViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: PlaylistViewHolder, position: Int) {
-        holder.bind(getItem(position))
+    override fun onBindViewHolder(holder: PlaylistBSViewHolder, position: Int) {
+        val playlist = getItem(position)
+        holder.bind(playlist)
+        holder.itemView.setOnClickListener {
+            onPlaylistClicked.invoke(playlist)
+        }
     }
 
-    class PlaylistViewHolder(private val binding: PlaylistViewBinding) :
+    class PlaylistBSViewHolder(private val binding: PlaylistBotomsheetViewBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(playlist: Playlist) {
@@ -44,15 +51,11 @@ class PlaylistAdapter :
                         .placeholder(R.drawable.cover_placeholder)
                         .transform(
                             CenterCrop(),
-                            RoundedCorners(
-                                itemView.resources.getDimensionPixelSize(R.dimen.album_cover_corner_radius_player)
-                            ),
+                            RoundedCorners(itemView.resources.getDimensionPixelSize(R.dimen.album_cover_corner_radius)),
                         )
                         .into(ivPlaylistCover)
                 }
             }
         }
     }
-
-
 }
