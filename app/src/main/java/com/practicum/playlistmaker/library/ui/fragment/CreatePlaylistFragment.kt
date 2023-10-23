@@ -24,7 +24,7 @@ import com.practicum.playlistmaker.library.ui.view_model.CreatePlaylistViewModel
 import com.practicum.playlistmaker.util.BindingFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class CreatePlaylistFragment() : BindingFragment<FragmentCreatePlaylistBinding>() {
+class CreatePlaylistFragment : BindingFragment<FragmentCreatePlaylistBinding>() {
 
     private val viewModel: CreatePlaylistViewModel by viewModel()
     private var coverUri: Uri? = null

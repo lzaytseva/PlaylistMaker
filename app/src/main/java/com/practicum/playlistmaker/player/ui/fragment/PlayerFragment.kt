@@ -27,7 +27,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import kotlin.math.abs
 
-class PlayerFragment() : BindingFragment<FragmentPlayerBinding>() {
+class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
 
     private lateinit var track: Track
 
