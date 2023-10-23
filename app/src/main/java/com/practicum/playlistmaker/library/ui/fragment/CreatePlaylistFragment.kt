@@ -126,7 +126,6 @@ class CreatePlaylistFragment : BindingFragment<FragmentCreatePlaylistBinding>() 
 
     private fun registerPickMediaRequest() =
         registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-            //обрабатываем событие выбора пользователем фотографии
             if (uri != null) {
                 coverUri = uri
                 setImage(coverUri)

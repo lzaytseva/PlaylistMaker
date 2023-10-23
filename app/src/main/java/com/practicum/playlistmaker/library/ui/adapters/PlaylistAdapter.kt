@@ -13,6 +13,7 @@ import com.practicum.playlistmaker.library.domain.model.Playlist
 
 class PlaylistAdapter :
     ListAdapter<Playlist, PlaylistAdapter.PlaylistViewHolder>(PlaylistDiffCallback) {
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaylistViewHolder {
         val binding = PlaylistViewBinding.inflate(
             LayoutInflater.from(parent.context),
@@ -53,6 +54,4 @@ class PlaylistAdapter :
             }
         }
     }
-
-
 }

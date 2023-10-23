@@ -23,5 +23,4 @@ class FavTracksInteractorImpl(
             emit(it.reversed())
         }
     }
-
 }

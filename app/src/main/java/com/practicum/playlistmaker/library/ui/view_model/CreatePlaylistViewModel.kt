@@ -13,12 +13,12 @@ import kotlinx.coroutines.launch
 class CreatePlaylistViewModel(
     private val playlistsInteractor: PlaylistsInteractor
 ) : ViewModel() {
+
     private val _state = MutableLiveData<CreatePlaylistState>()
     val state: LiveData<CreatePlaylistState>
         get() = _state
 
     fun createPlaylist(uri: Uri?, name: String, description: String?) {
-
         viewModelScope.launch {
             //TODO: Надо ли переключать на IO?
             val uriInternalStorage = playlistsInteractor.saveCoverToStorage(uri)

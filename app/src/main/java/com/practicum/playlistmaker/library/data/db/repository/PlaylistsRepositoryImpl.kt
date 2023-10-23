@@ -24,6 +24,7 @@ class PlaylistsRepositoryImpl(
     private val trackMapper: TrackDbMapper,
     private val sharedPrefs: SharedPreferences
 ) : PlaylistsRepository {
+
     override suspend fun savePlaylist(playlist: Playlist) {
         db.playlistsDao().savePlaylist(playlistMapper.mapDomainToEntity(playlist))
     }
@@ -40,7 +41,6 @@ class PlaylistsRepositoryImpl(
     override suspend fun addTrack(track: Track) {
         db.tracksDao().addTrack(trackMapper.mapDomainToPlaylistTrack(track))
     }
-
 
     override fun saveCoverToStorage(uri: Uri?): Uri {
         if (uri == null) {
@@ -76,7 +76,6 @@ class PlaylistsRepositoryImpl(
         return Uri.fromFile(file)
     }
 
-
     private fun getCoverNumber(): Int {
         return sharedPrefs.getInt(COVERS_COUNT_KEY, 0)
     }
@@ -87,7 +86,6 @@ class PlaylistsRepositoryImpl(
             .putInt(COVERS_COUNT_KEY, count)
             .apply()
     }
-
 
     companion object {
         private const val DIRECTORY_NAME = "playlist_covers"

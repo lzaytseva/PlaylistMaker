@@ -145,7 +145,6 @@ class PlayerViewModel(
         }
     }
 
-
     companion object {
         private const val UPDATE_TIMER_DELAY_IN_MILLIS = 300L
         private const val INITIAL_TIME = "00:00"

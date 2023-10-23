@@ -30,13 +30,10 @@ import kotlin.math.abs
 class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
 
     private lateinit var track: Track
-
     private val viewModel: PlayerViewModel by viewModel {
         parametersOf(track)
     }
-
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<LinearLayout>
-
     private lateinit var adapter: PlaylistBSAdapter
 
     override fun createBinding(
@@ -54,11 +51,8 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
         }
 
         setTrackInfoToViews()
-
         initPlaylistsRv()
-
         initBottomSheet()
-
         setFavsBtnImage(track.isFavorite)
 
         binding.arrowBack.setOnClickListener {

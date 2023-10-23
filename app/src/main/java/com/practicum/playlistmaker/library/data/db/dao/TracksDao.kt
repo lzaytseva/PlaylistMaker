@@ -10,6 +10,4 @@ interface TracksDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addTrack(track: PlaylistTrackEntity)
-
-
 }
