@@ -25,6 +25,7 @@ import com.practicum.playlistmaker.util.BindingFragment
 import com.practicum.playlistmaker.util.setTextOrHide
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
+import kotlin.math.abs
 
 class PlayerFragment() : BindingFragment<FragmentPlayerBinding>() {
 
@@ -244,7 +245,7 @@ class PlayerFragment() : BindingFragment<FragmentPlayerBinding>() {
             }
 
             override fun onSlide(bottomSheet: View, slideOffset: Float) {
-
+                binding.overlay.alpha = 1 - abs(slideOffset)
             }
         })
     }
