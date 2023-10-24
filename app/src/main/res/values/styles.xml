@@ -110,4 +110,19 @@
         <item name="android:textColor">@color/playlist_desc_text_color</item>
     </style>
 
+    <style name="MyThemeOverlay.MaterialComponents.MaterialAlertDialog" parent="@style/ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
+        <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
+    </style>
+
+    <style name="PositiveButtonStyle" parent="@style/Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/dark_blue</item>
+        <item name="backgroundTint">@android:color/transparent</item>
+    </style>
+
+    <style name="NegativeButtonStyle" parent="@style/Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/dark_blue</item>
+        <item name="backgroundTint">@android:color/transparent</item>
+    </style>
+
 </resources>

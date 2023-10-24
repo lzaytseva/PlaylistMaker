@@ -110,7 +110,10 @@ class CreatePlaylistFragment : BindingFragment<FragmentCreatePlaylistBinding>() 
     }
 
     private fun showDialog() {
-        MaterialAlertDialogBuilder(requireContext())
+        MaterialAlertDialogBuilder(
+            requireContext(),
+            R.style.MyThemeOverlay_MaterialComponents_MaterialAlertDialog
+            )
             .setTitle(getString(R.string.finish_creating_dialog_title))
             .setMessage(getString(R.string.finish_creating_dialog_message))
             .setPositiveButton(getString(R.string.finish_creating_dialog_btn_positive))
