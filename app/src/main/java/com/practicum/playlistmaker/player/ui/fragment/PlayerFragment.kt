@@ -84,11 +84,6 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
         viewModel.pause()
     }
 
-    override fun onStop() {
-        super.onStop()
-        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-    }
-
     private fun observeViewModel() {
         viewModel.playerState.observe(viewLifecycleOwner) {
             renderPlayerState(it)
