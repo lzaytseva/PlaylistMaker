@@ -319,7 +319,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin24dp"
             tools:itemCount="5"
-            tools:listitem="@layout/playlist_botomsheet_view" />
+            tools:listitem="@layout/playlist_bottomsheet_view" />
 
     </LinearLayout>
 

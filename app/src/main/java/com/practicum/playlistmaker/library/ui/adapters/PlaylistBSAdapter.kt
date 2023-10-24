@@ -8,7 +8,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.databinding.PlaylistBotomsheetViewBinding
+import com.practicum.playlistmaker.databinding.PlaylistBottomsheetViewBinding
 import com.practicum.playlistmaker.library.domain.model.Playlist
 
 class PlaylistBSAdapter(
@@ -17,7 +17,7 @@ class PlaylistBSAdapter(
     ListAdapter<Playlist, PlaylistBSAdapter.PlaylistBSViewHolder>(PlaylistDiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaylistBSViewHolder {
-        val binding = PlaylistBotomsheetViewBinding.inflate(
+        val binding = PlaylistBottomsheetViewBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
             false
@@ -33,7 +33,7 @@ class PlaylistBSAdapter(
         }
     }
 
-    class PlaylistBSViewHolder(private val binding: PlaylistBotomsheetViewBinding) :
+    class PlaylistBSViewHolder(private val binding: PlaylistBottomsheetViewBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(playlist: Playlist) {
