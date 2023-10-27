@@ -23,5 +23,8 @@
     <color name="labels_text_color">@color/gray</color>
     <color name="settings_icons_tint">@color/gray</color>
     <color name="search_ic_tint">@color/gray</color>
+    <color name="et_borders">@color/gray</color>
+    <color name="rect_background">@color/light_gray</color>
+    <color name="playlist_desc_text_color">@color/gray</color>
 
 </resources>

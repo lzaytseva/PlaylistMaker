@@ -21,7 +21,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class FavouriteTracksFragment : BindingFragment<FragmentFavouriteTracksBinding>() {
 
     private val viewModel: FavouriteTracksViewModel by viewModel()
-
     private lateinit var adapter: TrackAdapter
 
     override fun createBinding(

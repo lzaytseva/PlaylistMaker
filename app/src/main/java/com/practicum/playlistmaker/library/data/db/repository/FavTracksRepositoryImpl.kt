@@ -1,6 +1,6 @@
 package com.practicum.playlistmaker.library.data.db.repository
 
-import com.practicum.playlistmaker.library.data.db.dao.FavTracksDao
+import com.practicum.playlistmaker.library.data.db.AppDatabase
 import com.practicum.playlistmaker.library.data.db.mapper.TrackDbMapper
 import com.practicum.playlistmaker.library.domain.api.FavTracksRepository
 import com.practicum.playlistmaker.search.domain.model.Track
@@ -8,20 +8,20 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 class FavTracksRepositoryImpl(
-    private val favTracksDao: FavTracksDao,
-    private val trackDbMapper: TrackDbMapper
+    private val db: AppDatabase,
+    private val mapper: TrackDbMapper
 ) : FavTracksRepository {
 
     override suspend fun addTrack(track: Track) {
-        favTracksDao.addTrack(trackDbMapper.mapDomainToEntity(track))
+        db.favTracksDao().addTrack(mapper.mapDomainToTrackEntity(track))
     }
 
     override suspend fun deleteTrack(track: Track) {
-        favTracksDao.deleteTrack(trackDbMapper.mapDomainToEntity(track))
+        db.favTracksDao().deleteTrack(mapper.mapDomainToTrackEntity(track))
     }
 
     override fun getAllTracks(): Flow<List<Track>> = flow {
-        val tracks = favTracksDao.getAllTracks()
-        emit(trackDbMapper.mapEntityListToDomain(tracks))
+        val tracks = db.favTracksDao().getAllTracks()
+        emit(mapper.mapTrackEntityListToDomain(tracks))
     }
 }
