@@ -40,7 +40,6 @@
             android:contentDescription="@string/playlist_cover_content_desc"
             android:scaleType="center"
             android:src="@drawable/ic_add_photo"
-
             app:layout_constraintDimensionRatio="w, 1:1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -48,13 +47,12 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_title"
-            style="@style/et_style"
+            style="@style/text_input_layout_style"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin32dp"
             android:hint="@string/hint_title"
-            android:theme="@style/et_style"
-
+            android:theme="@style/text_input_layout_style"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/iv_playlist_cover">
@@ -64,6 +62,8 @@
                 style="@style/regular_text_style"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:maxLines="1"
+                android:inputType="textShortMessage"
                 android:padding="16dp"
                 android:textColorHint="@color/regular_text_color" />
 
@@ -71,13 +71,12 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/til_description"
-            style="@style/et_style"
+            style="@style/text_input_layout_style"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin16dp"
             android:hint="@string/hint_description"
-            android:theme="@style/et_style"
-
+            android:theme="@style/text_input_layout_style"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/til_title">
