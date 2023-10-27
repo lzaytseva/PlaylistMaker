@@ -8,16 +8,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.widget.Toast
+import android.widget.TextView
 import androidx.activity.addCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat.getColor
 import androidx.core.content.ContextCompat.getDrawable
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentCreatePlaylistBinding
 import com.practicum.playlistmaker.library.domain.model.CreatePlaylistState
@@ -47,14 +49,14 @@ class CreatePlaylistFragment : BindingFragment<FragmentCreatePlaylistBinding>() 
         setArrowBackClickListener()
         addOnBackPressedCallback()
 
-        observeViewModel()
+        observeViewModel(view)
     }
 
-    private fun observeViewModel() {
+    private fun observeViewModel(view: View) {
         viewModel.state.observe(viewLifecycleOwner) { state ->
             when (state) {
                 is CreatePlaylistState.Saved -> {
-                    showToast(state.name)
+                    showSnackbar(view, state.name)
                     closeScreen()
                 }
 
@@ -69,11 +71,15 @@ class CreatePlaylistFragment : BindingFragment<FragmentCreatePlaylistBinding>() 
         }
     }
 
-    private fun showToast(name: String) {
-        Toast.makeText(
-            requireContext(),
-            getString(R.string.playlist_created, name), Toast.LENGTH_SHORT
-        ).show()
+    private fun showSnackbar(root: View, name: String) {
+        val snackbar =
+            Snackbar.make(root, getString(R.string.playlist_created, name), Snackbar.LENGTH_SHORT)
+        snackbar.setBackgroundTint(getColor(requireContext(), R.color.basic_btn_background))
+        snackbar.setTextColor(getColor(requireContext(), R.color.basic_btn_text_color))
+        val textView =
+            snackbar.view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
+        textView.textAlignment = View.TEXT_ALIGNMENT_CENTER
+        snackbar.show()
     }
 
     private fun closeScreen() {
