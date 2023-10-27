@@ -40,50 +40,17 @@ class CreatePlaylistFragment : BindingFragment<FragmentCreatePlaylistBinding>() 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
+        setKeyboardMode()
+        setCoverClickListener()
+        setBtnCreateClickListener()
+        addTitleTextWatcher()
+        setArrowBackClickListener()
+        addOnBackPressedCallback()
 
-        val pickMedia = registerPickMediaRequest()
+        observeViewModel()
+    }
 
-        binding.ivPlaylistCover.setOnClickListener {
-            pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-        }
-
-        binding.btnCreate.setOnClickListener {
-            viewModel.createPlaylist(
-                name = binding.etPlaylistTitle.text.toString(),
-                description = binding.etPlaylistDesc.text.toString(),
-                uri = coverUri
-            )
-        }
-
-        binding.etPlaylistTitle.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                binding.btnCreate.isEnabled = !s.isNullOrBlank()
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-            }
-        })
-
-        binding.arrowBack.setOnClickListener {
-            viewModel.shouldCloseScreen(
-                name = binding.etPlaylistTitle.text.toString(),
-                description = binding.etPlaylistDesc.text.toString(),
-                uri = coverUri
-            )
-        }
-
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
-            viewModel.shouldCloseScreen(
-                name = binding.etPlaylistTitle.text.toString(),
-                description = binding.etPlaylistDesc.text.toString(),
-                uri = coverUri
-            )
-        }
-
+    private fun observeViewModel() {
         viewModel.state.observe(viewLifecycleOwner) { state ->
             when (state) {
                 is CreatePlaylistState.Saved -> {
@@ -109,6 +76,10 @@ class CreatePlaylistFragment : BindingFragment<FragmentCreatePlaylistBinding>() 
         ).show()
     }
 
+    private fun closeScreen() {
+        findNavController().navigateUp()
+    }
+
     private fun showDialog() {
         MaterialAlertDialogBuilder(
             requireContext(),
@@ -123,8 +94,59 @@ class CreatePlaylistFragment : BindingFragment<FragmentCreatePlaylistBinding>() 
             .show()
     }
 
-    private fun closeScreen() {
-        findNavController().navigateUp()
+    private fun addOnBackPressedCallback() {
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            shouldCloseScreen()
+        }
+    }
+
+    private fun setArrowBackClickListener() {
+        binding.arrowBack.setOnClickListener {
+            shouldCloseScreen()
+        }
+    }
+
+    private fun shouldCloseScreen() {
+        viewModel.shouldCloseScreen(
+            name = binding.etPlaylistTitle.text.toString(),
+            description = binding.etPlaylistDesc.text.toString(),
+            uri = coverUri
+        )
+    }
+
+    private fun addTitleTextWatcher() {
+        binding.etPlaylistTitle.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                binding.btnCreate.isEnabled = !s.isNullOrBlank()
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+            }
+        })
+    }
+
+    private fun setBtnCreateClickListener() {
+        binding.btnCreate.setOnClickListener {
+            viewModel.createPlaylist(
+                name = binding.etPlaylistTitle.text.toString(),
+                description = binding.etPlaylistDesc.text.toString(),
+                uri = coverUri
+            )
+        }
+    }
+
+    private fun setCoverClickListener() {
+        val pickMedia = registerPickMediaRequest()
+        binding.ivPlaylistCover.setOnClickListener {
+            pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+        }
+    }
+
+    private fun setKeyboardMode() {
+        requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
     }
 
     private fun registerPickMediaRequest() =

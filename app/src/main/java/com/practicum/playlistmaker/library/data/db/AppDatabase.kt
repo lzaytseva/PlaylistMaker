@@ -9,7 +9,11 @@ import com.practicum.playlistmaker.library.data.db.entity.PlaylistEntity
 import com.practicum.playlistmaker.library.data.db.entity.PlaylistTrackEntity
 import com.practicum.playlistmaker.library.data.db.entity.TrackEntity
 
-@Database(version = 5, entities = [TrackEntity::class, PlaylistEntity::class, PlaylistTrackEntity::class], exportSchema = false)
+@Database(
+    version = 5,
+    entities = [TrackEntity::class, PlaylistEntity::class, PlaylistTrackEntity::class],
+    exportSchema = false
+)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun favTracksDao(): FavTracksDao
