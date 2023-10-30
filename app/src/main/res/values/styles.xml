@@ -92,7 +92,7 @@
 
     <style name="text_input_layout_style" parent="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="android:textColorHint">@color/regular_text_color</item>
-        <item name="boxStrokeColor">@drawable/et_box_color</item>
+        <item name="boxStrokeColor">@color/et_box_color</item>
         <item name="hintTextColor">@color/dark_blue</item>
         <item name="colorControlActivated">@color/dark_blue</item>
 
