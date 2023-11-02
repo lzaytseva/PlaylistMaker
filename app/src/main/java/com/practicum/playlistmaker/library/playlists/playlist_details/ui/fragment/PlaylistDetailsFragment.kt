@@ -60,11 +60,11 @@ class PlaylistDetailsFragment : BindingFragment<FragmentPlaylistDetailsBinding>(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        observeViewModel()
-
         initBottomSheetBehavior()
         initTracksRv()
         setArrowBackClickListener()
+
+        observeViewModel()
     }
 
     private fun observeViewModel() {
@@ -76,14 +76,21 @@ class PlaylistDetailsFragment : BindingFragment<FragmentPlaylistDetailsBinding>(
     private fun renderState(state: PlaylistDetailsScreenState) {
         when (state) {
             is PlaylistDetailsScreenState.FullContent -> showFullContent(state.playlistInfo)
-            is PlaylistDetailsScreenState.EmptyPlaylist -> showPlaylistInfo(state.playlistInfo.playlist)
+            is PlaylistDetailsScreenState.EmptyPlaylist -> showEmptyPlaylist(state.playlistInfo)
         }
     }
 
     private fun showFullContent(playlistDetails: PlaylistDetails) {
         showPlaylistInfo(playlistDetails.playlist, playlistDetails.totalDuration)
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        bottomSheetBehavior.isHideable = false
         adapter.submitList(playlistDetails.tracks)
+    }
+
+    private fun showEmptyPlaylist(playlistDetails: PlaylistDetails) {
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        bottomSheetBehavior.isHideable = true
+        showPlaylistInfo(playlistDetails.playlist)
     }
 
     private fun showPlaylistInfo(playlist: Playlist, totalDuration: Int = 0) {
