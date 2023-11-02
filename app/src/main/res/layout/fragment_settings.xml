@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/root_layout_padding"
+    tools:context=".settings.ui.fragment.SettingsFragment">
+
+    <TextView
+        android:id="@+id/tv_header"
+        style="@style/header_style"
+        android:layout_marginBottom="@dimen/margin24dp"
+        android:text="@string/settings"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            style="@style/settings_text_view_option_style"
+            android:text="@string/dark_theme" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/switch_dark_mode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|center"
+            android:checked="false" />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/bth_share_app"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            style="@style/settings_text_view_option_style"
+            android:text="@string/share_app" />
+
+        <ImageView
+            android:layout_width="16dp"
+            android:layout_height="18dp"
+            android:layout_gravity="end|center"
+            android:contentDescription="@string/share_app"
+            android:src="@drawable/share"
+            app:tint="@color/settings_icons_tint" />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/bth_contact_support"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            style="@style/settings_text_view_option_style"
+            android:text="@string/contact_support" />
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="18dp"
+            android:layout_gravity="end|center"
+            android:contentDescription="@string/contact_support"
+            android:src="@drawable/support"
+            app:tint="@color/settings_icons_tint" />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/btn_user_agreement"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            style="@style/settings_text_view_option_style"
+            android:text="@string/user_agreement" />
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="18dp"
+            android:layout_gravity="end|center"
+            android:contentDescription="@string/go_forward"
+            android:src="@drawable/arrow_forward"
+            app:tint="@color/settings_icons_tint" />
+
+    </FrameLayout>
+
+</LinearLayout>

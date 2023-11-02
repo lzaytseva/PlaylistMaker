@@ -1,23 +1,20 @@
 package com.practicum.playlistmaker.settings.ui.view_model
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
+import androidx.lifecycle.ViewModel
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.creator.Creator
 import com.practicum.playlistmaker.settings.domain.model.ThemeSettings
+import com.practicum.playlistmaker.settings.domain.repository.SettingsRepository
+import com.practicum.playlistmaker.sharing.domain.repository.SharingRepository
 import com.practicum.playlistmaker.util.ToastState
 
 class SettingsViewModel(
-    private val application: Application
-) : AndroidViewModel(application) {
-
-    private val sharingRepository = Creator.provideSharingRepository(application)
-    private val settingsRepository = Creator.provideSettingsRepository(application)
+    private val application: Application,
+    private val sharingRepository: SharingRepository,
+    private val settingsRepository: SettingsRepository,
+) : ViewModel() {
 
     private val _toastState = MutableLiveData<ToastState>()
     val noApplicationsFound: LiveData<ToastState>
@@ -68,13 +65,5 @@ class SettingsViewModel(
 
     private fun getErrorMessage(): String {
         return application.getString(R.string.no_applications_found)
-    }
-
-    companion object {
-        fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                SettingsViewModel(this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as Application)
-            }
-        }
     }
 }

@@ -8,10 +8,14 @@ import com.practicum.playlistmaker.player.domain.model.PlayerState
 class TrackPlayerInteractorImpl(
     private val trackPlayer: TrackPlayer
 ) : TrackPlayerInteractor {
+
+    override fun preparePlayer(trackUrl: String) {
+        trackPlayer.preparePlayer(trackUrl)
+    }
+
     override fun getState(): LiveData<PlayerState> {
         return trackPlayer.getState()
     }
-
 
     override fun play() {
         trackPlayer.play()

@@ -1,12 +1,10 @@
 package com.practicum.playlistmaker.search.domain.api
 
 import com.practicum.playlistmaker.search.domain.model.Track
-import com.practicum.playlistmaker.util.ErrorType
+import com.practicum.playlistmaker.util.Resource
+import kotlinx.coroutines.flow.Flow
 
 interface SearchInteractor {
-    fun searchTracks(expression: String, consumer: TracksConsumer)
 
-    interface TracksConsumer {
-        fun consume(foundTracks: List<Track>?, errorType: ErrorType?)
-    }
+    suspend fun searchTracks(expression: String): Flow<Resource<List<Track>>>
 }

@@ -17,6 +17,10 @@
     <dimen name="btn_clear_size">12dp</dimen>
     <dimen name="album_cover_corner_radius">2dp</dimen>
     <dimen name="album_cover_corner_radius_player">8dp</dimen>
-
+    <dimen name="margin_top_placeholder">108dp</dimen>
+    <dimen name="bottom_nav_view_top_border">0.5dp</dimen>
+    <dimen name="margin8dp">8dp</dimen>
+    <dimen name="margin20dp">20dp</dimen>
+    <dimen name="root_layout_padding">16dp</dimen>
 
 </resources>

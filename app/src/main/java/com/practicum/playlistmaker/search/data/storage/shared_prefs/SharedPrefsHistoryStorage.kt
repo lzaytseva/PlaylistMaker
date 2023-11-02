@@ -1,25 +1,35 @@
 package com.practicum.playlistmaker.search.data.storage.shared_prefs
 
-import android.content.Context
-import android.content.Context.MODE_PRIVATE
+import android.content.SharedPreferences
 import com.practicum.playlistmaker.search.data.mappers.TrackMapper
 import com.practicum.playlistmaker.search.data.storage.HistoryStorage
 import com.practicum.playlistmaker.search.domain.model.Track
 
-class SharedPrefsHistoryStorage(context: Context) : HistoryStorage {
-    private val savedTracks = mutableListOf<Track>()
-    private val mapper = TrackMapper()
-    private val sharedPrefs = context.getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
+class SharedPrefsHistoryStorage(
+    private val sharedPrefs: SharedPreferences,
+    private val mapper: TrackMapper
+) : HistoryStorage {
+
+    private var savedTracks = mutableListOf<Track>()
 
     override fun saveTrack(track: Track) {
-        if (savedTracks.contains(track)) {
-            savedTracks.remove(track)
-        }
+        addTrack(track)
+        updateSP()
+    }
+
+    private fun addTrack(track: Track) {
+        savedTracks = savedTracks.filterNot {
+            it.trackId == track.trackId
+        }.toMutableList()
+
         if (savedTracks.size == MAX_NUMBER_OF_TRACKS) {
             savedTracks.removeLast()
         }
-        savedTracks.add(0, track)
 
+        savedTracks.add(0, track)
+    }
+
+    private fun updateSP() {
         sharedPrefs.edit()
             .putString(
                 HISTORY_LIST_KEY,
@@ -30,6 +40,7 @@ class SharedPrefsHistoryStorage(context: Context) : HistoryStorage {
 
     override fun getAllTracks(): List<Track> {
         val tracksString = sharedPrefs.getString(HISTORY_LIST_KEY, "")
+
         if (tracksString?.isNotEmpty() == true) {
             savedTracks.clear()
             savedTracks.addAll(mapper.createTracksListFromJson(tracksString))

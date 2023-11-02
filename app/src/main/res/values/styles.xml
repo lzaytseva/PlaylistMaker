@@ -1,25 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="MainScreenButtonStyle" parent="@style/Widget.Material3.Button.UnelevatedButton">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">match_parent</item>
-        <item name="android:layout_weight">1</item>
-        <item name="android:layout_marginStart">16dp</item>
-        <item name="android:layout_marginEnd">16dp</item>
-        <item name="android:layout_marginBottom">16dp</item>
-        <item name="backgroundTint">?attr/colorPrimary</item>
-        <item name="cornerRadius">@dimen/btn_corners_radius</item>
-        <item name="fontFamily">@font/ys_display_medium</item>
-        <item name="textAllCaps">false</item>
-        <item name="android:textSize">@dimen/primary_text_size</item>
-        <item name="android:textColor">?attr/colorOnPrimary</item>
-        <item name="iconGravity">textStart</item>
-        <item name="iconPadding">10dp</item>
-        <item name="iconTint">@color/black</item>
-    </style>
-
-    <style name="SettingsTextViewOptionsStyle">
+    <style name="settings_text_view_option_style">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:paddingTop">@dimen/settings_options_text_padding</item>
@@ -27,67 +9,120 @@
         <item name="android:layout_gravity">start|center</item>
         <item name="fontFamily">@font/ys_display_regular</item>
         <item name="android:textSize">@dimen/settings_options_text_size</item>
-        <item name="android:textColor">?attr/colorOnPrimary</item>
-
+        <item name="android:textColor">@color/regular_text_color</item>
     </style>
 
-    <style name="HeaderStyle">
+    <style name="header_style">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="fontFamily">@font/ys_display_medium</item>
         <item name="android:textSize">@dimen/primary_text_size</item>
-        <item name="android:textColor">?attr/colorOnPrimary</item>
+        <item name="android:textColor">@color/regular_text_color</item>
     </style>
 
-    <style name="RegularTextStyle">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
+    <style name="regular_text_style">
         <item name="fontFamily">@font/ys_display_medium</item>
         <item name="android:textSize">14sp</item>
-        <item name="android:textColor">?attr/colorOnPrimary</item>
+        <item name="android:textColor">@color/regular_text_color</item>
     </style>
 
-    <style name="LabelsTextStyle">
+    <style name="labels_text_style">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="fontFamily">@font/ys_display_regular</item>
         <item name="android:textSize">13sp</item>
-        <item name="android:textColor">@color/gray</item>
+        <item name="android:textColor">@color/labels_text_color</item>
     </style>
 
-    <style name="PlayerSongInfoTextStyle">
+    <style name="player_song_info_text_style">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="fontFamily">@font/ys_display_regular</item>
         <item name="android:textSize">13sp</item>
-        <item name="android:textColor">?attr/colorOnPrimary</item>
+        <item name="android:textColor">@color/regular_text_color</item>
     </style>
 
+    <style name="medium_text_style">
+        <item name="fontFamily">@font/ys_display_medium</item>
+        <item name="android:textSize">@dimen/placeholders_text_size</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:textColor">@color/regular_text_color</item>
 
+    </style>
 
-    <style name="ArrowBackStyle">
+    <style name="arrow_back_style">
         <item name="android:layout_width">16dp</item>
         <item name="android:layout_height">16dp</item>
-        <item name="android:layout_marginStart">4dp</item>
-        <item name="android:layout_gravity">center</item>
-        <item name="android:contentDescription">@string/go_back</item>
         <item name="android:src">@drawable/arrow_back</item>
-        <item name="tint">?attr/colorOnPrimary</item>
+        <item name="tint">@color/basic_btn_background</item>
     </style>
 
-    <style name="SongDescTextStyle">
+    <style name="song_desc_text_style">
         <item name="fontFamily">@font/ys_display_regular</item>
         <item name="android:textSize">@dimen/song_desc_text_size</item>
-        <item name="android:textColor">?attr/colorSecondary</item>
+        <item name="android:textColor">@color/labels_text_color</item>
     </style>
 
-    <style name="RefreshButtonStyle" parent="@style/Widget.Material3.Button.UnelevatedButton">
-        <item name="backgroundTint">?attr/colorOnPrimary</item>
+    <style name="playlist_title_text_style">
+        <item name="fontFamily">@font/ys_display_regular</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/regular_text_color</item>
+    </style>
+
+    <style name="basic_button_style" parent="@style/Widget.Material3.Button.UnelevatedButton">
+        <item name="backgroundTint">@color/basic_btn_background</item>
         <item name="cornerRadius">54dp</item>
         <item name="fontFamily">@font/ys_display_medium</item>
         <item name="textAllCaps">false</item>
         <item name="android:textSize">14sp</item>
-        <item name="android:textColor">?attr/colorPrimary</item>
+        <item name="android:textColor">@color/basic_btn_text_color</item>
+    </style>
+
+    <style name="library_tabs_style">
+        <item name="tabBackground">@color/window_background</item>
+        <item name="tabIndicatorColor">@color/regular_text_color</item>
+        <item name="tabTextColor">@color/regular_text_color</item>
+    </style>
+
+    <style name="tabs_text_style" parent="@android:style/TextAppearance.Widget.TabWidget">
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:textSize">14sp</item>
+        <item name="textAllCaps">false</item>
+    </style>
+
+    <style name="text_input_layout_style" parent="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:textColorHint">@color/regular_text_color</item>
+        <item name="boxStrokeColor">@color/et_box_color</item>
+        <item name="hintTextColor">@color/dark_blue</item>
+        <item name="colorControlActivated">@color/dark_blue</item>
+
+    </style>
+
+    <style name="playlist_desc_text_style">
+        <item name="fontFamily">@font/ys_display_regular</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/regular_text_color</item>
+    </style>
+
+    <style name="playlist_bottom_sheet_desc_text_style">
+        <item name="fontFamily">@font/ys_display_regular</item>
+        <item name="android:textSize">11sp</item>
+        <item name="android:textColor">@color/playlist_desc_text_color</item>
+    </style>
+
+    <style name="MyThemeOverlay.MaterialComponents.MaterialAlertDialog" parent="@style/ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonStyle</item>
+        <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonStyle</item>
+    </style>
+
+    <style name="PositiveButtonStyle" parent="@style/Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/dark_blue</item>
+        <item name="backgroundTint">@android:color/transparent</item>
+    </style>
+
+    <style name="NegativeButtonStyle" parent="@style/Widget.MaterialComponents.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/dark_blue</item>
+        <item name="backgroundTint">@android:color/transparent</item>
     </style>
 
 </resources>

@@ -1,140 +1,125 @@
 package com.practicum.playlistmaker.search.ui.view_model
 
 import android.app.Application
-import android.os.Handler
-import android.os.Looper
-import android.os.SystemClock
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.practicum.playlistmaker.R
-import com.practicum.playlistmaker.creator.Creator
+import com.practicum.playlistmaker.search.domain.api.HistoryInteractor
 import com.practicum.playlistmaker.search.domain.api.SearchInteractor
-import com.practicum.playlistmaker.search.domain.model.SearchActivityState
+import com.practicum.playlistmaker.search.domain.model.SearchScreenState
 import com.practicum.playlistmaker.search.domain.model.Track
 import com.practicum.playlistmaker.util.ErrorType
+import com.practicum.playlistmaker.util.debounce
+import kotlinx.coroutines.launch
 
-class SearchViewModel(application: Application) : AndroidViewModel(application) {
+class SearchViewModel(
+    private val application: Application,
+    private val searchInteractor: SearchInteractor,
+    private val historyInteractor: HistoryInteractor
+) : ViewModel() {
 
-    private val searchInteractor = Creator.provideSearchInteractor(application)
-    private val historyInteractor = Creator.provideHistoryInteractor(application)
-
-    private val handler = Handler(Looper.getMainLooper())
     private var latestSearchText: String? = null
+    private val tracksSearchDebounce =
+        debounce<String>(SEARCH_DEBOUNCE_DELAY_IN_MILLIS, viewModelScope, true) { changedText ->
+            searchRequest(changedText)
+        }
 
-    private var isClickAllowed = true
-
-    private val _state = MutableLiveData<SearchActivityState>()
-    val state: LiveData<SearchActivityState>
+    private val _state = MutableLiveData<SearchScreenState>()
+    val state: LiveData<SearchScreenState>
         get() = _state
 
+
     fun searchDebounce(changedText: String) {
-        handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
-        if (changedText.isBlank()) {
-            _state.value = SearchActivityState.SearchHistory(getHistory())
-        } else {
-            this.latestSearchText = changedText
-
-            val searchRunnable = Runnable { searchRequest(changedText) }
-
-            val postTime = SystemClock.uptimeMillis() + SEARCH_DEBOUNCE_DELAY_IN_MILLIS
-            handler.postAtTime(
-                searchRunnable,
-                SEARCH_REQUEST_TOKEN,
-                postTime,
-            )
+        if (latestSearchText != changedText) {
+            latestSearchText = changedText
+            tracksSearchDebounce(changedText)
         }
     }
 
     private fun searchRequest(newSearchText: String) {
-        if (newSearchText.isNotEmpty()) {
-            renderState(SearchActivityState.Loading)
+        if (newSearchText.isBlank()) {
+            viewModelScope.launch {
+                _state.value = SearchScreenState.SearchHistory(getHistory())
+            }
+        } else {
+            renderState(SearchScreenState.Loading)
 
-            searchInteractor.searchTracks(newSearchText, object : SearchInteractor.TracksConsumer {
-                override fun consume(foundTracks: List<Track>?, errorType: ErrorType?) {
-                    val tracks = mutableListOf<Track>()
-                    if (foundTracks != null) {
-                        tracks.addAll(foundTracks)
+            viewModelScope.launch {
+                searchInteractor
+                    .searchTracks(newSearchText)
+                    .collect {
+                        processResult(
+                            foundTracks = it.data,
+                            errorType = it.errorType
+                        )
                     }
-
-                    when {
-                        errorType != null -> {
-                            renderState(
-                                SearchActivityState.Error(
-                                    errorMessage = getApplication<Application>().getString(R.string.check_connection),
-                                )
-                            )
-                        }
-
-                        tracks.isEmpty() -> {
-                            renderState(
-                                SearchActivityState.Empty(
-                                    message = getApplication<Application>().getString(R.string.nothing_found),
-                                )
-                            )
-                        }
-
-                        else -> {
-                            renderState(
-                                SearchActivityState.Content(
-                                    tracks = tracks,
-                                )
-                            )
-                        }
-                    }
-
-                }
-            })
+            }
         }
     }
 
-    private fun renderState(state: SearchActivityState) {
+    private fun processResult(foundTracks: List<Track>?, errorType: ErrorType?) {
+        val tracks = mutableListOf<Track>()
+
+        if (foundTracks != null) {
+            tracks.addAll(foundTracks)
+        }
+
+        when {
+            errorType != null -> {
+                renderState(
+                    SearchScreenState.Error(
+                        errorMessage = application.getString(R.string.check_connection),
+                    )
+                )
+            }
+
+            tracks.isEmpty() -> {
+                renderState(
+                    SearchScreenState.Empty(
+                        message = application.getString(R.string.nothing_found),
+                    )
+                )
+            }
+
+            else -> {
+                renderState(
+                    SearchScreenState.Content(
+                        tracks = tracks,
+                    )
+                )
+            }
+        }
+    }
+
+    private fun renderState(state: SearchScreenState) {
         _state.postValue(state)
-    }
-
-    fun clickDebounce(): Boolean {
-        val current = isClickAllowed
-        if (isClickAllowed) {
-            isClickAllowed = false
-            handler.postDelayed(
-                { isClickAllowed = true },
-                CLICK_DEBOUNCE_DELAY_IN_MILLIS
-            )
-        }
-        return current
     }
 
     fun saveTrack(track: Track) {
         historyInteractor.saveTrack(track)
+        showHistory()
     }
 
     fun clearHistory() {
         historyInteractor.clearHistory()
-        _state.value = SearchActivityState.SearchHistory(
+        _state.value = SearchScreenState.SearchHistory(
             emptyList()
         )
     }
 
     fun showHistory() {
-        _state.value = SearchActivityState.SearchHistory(
-            getHistory()
-        )
+        viewModelScope.launch {
+            _state.value = SearchScreenState.SearchHistory(
+                getHistory()
+            )
+        }
     }
 
-    private fun getHistory() = historyInteractor.getAllTracks()
+    private suspend fun getHistory() = historyInteractor.getAllTracks()
 
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY_IN_MILLIS = 2000L
-        private val SEARCH_REQUEST_TOKEN = Any()
-        private const val CLICK_DEBOUNCE_DELAY_IN_MILLIS = 1000L
-
-        fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                SearchViewModel(this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as Application)
-            }
-        }
     }
 }

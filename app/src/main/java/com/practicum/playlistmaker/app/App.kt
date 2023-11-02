@@ -3,13 +3,32 @@ package com.practicum.playlistmaker.app
 import android.app.Application
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatDelegate
+import com.practicum.playlistmaker.di.dataModule
+import com.practicum.playlistmaker.di.interactorModule
+import com.practicum.playlistmaker.di.repositoryModule
+import com.practicum.playlistmaker.di.viewModelModule
+import org.koin.android.ext.koin.androidContext
+import org.koin.core.context.startKoin
 
 class App : Application() {
+
     var darkTheme = false
     private lateinit var sharedPrefs: SharedPreferences
 
     override fun onCreate() {
         super.onCreate()
+        initDI()
+        setTheme()
+    }
+
+    private fun initDI() {
+        startKoin {
+            androidContext(this@App)
+            modules(dataModule, repositoryModule, interactorModule, viewModelModule)
+        }
+    }
+
+    private fun setTheme() {
         sharedPrefs = getSharedPreferences(PLAYLIST_MAKER_PREFERENCES, MODE_PRIVATE)
         darkTheme = sharedPrefs.getBoolean(DARK_MODE_KEY, false)
         switchTheme(darkTheme)
