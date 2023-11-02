@@ -11,7 +11,9 @@ import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.PlaylistViewBinding
 import com.practicum.playlistmaker.library.playlists.all_playlists.domain.model.Playlist
 
-class PlaylistAdapter :
+class PlaylistAdapter(
+    private val onPlaylistClicked: (Playlist) -> Unit
+) :
     ListAdapter<Playlist, PlaylistAdapter.PlaylistViewHolder>(PlaylistDiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaylistViewHolder {
@@ -24,7 +26,11 @@ class PlaylistAdapter :
     }
 
     override fun onBindViewHolder(holder: PlaylistViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        val playlist = getItem(position)
+        holder.bind(playlist)
+        holder.itemView.setOnClickListener {
+            onPlaylistClicked.invoke(playlist)
+        }
     }
 
     class PlaylistViewHolder(private val binding: PlaylistViewBinding) :

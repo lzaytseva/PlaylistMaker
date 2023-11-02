@@ -59,6 +59,23 @@ class TrackDbMapper {
         }
     }
 
+    fun mapPlaylistTrackEntityToDomain(trackEntity: PlaylistTrackEntity): Track {
+        return with(trackEntity) {
+            Track(
+                trackId,
+                trackName,
+                artistName,
+                duration,
+                artworkUrl100,
+                collectionName,
+                year,
+                primaryGenreName,
+                country,
+                previewUrl,
+            )
+        }
+    }
+
     fun mapTrackEntityListToDomain(tracks: List<TrackEntity>): List<Track> {
         return tracks.map {
             mapTrackEntityToDomain(it)

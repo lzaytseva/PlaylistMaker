@@ -19,7 +19,7 @@ class PlaylistDbMapper {
         }
     }
 
-    private fun mapEntityToDomain(playlistEntity: PlaylistEntity): Playlist {
+    fun mapEntityToDomain(playlistEntity: PlaylistEntity): Playlist {
         return with(playlistEntity) {
             Playlist(
                 id = id,

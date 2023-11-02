@@ -12,13 +12,19 @@ import com.practicum.playlistmaker.library.playlists.all_playlists.domain.model.
 import com.practicum.playlistmaker.library.playlists.all_playlists.ui.view_model.PlaylistsViewModel
 import com.practicum.playlistmaker.library.playlists.all_playlists.domain.model.Playlist
 import com.practicum.playlistmaker.library.playlists.all_playlists.ui.adapters.PlaylistAdapter
+import com.practicum.playlistmaker.library.playlists.playlist_details.ui.fragment.PlaylistDetailsFragment
 import com.practicum.playlistmaker.util.BindingFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PlaylistsFragment : BindingFragment<FragmentPlaylistsBinding>() {
 
     private val viewModel: PlaylistsViewModel by viewModel()
-    private val adapter = PlaylistAdapter()
+    private val adapter = PlaylistAdapter {
+        findNavController().navigate(
+            R.id.action_libraryFragment_to_playlistDetailsFragment,
+            PlaylistDetailsFragment.createArgs(playlistId = it.id)
+        )
+    }
 
     override fun createBinding(
         inflater: LayoutInflater,
