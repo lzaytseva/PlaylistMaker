@@ -9,17 +9,17 @@ data class PlaylistDetails(
     val playlist: Playlist,
     val tracks: List<Track>?
 ) {
-    val totalDuration: String
+    val totalDuration: Int
         get() {
             val totalMillis = tracks?.sumOfDuration() ?: 0
-            return SimpleDateFormat("mm", Locale.getDefault()).format(totalMillis)
+            return SimpleDateFormat("m", Locale.getDefault()).format(totalMillis).toInt()
         }
 }
 
 private fun List<Track>.sumOfDuration(): Long {
     var sum = 0L
     forEach {
-        sum += it.duration.toLong()
+        sum += it.durationMillis
     }
     return sum
 }

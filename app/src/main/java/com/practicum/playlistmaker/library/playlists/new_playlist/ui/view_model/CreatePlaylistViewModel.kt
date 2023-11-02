@@ -20,7 +20,6 @@ class CreatePlaylistViewModel(
 
     fun createPlaylist(uri: Uri?, name: String, description: String?) {
         viewModelScope.launch {
-            //TODO: Надо ли переключать на IO?
             val uriInternalStorage = playlistsInteractor.saveCoverToStorage(uri)
 
             playlistsInteractor.savePlaylist(

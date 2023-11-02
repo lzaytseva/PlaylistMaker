@@ -12,6 +12,7 @@ class TrackMapper(private val gson: Gson) {
         trackId = dto.trackId,
         trackName = dto.trackName,
         artistName = dto.artistName,
+        durationMillis = dto.trackTimeMillis ?: 0,
         duration = dto.trackTimeMillis?.let { getDuration(it) }.orEmpty(),
         artworkUrl100 = dto.artworkUrl100.orEmpty(),
         collectionName = dto.collectionName.orEmpty(),

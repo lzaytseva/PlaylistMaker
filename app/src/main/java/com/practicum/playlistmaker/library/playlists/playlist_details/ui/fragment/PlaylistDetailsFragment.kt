@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.core.os.bundleOf
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
@@ -19,6 +21,8 @@ import com.practicum.playlistmaker.library.playlists.all_playlists.domain.model.
 import com.practicum.playlistmaker.library.playlists.playlist_details.domain.model.PlaylistDetails
 import com.practicum.playlistmaker.library.playlists.playlist_details.domain.model.PlaylistDetailsScreenState
 import com.practicum.playlistmaker.library.playlists.playlist_details.ui.view_model.PlaylistDetailsViewModel
+import com.practicum.playlistmaker.player.ui.fragment.PlayerFragment
+import com.practicum.playlistmaker.search.ui.adapters.TrackAdapter
 import com.practicum.playlistmaker.util.BindingFragment
 import com.practicum.playlistmaker.util.setTextOrHide
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -30,6 +34,12 @@ class PlaylistDetailsFragment : BindingFragment<FragmentPlaylistDetailsBinding>(
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<LinearLayout>
     private val viewModel: PlaylistDetailsViewModel by viewModel {
         parametersOf(playlistId)
+    }
+    private val adapter = TrackAdapter {
+        findNavController().navigate(
+            R.id.action_playlistDetailsFragment_to_playerFragment,
+            PlayerFragment.createArgs(track = it)
+        )
     }
 
     override fun createBinding(
@@ -50,10 +60,11 @@ class PlaylistDetailsFragment : BindingFragment<FragmentPlaylistDetailsBinding>(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         observeViewModel()
 
         initBottomSheetBehavior()
+        initTracksRv()
+        setArrowBackClickListener()
     }
 
     private fun observeViewModel() {
@@ -70,10 +81,12 @@ class PlaylistDetailsFragment : BindingFragment<FragmentPlaylistDetailsBinding>(
     }
 
     private fun showFullContent(playlistDetails: PlaylistDetails) {
-
+        showPlaylistInfo(playlistDetails.playlist, playlistDetails.totalDuration)
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        adapter.submitList(playlistDetails.tracks)
     }
 
-    private fun showPlaylistInfo(playlist: Playlist, totalDuration: String = "0") {
+    private fun showPlaylistInfo(playlist: Playlist, totalDuration: Int = 0) {
         with(binding) {
             with(playlist) {
                 tvPlaylistDescription.setTextOrHide(text = description, fieldLabel = null)
@@ -83,7 +96,11 @@ class PlaylistDetailsFragment : BindingFragment<FragmentPlaylistDetailsBinding>(
                     numberOfTracks,
                     numberOfTracks
                 )
-                tvTotalDuration.text = getString(R.string.total_minutes, totalDuration)
+                tvTotalDuration.text = resources.getQuantityString(
+                    R.plurals.total_minutes,
+                    totalDuration,
+                    totalDuration
+                )
                 Glide.with(ivPlaylistCover)
                     .load(coverUri)
                     .centerCrop()
@@ -117,6 +134,17 @@ class PlaylistDetailsFragment : BindingFragment<FragmentPlaylistDetailsBinding>(
     private fun initBottomSheetBehavior() {
         bottomSheetBehavior = BottomSheetBehavior.from(binding.tracksBottomSheet).apply {
             state = BottomSheetBehavior.STATE_HIDDEN
+        }
+    }
+
+    private fun initTracksRv() {
+        binding.rvTracks.layoutManager = LinearLayoutManager(requireContext())
+        binding.rvTracks.adapter = adapter
+    }
+
+    private fun setArrowBackClickListener() {
+        binding.arrowBack.setOnClickListener {
+            findNavController().navigateUp()
         }
     }
 

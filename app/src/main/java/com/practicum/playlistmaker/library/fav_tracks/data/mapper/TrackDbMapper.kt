@@ -9,16 +9,16 @@ class TrackDbMapper {
     private fun mapTrackEntityToDomain(trackEntity: TrackEntity): Track {
         return with(trackEntity) {
             Track(
-                trackId,
-                trackName,
-                artistName,
-                duration,
-                artworkUrl100,
-                collectionName,
-                year,
-                primaryGenreName,
-                country,
-                previewUrl,
+                trackId = trackId,
+                trackName = trackName,
+                artistName = artistName,
+                duration = duration,
+                artworkUrl100 = artworkUrl100,
+                collectionName = collectionName,
+                year = year,
+                primaryGenreName = primaryGenreName,
+                country = country,
+                previewUrl = previewUrl,
                 isFavorite = true
             )
         }
@@ -48,6 +48,7 @@ class TrackDbMapper {
                 trackId,
                 trackName,
                 artistName,
+                durationMillis,
                 duration,
                 artworkUrl100,
                 collectionName,
@@ -66,6 +67,7 @@ class TrackDbMapper {
                 trackName,
                 artistName,
                 duration,
+                durationMillis,
                 artworkUrl100,
                 collectionName,
                 year,
