@@ -17,7 +17,7 @@
 
     <fragment
         android:id="@+id/libraryFragment"
-        android:name="com.practicum.playlistmaker.library.ui.fragment.LibraryFragment"
+        android:name="com.practicum.playlistmaker.library.core.ui.LibraryFragment"
         android:label="fragment_library"
         tools:layout="@layout/fragment_library" >
         <action
@@ -43,7 +43,7 @@
     </fragment>
     <fragment
         android:id="@+id/createPlaylistFragment"
-        android:name="com.practicum.playlistmaker.library.ui.fragment.CreatePlaylistFragment"
+        android:name="com.practicum.playlistmaker.library.playlists.new_playlist.ui.fragment.CreatePlaylistFragment"
         android:label="CreatePlaylistFragment" />
 
 </navigation>

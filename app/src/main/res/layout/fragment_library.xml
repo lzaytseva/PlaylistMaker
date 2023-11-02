@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="@dimen/root_layout_padding"
-    tools:context=".library.ui.fragment.LibraryFragment">
+    tools:context=".library.core.ui.LibraryFragment">
 
     <TextView
         style="@style/header_style"

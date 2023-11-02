@@ -1,9 +1,9 @@
 package com.practicum.playlistmaker.di
 
-import com.practicum.playlistmaker.library.domain.api.FavTracksInteractor
-import com.practicum.playlistmaker.library.domain.api.PlaylistsInteractor
-import com.practicum.playlistmaker.library.domain.impl.FavTracksInteractorImpl
-import com.practicum.playlistmaker.library.domain.impl.PlaylistsInteractorImpl
+import com.practicum.playlistmaker.library.fav_tracks.domain.api.FavTracksInteractor
+import com.practicum.playlistmaker.library.playlists.all_playlists.domain.api.PlaylistsInteractor
+import com.practicum.playlistmaker.library.fav_tracks.domain.impl.FavTracksInteractorImpl
+import com.practicum.playlistmaker.library.playlists.all_playlists.domain.impl.PlaylistsInteractorImpl
 import com.practicum.playlistmaker.player.domain.api.TrackPlayerInteractor
 import com.practicum.playlistmaker.player.domain.impl.TrackPlayerInteractorImpl
 import com.practicum.playlistmaker.search.domain.api.HistoryInteractor

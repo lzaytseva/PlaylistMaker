@@ -4,9 +4,9 @@ import android.content.Context
 import android.media.MediaPlayer
 import androidx.room.Room
 import com.google.gson.Gson
-import com.practicum.playlistmaker.library.data.db.AppDatabase
-import com.practicum.playlistmaker.library.data.db.mapper.PlaylistDbMapper
-import com.practicum.playlistmaker.library.data.db.mapper.TrackDbMapper
+import com.practicum.playlistmaker.library.core.data.db.AppDatabase
+import com.practicum.playlistmaker.library.playlists.all_playlists.data.mapper.PlaylistDbMapper
+import com.practicum.playlistmaker.library.fav_tracks.data.mapper.TrackDbMapper
 import com.practicum.playlistmaker.player.data.TrackPlayerImpl
 import com.practicum.playlistmaker.player.domain.api.TrackPlayer
 import com.practicum.playlistmaker.search.data.mappers.TrackMapper

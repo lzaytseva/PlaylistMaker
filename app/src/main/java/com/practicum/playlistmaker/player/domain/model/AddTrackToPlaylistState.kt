@@ -1,6 +1,6 @@
 package com.practicum.playlistmaker.player.domain.model
 
-import com.practicum.playlistmaker.library.domain.model.Playlist
+import com.practicum.playlistmaker.library.playlists.all_playlists.domain.model.Playlist
 
 sealed interface AddTrackToPlaylistState {
     data class WasAdded(val playlistName: String) : AddTrackToPlaylistState

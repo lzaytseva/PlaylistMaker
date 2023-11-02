@@ -4,9 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.practicum.playlistmaker.library.domain.api.FavTracksInteractor
-import com.practicum.playlistmaker.library.domain.api.PlaylistsInteractor
-import com.practicum.playlistmaker.library.domain.model.Playlist
+import com.practicum.playlistmaker.library.fav_tracks.domain.api.FavTracksInteractor
+import com.practicum.playlistmaker.library.playlists.all_playlists.domain.api.PlaylistsInteractor
+import com.practicum.playlistmaker.library.playlists.all_playlists.domain.model.Playlist
 import com.practicum.playlistmaker.player.domain.api.TrackPlayerInteractor
 import com.practicum.playlistmaker.player.domain.model.AddTrackToPlaylistState
 import com.practicum.playlistmaker.player.domain.model.PlayerState

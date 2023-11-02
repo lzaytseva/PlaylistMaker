@@ -1,6 +1,6 @@
 package com.practicum.playlistmaker.search.data.repository
 
-import com.practicum.playlistmaker.library.data.db.AppDatabase
+import com.practicum.playlistmaker.library.core.data.db.AppDatabase
 import com.practicum.playlistmaker.search.data.dto.SearchTracksResponse
 import com.practicum.playlistmaker.search.data.dto.TracksSearchRequest
 import com.practicum.playlistmaker.search.data.mappers.TrackMapper
