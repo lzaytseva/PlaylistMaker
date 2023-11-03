@@ -39,4 +39,22 @@ class PlaylistDetailsRepositoryImpl(
             playlistMapper.mapDomainToEntity(playlist)
         )
     }
+
+    override suspend fun deleteTrackFromTable(track: Track) {
+        val playlists = db.playlistsDao().getAllPlaylists().filter {
+            it.id == track.trackId
+        }
+        if (playlists.isEmpty()) {
+            db.tracksDao().deleteTrack(trackMapper.mapDomainToPlaylistTrack(track))
+        }
+    }
+
+    override suspend fun deletePlaylist(playlist: Playlist, tracks: List<Track>) {
+        db.playlistsDao().deletePlaylist(playlistMapper.mapDomainToEntity(playlist))
+        tracks.forEach {
+            deleteTrackFromTable(it)
+        }
+    }
+
+
 }

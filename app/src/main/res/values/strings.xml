@@ -57,4 +57,9 @@
     <string name="total_minutes">%1$s минут</string>
     <string name="delete_track_dialog_title">Хотите удалить трек?</string>
     <string name="delete_track_dialig_btn_positive">Удалить</string>
+    <string name="share">Поделиться</string>
+    <string name="edit_playlist">Редактировать информацию</string>
+    <string name="delete_playlist">Удалить плейлист</string>
+    <string name="dialog_btn_positive">Да</string>
+    <string name="dialog_btn_negative">Нет</string>
 </resources>

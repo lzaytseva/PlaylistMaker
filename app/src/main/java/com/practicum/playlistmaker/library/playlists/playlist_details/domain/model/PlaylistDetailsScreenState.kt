@@ -4,4 +4,6 @@ sealed interface PlaylistDetailsScreenState {
     data class EmptyPlaylist(val playlistInfo: PlaylistDetails): PlaylistDetailsScreenState
 
     data class FullContent(val playlistInfo: PlaylistDetails): PlaylistDetailsScreenState
+
+    object PlaylistDeleted: PlaylistDetailsScreenState
 }

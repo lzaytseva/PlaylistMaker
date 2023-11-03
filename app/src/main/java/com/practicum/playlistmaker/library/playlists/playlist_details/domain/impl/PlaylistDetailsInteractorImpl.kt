@@ -22,4 +22,12 @@ class PlaylistDetailsInteractorImpl(
         repository.updatePlaylist(playlist)
     }
 
+    override suspend fun deleteTrackFromTable(track: Track) {
+        repository.deleteTrackFromTable(track)
+    }
+
+    override suspend fun deletePlaylist(playlist: Playlist, tracks: List<Track>) {
+        repository.deletePlaylist(playlist, tracks)
+    }
+
 }

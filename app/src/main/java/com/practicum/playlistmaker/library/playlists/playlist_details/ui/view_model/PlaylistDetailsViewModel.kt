@@ -22,6 +22,7 @@ class PlaylistDetailsViewModel(
         get() = _state
 
     private lateinit var playlist: Playlist
+    private lateinit var tracks: List<Track>
 
     init {
         getPlaylistDetails(playlistId)
@@ -30,7 +31,7 @@ class PlaylistDetailsViewModel(
     private fun getPlaylistDetails(playlistId: Int) {
         viewModelScope.launch {
             playlist = getPlaylist(playlistId)
-            val tracks = getTracks(playlist.tracksId)
+            tracks = getTracks(playlist.tracksId)
             _state.postValue(
                 if (tracks.isEmpty()) {
                     PlaylistDetailsScreenState.EmptyPlaylist(
@@ -66,6 +67,19 @@ class PlaylistDetailsViewModel(
         viewModelScope.launch {
             playlistDetailsInteractor.updatePlaylist(updatedPlaylist)
             getPlaylistDetails(playlistId)
+            playlistDetailsInteractor.deleteTrackFromTable(track)
         }
+    }
+
+    fun sharePlaylist() {
+        TODO("Not yet implemented")
+    }
+
+    fun deletePlaylist() {
+        viewModelScope.launch {
+            playlistDetailsInteractor.deletePlaylist(playlist, tracks)
+            _state.postValue(PlaylistDetailsScreenState.PlaylistDeleted)
+        }
+
     }
 }
