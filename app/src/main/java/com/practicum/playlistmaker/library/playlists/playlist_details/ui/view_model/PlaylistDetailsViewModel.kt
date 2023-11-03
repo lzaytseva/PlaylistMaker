@@ -72,7 +72,20 @@ class PlaylistDetailsViewModel(
     }
 
     fun sharePlaylist() {
-        TODO("Not yet implemented")
+        val playlistDescription = buildString {
+            appendLine(playlist.name)
+            appendLine(playlist.description)
+            //TODO: добавить склонение
+            appendLine("${tracks.size} треков")
+            tracks.forEachIndexed { index, track ->
+                append("${index + 1}. ${track.artistName} - ${track.trackName} (${track.duration})")
+            }
+        }
+        try {
+            playlistDetailsInteractor.sharePlaylist(playlistDescription)
+        } catch (t: Throwable) {
+            //TODO: Показать тостер
+        }
     }
 
     fun deletePlaylist() {

@@ -53,7 +53,8 @@ val repositoryModule = module {
         PlaylistDetailsRepositoryImpl(
             db = get(),
             playlistMapper = get(),
-            trackMapper = get()
+            trackMapper = get(),
+            externalNavigator = get()
         )
     }
 }

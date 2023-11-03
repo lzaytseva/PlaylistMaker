@@ -50,6 +50,8 @@ class PlaylistDetailsFragment : BindingFragment<FragmentPlaylistDetailsBinding>(
         )
     }
 
+    private lateinit var playlist: Playlist
+
     override fun createBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
@@ -73,6 +75,7 @@ class PlaylistDetailsFragment : BindingFragment<FragmentPlaylistDetailsBinding>(
         setArrowBackClickListener()
         setMoreBtnClickListener()
         setClickListenersInMoreBS()
+        setShareBtnClickListener()
 
         observeViewModel()
     }
@@ -150,6 +153,7 @@ class PlaylistDetailsFragment : BindingFragment<FragmentPlaylistDetailsBinding>(
             }
         }
         playlistAdapter.submitList(listOf(playlist))
+        this.playlist = playlist
     }
 
     private fun initBottomSheets() {
@@ -202,7 +206,7 @@ class PlaylistDetailsFragment : BindingFragment<FragmentPlaylistDetailsBinding>(
     }
 
     private fun setClickListenersInMoreBS() {
-        binding.btnShare.setOnClickListener {
+        binding.btnShareBs.setOnClickListener {
             sharePlaylist()
         }
         binding.btnEditPlaylist.setOnClickListener {
@@ -226,7 +230,7 @@ class PlaylistDetailsFragment : BindingFragment<FragmentPlaylistDetailsBinding>(
             requireContext(),
             R.style.MyThemeOverlay_MaterialComponents_MaterialAlertDialog
         )
-            .setTitle(getString(R.string.delete_track_dialog_title))
+            .setTitle(getString(R.string.title_delete_playlist_dialog, playlist.name))
             .setPositiveButton(getString(R.string.dialog_btn_positive))
             { _, _ ->
                 viewModel.deletePlaylist()
@@ -234,6 +238,12 @@ class PlaylistDetailsFragment : BindingFragment<FragmentPlaylistDetailsBinding>(
             .setNegativeButton(getString(R.string.dialog_btn_negative))
             { _, _ -> }
             .show()
+    }
+
+    private fun setShareBtnClickListener() {
+        binding.btnShare.setOnClickListener {
+            viewModel.sharePlaylist()
+        }
     }
 
     companion object {

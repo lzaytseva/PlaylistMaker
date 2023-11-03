@@ -6,13 +6,15 @@ import com.practicum.playlistmaker.library.playlists.all_playlists.data.mapper.P
 import com.practicum.playlistmaker.library.playlists.all_playlists.domain.model.Playlist
 import com.practicum.playlistmaker.library.playlists.playlist_details.domain.api.PlaylistDetailsRepository
 import com.practicum.playlistmaker.search.domain.model.Track
+import com.practicum.playlistmaker.sharing.data.navigation.ExternalNavigator
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 class PlaylistDetailsRepositoryImpl(
     private val db: AppDatabase,
     private val playlistMapper: PlaylistDbMapper,
-    private val trackMapper: TrackDbMapper
+    private val trackMapper: TrackDbMapper,
+    private val externalNavigator: ExternalNavigator
 ) : PlaylistDetailsRepository {
     override suspend fun getPlaylist(playlistId: Int): Playlist {
         val entity = db.playlistsDao().getPlaylist(playlistId)
@@ -56,5 +58,7 @@ class PlaylistDetailsRepositoryImpl(
         }
     }
 
-
+    override fun sharePlaylist(fullPlaylistDesc: String) {
+        externalNavigator.sharePlaylist(fullPlaylistDesc)
+    }
 }

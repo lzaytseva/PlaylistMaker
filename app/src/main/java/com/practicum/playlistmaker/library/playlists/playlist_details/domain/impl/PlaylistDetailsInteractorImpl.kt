@@ -30,4 +30,7 @@ class PlaylistDetailsInteractorImpl(
         repository.deletePlaylist(playlist, tracks)
     }
 
+    override fun sharePlaylist(fullPlaylistDesc: String) {
+        repository.sharePlaylist(fullPlaylistDesc)
+    }
 }
