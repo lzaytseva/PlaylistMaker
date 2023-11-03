@@ -13,7 +13,6 @@ class PlaylistDbMapper {
                 name = name,
                 description = description,
                 coverUri = coverUri.toString(),
-                numberOfTracks = numberOfTracks,
                 tracksId = tracksId.joinToString(" ")
             )
         }
@@ -26,7 +25,6 @@ class PlaylistDbMapper {
                 name = name,
                 description = description,
                 coverUri = Uri.parse(coverUri),
-                numberOfTracks = numberOfTracks,
                 tracksId = tracksId.mapStringToListInt()
             )
         }

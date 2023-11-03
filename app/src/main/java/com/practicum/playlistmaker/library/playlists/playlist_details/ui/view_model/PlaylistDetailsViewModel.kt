@@ -13,12 +13,15 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 class PlaylistDetailsViewModel(
-    playlistId: Int,
+    private val playlistId: Int,
     private val playlistDetailsInteractor: PlaylistDetailsInteractor
 ) : ViewModel() {
+
     private val _state = MutableLiveData<PlaylistDetailsScreenState>()
     val state: LiveData<PlaylistDetailsScreenState>
         get() = _state
+
+    private lateinit var playlist: Playlist
 
     init {
         getPlaylistDetails(playlistId)
@@ -26,7 +29,7 @@ class PlaylistDetailsViewModel(
 
     private fun getPlaylistDetails(playlistId: Int) {
         viewModelScope.launch {
-            val playlist = getPlaylist(playlistId)
+            playlist = getPlaylist(playlistId)
             val tracks = getTracks(playlist.tracksId)
             _state.postValue(
                 if (tracks.isEmpty()) {
@@ -54,5 +57,15 @@ class PlaylistDetailsViewModel(
 
     private suspend fun getTracks(tracksIds: List<Int>): List<Track> {
         return playlistDetailsInteractor.getTracks(tracksIds).first()
+    }
+
+    fun deleteTrack(track: Track) {
+        val newTracksIds = playlist.tracksId.toMutableList()
+        newTracksIds.remove(track.trackId)
+        val updatedPlaylist = playlist.copy(tracksId = newTracksIds)
+        viewModelScope.launch {
+            playlistDetailsInteractor.updatePlaylist(updatedPlaylist)
+            getPlaylistDetails(playlistId)
+        }
     }
 }

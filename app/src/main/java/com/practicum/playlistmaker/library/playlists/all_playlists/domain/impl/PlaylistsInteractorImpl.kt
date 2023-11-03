@@ -30,7 +30,7 @@ class PlaylistsInteractorImpl(
         val tracksId = playlist.tracksId.toMutableList().apply {
             add(track.trackId)
         }
-        repository.updatePlaylist(playlist.copy(tracksId = tracksId, numberOfTracks = tracksId.size))
+        repository.updatePlaylist(playlist.copy(tracksId = tracksId))
         repository.addTrack(track)
     }
 }

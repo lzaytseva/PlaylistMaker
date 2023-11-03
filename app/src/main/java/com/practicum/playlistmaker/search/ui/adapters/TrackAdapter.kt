@@ -13,8 +13,10 @@ import com.practicum.playlistmaker.search.domain.model.Track
 import com.practicum.playlistmaker.util.setTextOrHide
 
 class TrackAdapter(
-    private val onTrackClicked: (Track) -> Unit
+    private val onTrackClicked: (Track) -> Unit,
 ) : ListAdapter<Track, TrackAdapter.TrackViewHolder>(TrackDiffCallback) {
+
+    private var onTrackLongClicked: ((Track) -> Boolean)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
         val binding = TrackViewBinding.inflate(
@@ -26,11 +28,19 @@ class TrackAdapter(
     }
 
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
-        holder.bind(getItem(holder.adapterPosition))
+        val track = getItem(holder.adapterPosition)
+        holder.bind(track)
 
         holder.itemView.setOnClickListener {
-            onTrackClicked.invoke(getItem(holder.adapterPosition))
+            onTrackClicked.invoke(track)
         }
+        holder.itemView.setOnLongClickListener {
+            onTrackLongClicked?.invoke(track) ?: false
+        }
+    }
+
+    fun setOnTrackLongClicked(onTrackLongClicked: (Track) -> Boolean) {
+        this.onTrackLongClicked = onTrackLongClicked
     }
 
     class TrackViewHolder(private val binding: TrackViewBinding) :

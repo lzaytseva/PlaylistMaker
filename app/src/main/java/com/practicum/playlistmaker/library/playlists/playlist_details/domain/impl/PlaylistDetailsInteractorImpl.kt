@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 
 class PlaylistDetailsInteractorImpl(
     private val repository: PlaylistDetailsRepository
-): PlaylistDetailsInteractor {
+) : PlaylistDetailsInteractor {
 
     override suspend fun getPlaylist(playlistId: Int): Playlist {
         return repository.getPlaylist(playlistId)
@@ -16,6 +16,10 @@ class PlaylistDetailsInteractorImpl(
 
     override fun getTracks(tracksId: List<Int>): Flow<List<Track>> {
         return repository.getTracks(tracksId)
+    }
+
+    override suspend fun updatePlaylist(playlist: Playlist) {
+        repository.updatePlaylist(playlist)
     }
 
 }

@@ -33,4 +33,10 @@ class PlaylistDetailsRepositoryImpl(
             )
         }
     }
+
+    override suspend fun updatePlaylist(playlist: Playlist) {
+        db.playlistsDao().updateTracksInPlaylist(
+            playlistMapper.mapDomainToEntity(playlist)
+        )
+    }
 }

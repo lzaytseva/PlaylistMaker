@@ -15,6 +15,7 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentPlaylistDetailsBinding
 import com.practicum.playlistmaker.library.playlists.all_playlists.domain.model.Playlist
@@ -22,6 +23,7 @@ import com.practicum.playlistmaker.library.playlists.playlist_details.domain.mod
 import com.practicum.playlistmaker.library.playlists.playlist_details.domain.model.PlaylistDetailsScreenState
 import com.practicum.playlistmaker.library.playlists.playlist_details.ui.view_model.PlaylistDetailsViewModel
 import com.practicum.playlistmaker.player.ui.fragment.PlayerFragment
+import com.practicum.playlistmaker.search.domain.model.Track
 import com.practicum.playlistmaker.search.ui.adapters.TrackAdapter
 import com.practicum.playlistmaker.util.BindingFragment
 import com.practicum.playlistmaker.util.setTextOrHide
@@ -82,14 +84,16 @@ class PlaylistDetailsFragment : BindingFragment<FragmentPlaylistDetailsBinding>(
 
     private fun showFullContent(playlistDetails: PlaylistDetails) {
         showPlaylistInfo(playlistDetails.playlist, playlistDetails.totalDuration)
+        //TODO: надо как-то починить болеющую высоту bs для маленьких экранов
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
         bottomSheetBehavior.isHideable = false
         adapter.submitList(playlistDetails.tracks)
     }
 
     private fun showEmptyPlaylist(playlistDetails: PlaylistDetails) {
-        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
         bottomSheetBehavior.isHideable = true
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+        adapter.submitList(emptyList())
         showPlaylistInfo(playlistDetails.playlist)
     }
 
@@ -147,6 +151,25 @@ class PlaylistDetailsFragment : BindingFragment<FragmentPlaylistDetailsBinding>(
     private fun initTracksRv() {
         binding.rvTracks.layoutManager = LinearLayoutManager(requireContext())
         binding.rvTracks.adapter = adapter
+        adapter.setOnTrackLongClicked {
+            showAlertDialog(it)
+            true
+        }
+    }
+
+    private fun showAlertDialog(track: Track) {
+        MaterialAlertDialogBuilder(
+            requireContext(),
+            R.style.MyThemeOverlay_MaterialComponents_MaterialAlertDialog
+        )
+            .setTitle(getString(R.string.delete_track_dialog_title))
+            .setPositiveButton(getString(R.string.delete_track_dialig_btn_positive))
+            { _, _ ->
+                viewModel.deleteTrack(track)
+            }
+            .setNegativeButton(getString(R.string.finish_creating_dialog_btn_negative))
+            { _, _ -> }
+            .show()
     }
 
     private fun setArrowBackClickListener() {
