@@ -8,11 +8,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.widget.TextView
 import androidx.activity.addCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.ContextCompat.getColor
 import androidx.core.content.ContextCompat.getColorStateList
 import androidx.core.content.ContextCompat.getDrawable
 import androidx.navigation.fragment.findNavController
@@ -20,7 +18,6 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.practicum.playlistmaker.R
@@ -28,6 +25,7 @@ import com.practicum.playlistmaker.databinding.FragmentCreatePlaylistBinding
 import com.practicum.playlistmaker.library.playlists.new_playlist.domain.model.CreatePlaylistState
 import com.practicum.playlistmaker.library.playlists.new_playlist.ui.view_model.CreatePlaylistViewModel
 import com.practicum.playlistmaker.util.BindingFragment
+import com.practicum.playlistmaker.util.FeedbackUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 open class CreatePlaylistFragment : BindingFragment<FragmentCreatePlaylistBinding>() {
@@ -65,7 +63,10 @@ open class CreatePlaylistFragment : BindingFragment<FragmentCreatePlaylistBindin
     private fun renderState(state: CreatePlaylistState) {
         when (state) {
             is CreatePlaylistState.Saved -> {
-                showSnackbar(getString(R.string.playlist_created, state.name))
+                FeedbackUtils.showSnackbar(
+                    requireView(),
+                    getString(R.string.playlist_created, state.name)
+                )
                 closeScreen()
             }
 
@@ -77,17 +78,6 @@ open class CreatePlaylistFragment : BindingFragment<FragmentCreatePlaylistBindin
                 }
             }
         }
-    }
-
-    protected fun showSnackbar(text: String) {
-        val snackbar =
-            Snackbar.make(requireView(), text, Snackbar.LENGTH_SHORT)
-        snackbar.setBackgroundTint(getColor(requireContext(), R.color.basic_btn_background))
-        snackbar.setTextColor(getColor(requireContext(), R.color.basic_btn_text_color))
-        val textView =
-            snackbar.view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
-        textView.textAlignment = View.TEXT_ALIGNMENT_CENTER
-        snackbar.show()
     }
 
     private fun closeScreen() {

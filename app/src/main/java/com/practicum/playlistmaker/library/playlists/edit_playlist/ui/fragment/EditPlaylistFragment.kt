@@ -8,6 +8,7 @@ import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.library.playlists.edit_playlist.domain.EditPlaylistScreenState
 import com.practicum.playlistmaker.library.playlists.edit_playlist.ui.view_model.EditPlaylistViewModel
 import com.practicum.playlistmaker.library.playlists.new_playlist.ui.fragment.CreatePlaylistFragment
+import com.practicum.playlistmaker.util.FeedbackUtils
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -58,7 +59,8 @@ class EditPlaylistFragment : CreatePlaylistFragment() {
     }
 
     private fun showSaved(name: String) {
-        showSnackbar(
+        FeedbackUtils.showSnackbar(
+            requireView(),
             getString(
                 R.string.playlist_updated,
                 name
