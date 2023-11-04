@@ -12,7 +12,6 @@ import com.practicum.playlistmaker.library.playlists.playlist_details.domain.api
 import kotlinx.coroutines.launch
 
 class EditPlaylistViewModel(
-    //TODO: мб сделать один общий интерактор? надо посмотреть, что где используется
     private val playlistDetailsInteractor: PlaylistDetailsInteractor,
     private val playlistsInteractor: PlaylistsInteractor,
     private val playlistId: Int

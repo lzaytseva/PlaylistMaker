@@ -32,6 +32,7 @@ import com.practicum.playlistmaker.search.ui.adapters.TrackAdapter
 import com.practicum.playlistmaker.util.setTextOrHide
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
+import kotlin.math.abs
 
 class PlaylistDetailsFragment : Fragment() {
 
@@ -178,6 +179,27 @@ class PlaylistDetailsFragment : Fragment() {
         bottomSheetBehaviorMore = BottomSheetBehavior.from(binding.moreBottomSheet).apply {
             state = BottomSheetBehavior.STATE_HIDDEN
         }
+
+        bottomSheetBehaviorMore.addBottomSheetCallback(object :
+            BottomSheetBehavior.BottomSheetCallback() {
+
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                when (newState) {
+                    BottomSheetBehavior.STATE_HIDDEN -> {
+                        binding.overlay.visibility = View.GONE
+                    }
+
+                    else -> {
+                        binding.overlay.visibility = View.VISIBLE
+                    }
+                }
+            }
+
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+                binding.overlay.alpha = 1 - abs(slideOffset)
+            }
+        })
+
         binding.rvPlaylist.layoutManager = LinearLayoutManager(requireContext())
         binding.rvPlaylist.adapter = playlistAdapter
     }

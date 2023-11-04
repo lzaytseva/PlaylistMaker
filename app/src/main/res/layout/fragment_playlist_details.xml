@@ -151,7 +151,6 @@
         android:paddingStart="@dimen/root_layout_padding"
         android:paddingEnd="24dp"
         app:behavior_hideable="true"
-        app:behavior_peekHeight="240dp"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
         tools:visibility="gone">
 
@@ -173,6 +172,13 @@
 
     </LinearLayout>
 
+    <View
+        android:id="@+id/overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#99000000"
+        android:visibility="gone" />
+
     <LinearLayout
         android:id="@+id/more_bottom_sheet"
         android:layout_width="match_parent"
@@ -182,7 +188,6 @@
         android:paddingStart="@dimen/root_layout_padding"
         android:paddingEnd="24dp"
         app:behavior_hideable="true"
-        app:behavior_peekHeight="240dp"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
         tools:visibility="visible">
 
