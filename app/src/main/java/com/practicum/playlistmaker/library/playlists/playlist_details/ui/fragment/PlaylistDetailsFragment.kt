@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.core.os.bundleOf
+import androidx.core.view.doOnNextLayout
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -26,12 +28,14 @@ import com.practicum.playlistmaker.library.playlists.playlist_details.ui.view_mo
 import com.practicum.playlistmaker.player.ui.fragment.PlayerFragment
 import com.practicum.playlistmaker.search.domain.model.Track
 import com.practicum.playlistmaker.search.ui.adapters.TrackAdapter
-import com.practicum.playlistmaker.util.BindingFragment
 import com.practicum.playlistmaker.util.setTextOrHide
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
-class PlaylistDetailsFragment : BindingFragment<FragmentPlaylistDetailsBinding>() {
+class PlaylistDetailsFragment : Fragment() {
+
+    private var _binding: FragmentPlaylistDetailsBinding? = null
+    private val binding get() = _binding!!
 
     private var playlistId: Int = 0
 
@@ -52,19 +56,24 @@ class PlaylistDetailsFragment : BindingFragment<FragmentPlaylistDetailsBinding>(
 
     private lateinit var playlist: Playlist
 
-    override fun createBinding(
-        inflater: LayoutInflater,
-        container: ViewGroup?
-    ): FragmentPlaylistDetailsBinding {
-        return FragmentPlaylistDetailsBinding.inflate(inflater, container, false)
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         requireArguments().let {
             playlistId = it.getInt(ARGS_PLAYLIST_ID)
         }
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentPlaylistDetailsBinding.inflate(inflater, container, false)
+        binding.root.doOnNextLayout {
+            calculatePeekHeight()
+        }
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -96,7 +105,6 @@ class PlaylistDetailsFragment : BindingFragment<FragmentPlaylistDetailsBinding>(
 
     private fun showFullContent(playlistDetails: PlaylistDetails) {
         showPlaylistInfo(playlistDetails.playlist, playlistDetails.totalDuration)
-        //TODO: надо как-то починить болеющую высоту bs для маленьких экранов
         bottomSheetBehaviorTracks.state = BottomSheetBehavior.STATE_COLLAPSED
         bottomSheetBehaviorTracks.isHideable = false
         adapter.submitList(playlistDetails.tracks)
@@ -165,8 +173,18 @@ class PlaylistDetailsFragment : BindingFragment<FragmentPlaylistDetailsBinding>(
         }
         binding.rvPlaylist.layoutManager = LinearLayoutManager(requireContext())
         binding.rvPlaylist.adapter = playlistAdapter
+    }
 
-
+    private fun calculatePeekHeight() {
+        val screenHeight = binding.root.height
+        bottomSheetBehaviorMore.peekHeight =
+            (screenHeight - binding.tvPlaylistTitle.bottom).coerceAtLeast(
+                BS_MIN_SIZE_PX
+            )
+        bottomSheetBehaviorTracks.peekHeight =
+            (screenHeight - binding.btnShare.bottom - BS_TRACKS_OFFSET_PX).coerceAtLeast(
+                BS_MIN_SIZE_PX
+            )
     }
 
     private fun initTracksRv() {
@@ -246,7 +264,14 @@ class PlaylistDetailsFragment : BindingFragment<FragmentPlaylistDetailsBinding>(
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     companion object {
+        private const val BS_TRACKS_OFFSET_PX = 24
+        private const val BS_MIN_SIZE_PX = 100
         private const val ARGS_PLAYLIST_ID = "playlist_id"
 
         fun createArgs(playlistId: Int): Bundle {
