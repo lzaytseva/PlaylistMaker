@@ -1,14 +1,14 @@
 package com.practicum.playlistmaker.library.playlists.all_playlists.data.repository
 
 import android.app.Application
-import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Environment
+import androidx.core.net.toFile
 import com.practicum.playlistmaker.library.core.data.db.AppDatabase
-import com.practicum.playlistmaker.library.playlists.all_playlists.data.mapper.PlaylistDbMapper
 import com.practicum.playlistmaker.library.fav_tracks.data.mapper.TrackDbMapper
+import com.practicum.playlistmaker.library.playlists.all_playlists.data.mapper.PlaylistDbMapper
 import com.practicum.playlistmaker.library.playlists.all_playlists.domain.api.PlaylistsRepository
 import com.practicum.playlistmaker.library.playlists.all_playlists.domain.model.Playlist
 import com.practicum.playlistmaker.search.domain.model.Track
@@ -22,7 +22,6 @@ class PlaylistsRepositoryImpl(
     private val db: AppDatabase,
     private val playlistMapper: PlaylistDbMapper,
     private val trackMapper: TrackDbMapper,
-    private val sharedPrefs: SharedPreferences
 ) : PlaylistsRepository {
 
     override suspend fun savePlaylist(playlist: Playlist) {
@@ -56,12 +55,16 @@ class PlaylistsRepositoryImpl(
             filePath.mkdirs()
         }
 
-        var coverNumber = getCoverNumber()
+        var file = uri.toFile()
 
-        val file = File(
+        if (file.exists()) {
+            return uri
+        }
+
+        file = File(
             filePath, String.format(
                 FILE_NAME,
-                if (coverNumber == 0) "" else coverNumber
+                System.currentTimeMillis()
             )
         )
 
@@ -71,25 +74,11 @@ class PlaylistsRepositoryImpl(
             .decodeStream(inputStream)
             .compress(Bitmap.CompressFormat.JPEG, 30, outputStream)
 
-        setCoverNumber(++coverNumber)
-
         return Uri.fromFile(file)
-    }
-
-    private fun getCoverNumber(): Int {
-        return sharedPrefs.getInt(COVERS_COUNT_KEY, 0)
-    }
-
-    private fun setCoverNumber(count: Int) {
-        sharedPrefs
-            .edit()
-            .putInt(COVERS_COUNT_KEY, count)
-            .apply()
     }
 
     companion object {
         private const val DIRECTORY_NAME = "playlist_covers"
         private const val FILE_NAME = "playlist_cover%s.jpg"
-        private const val COVERS_COUNT_KEY = "covers_count"
     }
 }

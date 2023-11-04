@@ -27,10 +27,10 @@ import com.practicum.playlistmaker.library.playlists.new_playlist.ui.view_model.
 import com.practicum.playlistmaker.util.BindingFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class CreatePlaylistFragment : BindingFragment<FragmentCreatePlaylistBinding>() {
+open class CreatePlaylistFragment : BindingFragment<FragmentCreatePlaylistBinding>() {
 
     private val viewModel: CreatePlaylistViewModel by viewModel()
-    private var coverUri: Uri? = null
+    protected var coverUri: Uri? = null
 
     override fun createBinding(
         inflater: LayoutInflater,
@@ -49,31 +49,35 @@ class CreatePlaylistFragment : BindingFragment<FragmentCreatePlaylistBinding>() 
         setArrowBackClickListener()
         addOnBackPressedCallback()
 
-        observeViewModel(view)
+        observeViewModel()
     }
 
-    private fun observeViewModel(view: View) {
+    protected open fun observeViewModel() {
         viewModel.state.observe(viewLifecycleOwner) { state ->
-            when (state) {
-                is CreatePlaylistState.Saved -> {
-                    showSnackbar(view, state.name)
-                    closeScreen()
-                }
+            renderState(state)
+        }
+    }
 
-                is CreatePlaylistState.Editing -> {
-                    if (state.isStarted) {
-                        showDialog()
-                    } else {
-                        closeScreen()
-                    }
+    private fun renderState(state: CreatePlaylistState) {
+        when (state) {
+            is CreatePlaylistState.Saved -> {
+                showSnackbar(getString(R.string.playlist_created, state.name))
+                closeScreen()
+            }
+
+            is CreatePlaylistState.Editing -> {
+                if (state.isStarted) {
+                    showDialog()
+                } else {
+                    closeScreen()
                 }
             }
         }
     }
 
-    private fun showSnackbar(root: View, name: String) {
+    protected fun showSnackbar(text: String) {
         val snackbar =
-            Snackbar.make(root, getString(R.string.playlist_created, name), Snackbar.LENGTH_SHORT)
+            Snackbar.make(requireView(), text, Snackbar.LENGTH_SHORT)
         snackbar.setBackgroundTint(getColor(requireContext(), R.color.basic_btn_background))
         snackbar.setTextColor(getColor(requireContext(), R.color.basic_btn_text_color))
         val textView =
@@ -120,7 +124,7 @@ class CreatePlaylistFragment : BindingFragment<FragmentCreatePlaylistBinding>() 
         )
     }
 
-    private fun addTitleTextWatcher() {
+    protected fun addTitleTextWatcher() {
         binding.etPlaylistTitle.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
@@ -144,14 +148,14 @@ class CreatePlaylistFragment : BindingFragment<FragmentCreatePlaylistBinding>() 
         }
     }
 
-    private fun setCoverClickListener() {
+    protected fun setCoverClickListener() {
         val pickMedia = registerPickMediaRequest()
         binding.ivPlaylistCover.setOnClickListener {
             pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         }
     }
 
-    private fun setKeyboardMode() {
+    protected fun setKeyboardMode() {
         requireActivity().window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
     }
 
@@ -163,7 +167,7 @@ class CreatePlaylistFragment : BindingFragment<FragmentCreatePlaylistBinding>() 
             }
         }
 
-    private fun setImage(uri: Uri?) {
+    protected fun setImage(uri: Uri?) {
         Glide.with(this)
             .load(uri)
             .placeholder(getDrawable(requireContext(), R.drawable.ic_add_photo))

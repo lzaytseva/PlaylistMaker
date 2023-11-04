@@ -22,6 +22,7 @@ import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentPlaylistDetailsBinding
 import com.practicum.playlistmaker.library.playlists.all_playlists.domain.model.Playlist
 import com.practicum.playlistmaker.library.playlists.all_playlists.ui.adapters.PlaylistBSAdapter
+import com.practicum.playlistmaker.library.playlists.edit_playlist.ui.fragment.EditPlaylistFragment
 import com.practicum.playlistmaker.library.playlists.playlist_details.domain.model.PlaylistDetails
 import com.practicum.playlistmaker.library.playlists.playlist_details.domain.model.PlaylistDetailsScreenState
 import com.practicum.playlistmaker.library.playlists.playlist_details.ui.view_model.PlaylistDetailsViewModel
@@ -89,6 +90,11 @@ class PlaylistDetailsFragment : Fragment() {
         observeViewModel()
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.getPlaylistDetails()
+    }
+
     private fun observeViewModel() {
         viewModel.state.observe(viewLifecycleOwner) {
             renderState(it)
@@ -153,6 +159,7 @@ class PlaylistDetailsFragment : Fragment() {
                             dataSource: DataSource?,
                             isFirstResource: Boolean
                         ): Boolean {
+                            binding.ivPlaceholder.visibility = View.INVISIBLE
                             return false
                         }
 
@@ -240,7 +247,10 @@ class PlaylistDetailsFragment : Fragment() {
     }
 
     private fun editPlaylist() {
-
+        findNavController().navigate(
+            R.id.action_playlistDetailsFragment_to_editPlaylistFragment,
+            EditPlaylistFragment.createArgs(playlistId)
+        )
     }
 
     private fun deletePlaylist() {

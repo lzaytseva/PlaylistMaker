@@ -24,13 +24,9 @@ class PlaylistDetailsViewModel(
     private lateinit var playlist: Playlist
     private lateinit var tracks: List<Track>
 
-    init {
-        getPlaylistDetails(playlistId)
-    }
-
-    private fun getPlaylistDetails(playlistId: Int) {
+    fun getPlaylistDetails() {
         viewModelScope.launch {
-            playlist = getPlaylist(playlistId)
+            playlist = getPlaylist()
             tracks = getTracks(playlist.tracksId)
             _state.postValue(
                 if (tracks.isEmpty()) {
@@ -52,7 +48,7 @@ class PlaylistDetailsViewModel(
         }
     }
 
-    private suspend fun getPlaylist(playlistId: Int): Playlist {
+    private suspend fun getPlaylist(): Playlist {
         return playlistDetailsInteractor.getPlaylist(playlistId)
     }
 
@@ -66,7 +62,7 @@ class PlaylistDetailsViewModel(
         val updatedPlaylist = playlist.copy(tracksId = newTracksIds)
         viewModelScope.launch {
             playlistDetailsInteractor.updatePlaylist(updatedPlaylist)
-            getPlaylistDetails(playlistId)
+            getPlaylistDetails()
             playlistDetailsInteractor.deleteTrackFromTable(track)
         }
     }
