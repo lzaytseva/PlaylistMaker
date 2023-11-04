@@ -32,6 +32,7 @@ class EditPlaylistFragment : CreatePlaylistFragment() {
         setCoverClickListener()
         addTitleTextWatcher()
         setBtnSaveClickListener()
+        setInputFieldsColorsBehavior()
 
         observeViewModel()
     }
