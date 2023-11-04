@@ -13,6 +13,7 @@ import androidx.activity.addCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat.getColor
+import androidx.core.content.ContextCompat.getColorStateList
 import androidx.core.content.ContextCompat.getDrawable
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
@@ -20,6 +21,8 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.FragmentCreatePlaylistBinding
 import com.practicum.playlistmaker.library.playlists.new_playlist.domain.model.CreatePlaylistState
@@ -48,6 +51,7 @@ open class CreatePlaylistFragment : BindingFragment<FragmentCreatePlaylistBindin
         addTitleTextWatcher()
         setArrowBackClickListener()
         addOnBackPressedCallback()
+        setInputFieldsColorsBehavior()
 
         observeViewModel()
     }
@@ -178,5 +182,28 @@ open class CreatePlaylistFragment : BindingFragment<FragmentCreatePlaylistBindin
                 ),
             )
             .into(binding.ivPlaylistCover)
+    }
+
+    protected fun setInputFieldsColorsBehavior() {
+        with(binding) {
+            etPlaylistDesc.setEditTextFocusChangedListener(tilDescription)
+            etPlaylistTitle.setEditTextFocusChangedListener(tilTitle)
+        }
+    }
+
+    private fun TextInputEditText.setEditTextFocusChangedListener(textInputLayout: TextInputLayout) {
+        setOnFocusChangeListener { v, hasFocus ->
+            val strokeColorStateListId =
+                if (!hasFocus && !text.isNullOrBlank()) R.color.et_box_color_blue else R.color.et_box_color
+
+            val hintColorStateListId =
+                if (!hasFocus && !text.isNullOrBlank()) R.color.et_hint_color_blue else R.color.et_hint_color
+
+            textInputLayout.setBoxStrokeColorStateList(
+                getColorStateList(requireContext(), strokeColorStateListId)!!
+            )
+            textInputLayout.defaultHintTextColor =
+                getColorStateList(requireContext(), hintColorStateListId)
+        }
     }
 }
