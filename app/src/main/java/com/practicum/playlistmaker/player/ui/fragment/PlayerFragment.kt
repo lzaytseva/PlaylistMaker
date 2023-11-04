@@ -22,6 +22,7 @@ import com.practicum.playlistmaker.player.domain.model.PlayerState
 import com.practicum.playlistmaker.player.ui.view_model.PlayerViewModel
 import com.practicum.playlistmaker.search.domain.model.Track
 import com.practicum.playlistmaker.util.BindingFragment
+import com.practicum.playlistmaker.util.FeedbackUtils
 import com.practicum.playlistmaker.util.setTextOrHide
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -101,7 +102,8 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
 
     private fun renderAddTrackState(state: AddTrackToPlaylistState) {
         when (state) {
-            is AddTrackToPlaylistState.AlreadyPresent -> showToast(
+            is AddTrackToPlaylistState.AlreadyPresent -> FeedbackUtils.showSnackbar(
+                requireView(),
                 getString(
                     R.string.track_already_present,
                     state.playlistName
@@ -115,7 +117,10 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
 
     private fun showTrackAdded(playlistName: String) {
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-        showToast(getString(R.string.track_added_in_playlist, playlistName))
+        FeedbackUtils.showSnackbar(
+            requireView(),
+            getString(R.string.track_added_in_playlist, playlistName)
+        )
     }
 
     private fun initPlaylistsRv() {
