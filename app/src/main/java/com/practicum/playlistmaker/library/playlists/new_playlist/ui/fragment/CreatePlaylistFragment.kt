@@ -184,10 +184,18 @@ open class CreatePlaylistFragment : BindingFragment<FragmentCreatePlaylistBindin
     private fun TextInputEditText.setEditTextFocusChangedListener(textInputLayout: TextInputLayout) {
         setOnFocusChangeListener { v, hasFocus ->
             val strokeColorStateListId =
-                if (!hasFocus && !text.isNullOrBlank()) R.color.et_box_color_blue else R.color.et_box_color
+                if (!hasFocus && !text.isNullOrBlank()) {
+                    R.color.et_box_color_blue
+                } else {
+                    R.color.et_box_color
+                }
 
             val hintColorStateListId =
-                if (!hasFocus && !text.isNullOrBlank()) R.color.et_hint_color_blue else R.color.et_hint_color
+                if (!hasFocus && !text.isNullOrBlank()) {
+                    R.color.et_hint_color_blue
+                } else {
+                    R.color.et_hint_color
+                }
 
             textInputLayout.setBoxStrokeColorStateList(
                 getColorStateList(requireContext(), strokeColorStateListId)!!
