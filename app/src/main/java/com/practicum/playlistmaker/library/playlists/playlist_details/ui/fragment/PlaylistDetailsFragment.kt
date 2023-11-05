@@ -243,6 +243,7 @@ class PlaylistDetailsFragment : Fragment() {
     private fun initTracksRv() {
         binding.rvTracks.layoutManager = LinearLayoutManager(requireContext())
         binding.rvTracks.adapter = adapter
+        binding.rvTracks.itemAnimator = null
         adapter.setOnTrackLongClicked {
             showDeleteTrackDialog(it)
             true
