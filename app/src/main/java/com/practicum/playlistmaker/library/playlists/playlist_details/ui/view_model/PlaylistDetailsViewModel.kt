@@ -75,8 +75,10 @@ class PlaylistDetailsViewModel(
             return
         }
         val playlistDescription = buildString {
-            appendLine(playlist.name)
-            appendLine(playlist.description)
+            appendLine(context.getString(R.string.playlist, playlist.name))
+            if (playlist.description.isNotEmpty()) {
+                appendLine(playlist.description)
+            }
             appendLine(
                 context.resources.getQuantityString(
                     R.plurals.track_amount,
