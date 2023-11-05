@@ -209,34 +209,28 @@
 
         <TextView
             android:id="@+id/btn_share_bs"
+            style="@style/bottom_sheet_menu_text_stile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin8dp"
-            android:fontFamily="@font/ys_display_regular"
             android:padding="16dp"
-            android:text="@string/share"
-            android:textColor="@color/regular_text_color"
-            android:textSize="16sp" />
+            android:text="@string/share" />
 
         <TextView
             android:id="@+id/btn_edit_playlist"
+            style="@style/bottom_sheet_menu_text_stile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/ys_display_regular"
             android:padding="16dp"
-            android:text="@string/edit_playlist"
-            android:textColor="@color/regular_text_color"
-            android:textSize="16sp" />
+            android:text="@string/edit_playlist" />
 
         <TextView
             android:id="@+id/btn_delete_playlist"
+            style="@style/bottom_sheet_menu_text_stile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/ys_display_regular"
             android:padding="16dp"
-            android:text="@string/delete_playlist"
-            android:textColor="@color/regular_text_color"
-            android:textSize="16sp" />
+            android:text="@string/delete_playlist" />
 
     </LinearLayout>
 
