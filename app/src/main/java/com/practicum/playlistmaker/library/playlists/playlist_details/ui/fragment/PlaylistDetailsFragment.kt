@@ -179,7 +179,7 @@ class PlaylistDetailsFragment : Fragment() {
 
     private fun showNoApplicationFound() {
         showToast(getString(R.string.no_applications_found))
-        viewModel.setToastWasShown(
+        viewModel.setFeedbackWasShown(
             state = PlaylistDetailsScreenState.NoApplicationFound(
                 feedbackWasShown = true
             )
@@ -191,7 +191,7 @@ class PlaylistDetailsFragment : Fragment() {
             requireView(),
             getString(R.string.empty_playlist_nothing_to_share)
         )
-        viewModel.setToastWasShown(
+        viewModel.setFeedbackWasShown(
             state = PlaylistDetailsScreenState.NothingToShare(
                 feedbackWasShown = true
             )

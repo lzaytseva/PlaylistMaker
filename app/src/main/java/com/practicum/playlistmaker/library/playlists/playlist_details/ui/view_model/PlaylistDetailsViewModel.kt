@@ -95,7 +95,7 @@ class PlaylistDetailsViewModel(
         }
     }
 
-    fun setToastWasShown(state: PlaylistDetailsScreenState) {
+    fun setFeedbackWasShown(state: PlaylistDetailsScreenState) {
         if (state is PlaylistDetailsScreenState.NoApplicationFound) {
             _state.value = state
         }

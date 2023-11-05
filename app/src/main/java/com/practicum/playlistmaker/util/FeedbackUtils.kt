@@ -36,6 +36,5 @@ object FeedbackUtils {
             message,
             Toast.LENGTH_SHORT
         ).show()
-        TODO("Убрать дублирование методов")
     }
 }
