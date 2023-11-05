@@ -115,6 +115,7 @@ class PlaylistDetailsFragment : Fragment() {
     }
 
     private fun showFullContent(playlistDetails: PlaylistDetails) {
+        binding.placeholderMessage.visibility = View.INVISIBLE
         showPlaylistInfo(playlistDetails.playlist, playlistDetails.totalDuration)
         bottomSheetBehaviorTracks.showBottomSheet()
         bottomSheetBehaviorTracks.isHideable = false
@@ -122,6 +123,7 @@ class PlaylistDetailsFragment : Fragment() {
     }
 
     private fun showEmptyPlaylist(playlistDetails: PlaylistDetails) {
+        binding.placeholderMessage.visibility = View.VISIBLE
         bottomSheetBehaviorTracks.isHideable = true
         bottomSheetBehaviorTracks.hideBottomSheet()
         adapter.submitList(emptyList())

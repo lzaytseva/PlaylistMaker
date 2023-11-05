@@ -146,6 +146,20 @@
             app:layout_constraintTop_toBottomOf="@id/tv_total_duration"
             app:tint="@color/black" />
 
+        <TextView
+            android:id="@+id/placeholder_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_share"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:fontFamily="@font/ys_display_regular"
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:visibility="invisible"
+            android:text="@string/empty_playlist" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
@@ -195,7 +209,7 @@
         android:paddingEnd="24dp"
         app:behavior_hideable="true"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
-        tools:visibility="visible">
+        tools:visibility="gone">
 
         <ImageView
             android:layout_width="wrap_content"

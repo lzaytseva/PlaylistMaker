@@ -71,4 +71,5 @@
     <string name="btn_share_content_desc">Кнопка, чтобы поделиться плейлистом</string>
     <string name="btn_more_content_desc">Кнопка дополнительного меню</string>
     <string name="playlist">Плейлист \"%1$s\"</string>
+    <string name="empty_playlist">В этом плейлисте еще нет треков</string>
 </resources>
