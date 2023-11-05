@@ -30,25 +30,26 @@
             android:layout_marginTop="@dimen/margin16dp"
             android:contentDescription="@string/btn_back_description"
             app:layout_constraintStart_toStartOf="@id/guideline_start"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/black" />
 
         <ImageView
             android:id="@+id/iv_playlist_cover"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:contentDescription="@string/playlist_cover_content_desc"
             app:layout_constraintDimensionRatio="w, 1:1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:contentDescription="@string/playlist_cover_content_desc" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/iv_placeholder"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_margin="64dp"
-            android:src="@drawable/cover_placeholder"
             android:contentDescription="@string/placeholder_content_desc"
+            android:src="@drawable/cover_placeholder"
             android:visibility="invisible"
             app:layout_constraintDimensionRatio="w, 1:1"
             app:layout_constraintEnd_toEndOf="parent"
@@ -102,12 +103,12 @@
             android:layout_width="3dp"
             android:layout_height="3dp"
             android:layout_marginStart="4dp"
+            android:importantForAccessibility="no"
             android:src="@drawable/ellipse"
             app:layout_constraintBottom_toBottomOf="@id/tv_total_duration"
             app:layout_constraintStart_toEndOf="@id/tv_total_duration"
             app:layout_constraintTop_toTopOf="@id/tv_total_duration"
-            app:tint="@color/black"
-            android:importantForAccessibility="no" />
+            app:tint="@color/black" />
 
         <TextView
             android:id="@+id/tv_tracks_total"
@@ -127,11 +128,11 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginTop="@dimen/margin16dp"
+            android:contentDescription="@string/btn_share_content_desc"
             android:src="@drawable/ic_share"
             app:layout_constraintStart_toEndOf="@id/guideline_start"
             app:layout_constraintTop_toBottomOf="@id/tv_total_duration"
-            app:tint="@color/black"
-            android:contentDescription="@string/btn_share_content_desc" />
+            app:tint="@color/black" />
 
         <ImageView
             android:id="@+id/btn_more"
@@ -139,8 +140,8 @@
             android:layout_height="24dp"
             android:layout_marginStart="@dimen/margin16dp"
             android:layout_marginTop="@dimen/margin16dp"
-            android:src="@drawable/ic_more"
             android:contentDescription="@string/btn_more_content_desc"
+            android:src="@drawable/ic_more"
             app:layout_constraintStart_toEndOf="@id/btn_share"
             app:layout_constraintTop_toBottomOf="@id/tv_total_duration"
             app:tint="@color/black" />
