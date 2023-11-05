@@ -4,10 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.practicum.playlistmaker.databinding.FragmentSettingsBinding
 import com.practicum.playlistmaker.settings.ui.view_model.SettingsViewModel
 import com.practicum.playlistmaker.util.BindingFragment
+import com.practicum.playlistmaker.util.FeedbackUtils
 import com.practicum.playlistmaker.util.ToastState
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -43,17 +43,9 @@ class SettingsFragment : BindingFragment<FragmentSettingsBinding>() {
     private fun observeViewModel() {
         viewModel.noApplicationsFound.observe(viewLifecycleOwner) {
             if (it is ToastState.Show) {
-                showToast(it.additionalMessage)
+                FeedbackUtils.showToast(it.additionalMessage, requireContext())
                 viewModel.toastWasShown()
             }
         }
-    }
-
-    private fun showToast(message: String) {
-        Toast.makeText(
-            requireContext(),
-            message,
-            Toast.LENGTH_SHORT
-        ).show()
     }
 }
