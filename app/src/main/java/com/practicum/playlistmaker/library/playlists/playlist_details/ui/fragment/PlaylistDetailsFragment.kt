@@ -48,7 +48,7 @@ class PlaylistDetailsFragment : Fragment() {
     private lateinit var bottomSheetBehaviorTracks: BottomSheetBehavior<LinearLayout>
     private lateinit var bottomSheetBehaviorMore: BottomSheetBehavior<LinearLayout>
 
-    private var playlistAdapter = PlaylistBSAdapter() {}
+    private var playlistAdapter = PlaylistBSAdapter {}
     private val adapter = TrackAdapter {
         findNavController().navigate(
             R.id.action_playlistDetailsFragment_to_playerFragment,
