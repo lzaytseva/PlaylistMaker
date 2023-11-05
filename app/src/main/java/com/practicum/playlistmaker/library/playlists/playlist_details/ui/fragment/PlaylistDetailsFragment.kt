@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.core.view.doOnNextLayout
 import androidx.fragment.app.Fragment
@@ -42,15 +41,12 @@ class PlaylistDetailsFragment : Fragment() {
     private val binding get() = _binding!!
 
     private var playlistId: Int = 0
+    private lateinit var playlist: Playlist
 
     private lateinit var bottomSheetBehaviorTracks: BottomSheetBehavior<LinearLayout>
     private lateinit var bottomSheetBehaviorMore: BottomSheetBehavior<LinearLayout>
 
     private var playlistAdapter = PlaylistBSAdapter() {}
-
-    private val viewModel: PlaylistDetailsViewModel by viewModel {
-        parametersOf(playlistId)
-    }
     private val adapter = TrackAdapter {
         findNavController().navigate(
             R.id.action_playlistDetailsFragment_to_playerFragment,
@@ -58,7 +54,9 @@ class PlaylistDetailsFragment : Fragment() {
         )
     }
 
-    private lateinit var playlist: Playlist
+    private val viewModel: PlaylistDetailsViewModel by viewModel {
+        parametersOf(playlistId)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -167,8 +165,6 @@ class PlaylistDetailsFragment : Fragment() {
                             ivPlaceholder.visibility = View.INVISIBLE
                             return false
                         }
-
-
                     })
                     .into(ivPlaylistCover)
             }
@@ -178,7 +174,7 @@ class PlaylistDetailsFragment : Fragment() {
     }
 
     private fun showNoApplicationFound() {
-        showToast(getString(R.string.no_applications_found))
+        FeedbackUtils.showToast(getString(R.string.no_applications_found), requireContext())
         viewModel.setFeedbackWasShown(
             state = PlaylistDetailsScreenState.NoApplicationFound(
                 feedbackWasShown = true
@@ -196,14 +192,6 @@ class PlaylistDetailsFragment : Fragment() {
                 feedbackWasShown = true
             )
         )
-    }
-
-    private fun showToast(message: String) {
-        Toast.makeText(
-            requireContext(),
-            message,
-            Toast.LENGTH_SHORT
-        ).show()
     }
 
     private fun calculatePeekHeight() {
