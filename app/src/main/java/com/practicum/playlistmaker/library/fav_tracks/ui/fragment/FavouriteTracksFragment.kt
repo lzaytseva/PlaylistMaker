@@ -32,17 +32,9 @@ class FavouriteTracksFragment : BindingFragment<FragmentFavouriteTracksBinding>(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initRecyclerView()
-        viewModel.state.observe(viewLifecycleOwner) {
-            renderState(it)
-        }
-    }
 
-    private fun initRecyclerView() {
-        initAdapter()
-        binding.favTracksRv.layoutManager = LinearLayoutManager(requireContext())
-        binding.favTracksRv.adapter = adapter
-        binding.favTracksRv.itemAnimator = null
+        initRecyclerView()
+        observeViewModel()
     }
 
     override fun onResume() {
@@ -50,18 +42,10 @@ class FavouriteTracksFragment : BindingFragment<FragmentFavouriteTracksBinding>(
         viewModel.getFavTracks()
     }
 
-    private fun initAdapter() {
-        val onTrackClickDebounce = debounce<Track>(
-            CLICK_DEBOUNCE_DELAY_IN_MILLIS,
-            viewLifecycleOwner.lifecycleScope,
-            false
-        ) { track ->
-            findNavController().navigate(
-                R.id.action_libraryFragment_to_playerFragment,
-                PlayerFragment.createArgs(track)
-            )
+    private fun observeViewModel() {
+        viewModel.state.observe(viewLifecycleOwner) {
+            renderState(it)
         }
-        adapter = TrackAdapter(onTrackClickDebounce)
     }
 
     private fun renderState(state: FavTracksState) {
@@ -83,6 +67,27 @@ class FavouriteTracksFragment : BindingFragment<FragmentFavouriteTracksBinding>(
         binding.placeholderErrorLayout.root.visibility = View.INVISIBLE
         binding.favTracksRv.visibility = View.VISIBLE
         adapter.submitList(favTracks)
+    }
+
+    private fun initRecyclerView() {
+        initAdapter()
+        binding.favTracksRv.layoutManager = LinearLayoutManager(requireContext())
+        binding.favTracksRv.adapter = adapter
+        binding.favTracksRv.itemAnimator = null
+    }
+
+    private fun initAdapter() {
+        val onTrackClickDebounce = debounce<Track>(
+            CLICK_DEBOUNCE_DELAY_IN_MILLIS,
+            viewLifecycleOwner.lifecycleScope,
+            false
+        ) { track ->
+            findNavController().navigate(
+                R.id.action_libraryFragment_to_playerFragment,
+                PlayerFragment.createArgs(track)
+            )
+        }
+        adapter = TrackAdapter(onTrackClickDebounce)
     }
 
     companion object {
