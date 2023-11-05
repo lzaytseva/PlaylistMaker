@@ -66,4 +66,5 @@
     <string name="save">Сохранить</string>
     <string name="edit">Редактировать</string>
     <string name="playlist_updated">Плейлист %1$s сохранен</string>
+    <string name="empty_playlist_nothing_to_share">В этом плейлисте нет списка треков, которым можно поделиться</string>
 </resources>

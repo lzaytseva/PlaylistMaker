@@ -6,4 +6,8 @@ sealed interface PlaylistDetailsScreenState {
     data class FullContent(val playlistInfo: PlaylistDetails): PlaylistDetailsScreenState
 
     object PlaylistDeleted: PlaylistDetailsScreenState
+
+    data class NoApplicationFound(val feedbackWasShown: Boolean): PlaylistDetailsScreenState
+
+    data class NothingToShare(val feedbackWasShown: Boolean): PlaylistDetailsScreenState
 }

@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.core.view.doOnNextLayout
 import androidx.fragment.app.Fragment
@@ -29,6 +30,7 @@ import com.practicum.playlistmaker.library.playlists.playlist_details.ui.view_mo
 import com.practicum.playlistmaker.player.ui.fragment.PlayerFragment
 import com.practicum.playlistmaker.search.domain.model.Track
 import com.practicum.playlistmaker.search.ui.adapters.TrackAdapter
+import com.practicum.playlistmaker.util.FeedbackUtils
 import com.practicum.playlistmaker.util.setTextOrHide
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -107,6 +109,8 @@ class PlaylistDetailsFragment : Fragment() {
             is PlaylistDetailsScreenState.FullContent -> showFullContent(state.playlistInfo)
             is PlaylistDetailsScreenState.EmptyPlaylist -> showEmptyPlaylist(state.playlistInfo)
             is PlaylistDetailsScreenState.PlaylistDeleted -> findNavController().navigateUp()
+            is PlaylistDetailsScreenState.NoApplicationFound -> if (!state.feedbackWasShown) showNoApplicationFound()
+            is PlaylistDetailsScreenState.NothingToShare -> if (!state.feedbackWasShown) showNothingToShare()
         }
     }
 
@@ -160,9 +164,10 @@ class PlaylistDetailsFragment : Fragment() {
                             dataSource: DataSource?,
                             isFirstResource: Boolean
                         ): Boolean {
-                            binding.ivPlaceholder.visibility = View.INVISIBLE
+                            ivPlaceholder.visibility = View.INVISIBLE
                             return false
                         }
+
 
                     })
                     .into(ivPlaylistCover)
@@ -170,6 +175,47 @@ class PlaylistDetailsFragment : Fragment() {
         }
         playlistAdapter.submitList(listOf(playlist))
         this.playlist = playlist
+    }
+
+    private fun showNoApplicationFound() {
+        showToast(getString(R.string.no_applications_found))
+        viewModel.setToastWasShown(
+            state = PlaylistDetailsScreenState.NoApplicationFound(
+                feedbackWasShown = true
+            )
+        )
+    }
+
+    private fun showNothingToShare() {
+        FeedbackUtils.showSnackbar(
+            requireView(),
+            getString(R.string.empty_playlist_nothing_to_share)
+        )
+        viewModel.setToastWasShown(
+            state = PlaylistDetailsScreenState.NothingToShare(
+                feedbackWasShown = true
+            )
+        )
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(
+            requireContext(),
+            message,
+            Toast.LENGTH_SHORT
+        ).show()
+    }
+
+    private fun calculatePeekHeight() {
+        val screenHeight = binding.root.height
+        bottomSheetBehaviorMore.peekHeight =
+            (screenHeight - binding.tvPlaylistTitle.bottom).coerceAtLeast(
+                BS_MIN_SIZE_PX
+            )
+        bottomSheetBehaviorTracks.peekHeight =
+            (screenHeight - binding.btnShare.bottom - BS_TRACKS_OFFSET_PX).coerceAtLeast(
+                BS_MIN_SIZE_PX
+            )
     }
 
     private fun initBottomSheets() {
@@ -202,18 +248,6 @@ class PlaylistDetailsFragment : Fragment() {
 
         binding.rvPlaylist.layoutManager = LinearLayoutManager(requireContext())
         binding.rvPlaylist.adapter = playlistAdapter
-    }
-
-    private fun calculatePeekHeight() {
-        val screenHeight = binding.root.height
-        bottomSheetBehaviorMore.peekHeight =
-            (screenHeight - binding.tvPlaylistTitle.bottom).coerceAtLeast(
-                BS_MIN_SIZE_PX
-            )
-        bottomSheetBehaviorTracks.peekHeight =
-            (screenHeight - binding.btnShare.bottom - BS_TRACKS_OFFSET_PX).coerceAtLeast(
-                BS_MIN_SIZE_PX
-            )
     }
 
     private fun initTracksRv() {
@@ -265,7 +299,7 @@ class PlaylistDetailsFragment : Fragment() {
     }
 
     private fun sharePlaylist() {
-        viewModel.sharePlaylist()
+        viewModel.sharePlaylist(requireContext())
     }
 
     private fun editPlaylist() {
@@ -292,7 +326,7 @@ class PlaylistDetailsFragment : Fragment() {
 
     private fun setShareBtnClickListener() {
         binding.btnShare.setOnClickListener {
-            viewModel.sharePlaylist()
+            sharePlaylist()
         }
     }
 
