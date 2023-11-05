@@ -30,7 +30,9 @@ import com.practicum.playlistmaker.player.ui.fragment.PlayerFragment
 import com.practicum.playlistmaker.search.domain.model.Track
 import com.practicum.playlistmaker.search.ui.adapters.TrackAdapter
 import com.practicum.playlistmaker.util.FeedbackUtils
+import com.practicum.playlistmaker.util.hideBottomSheet
 import com.practicum.playlistmaker.util.setTextOrHide
+import com.practicum.playlistmaker.util.showBottomSheet
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import kotlin.math.abs
@@ -114,14 +116,14 @@ class PlaylistDetailsFragment : Fragment() {
 
     private fun showFullContent(playlistDetails: PlaylistDetails) {
         showPlaylistInfo(playlistDetails.playlist, playlistDetails.totalDuration)
-        bottomSheetBehaviorTracks.state = BottomSheetBehavior.STATE_COLLAPSED
+        bottomSheetBehaviorTracks.showBottomSheet()
         bottomSheetBehaviorTracks.isHideable = false
         adapter.submitList(playlistDetails.tracks)
     }
 
     private fun showEmptyPlaylist(playlistDetails: PlaylistDetails) {
         bottomSheetBehaviorTracks.isHideable = true
-        bottomSheetBehaviorTracks.state = BottomSheetBehavior.STATE_HIDDEN
+        bottomSheetBehaviorTracks.hideBottomSheet()
         adapter.submitList(emptyList())
         showPlaylistInfo(playlistDetails.playlist)
     }
@@ -208,10 +210,10 @@ class PlaylistDetailsFragment : Fragment() {
 
     private fun initBottomSheets() {
         bottomSheetBehaviorTracks = BottomSheetBehavior.from(binding.tracksBottomSheet).apply {
-            state = BottomSheetBehavior.STATE_HIDDEN
+            hideBottomSheet()
         }
         bottomSheetBehaviorMore = BottomSheetBehavior.from(binding.moreBottomSheet).apply {
-            state = BottomSheetBehavior.STATE_HIDDEN
+            hideBottomSheet()
         }
 
         bottomSheetBehaviorMore.addBottomSheetCallback(object :
@@ -270,7 +272,7 @@ class PlaylistDetailsFragment : Fragment() {
 
     private fun setMoreBtnClickListener() {
         binding.btnMore.setOnClickListener {
-            bottomSheetBehaviorMore.state = BottomSheetBehavior.STATE_COLLAPSED
+            bottomSheetBehaviorMore.showBottomSheet()
         }
     }
 

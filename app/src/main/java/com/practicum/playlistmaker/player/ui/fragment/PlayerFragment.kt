@@ -22,7 +22,9 @@ import com.practicum.playlistmaker.player.ui.view_model.PlayerViewModel
 import com.practicum.playlistmaker.search.domain.model.Track
 import com.practicum.playlistmaker.util.BindingFragment
 import com.practicum.playlistmaker.util.FeedbackUtils
+import com.practicum.playlistmaker.util.hideBottomSheet
 import com.practicum.playlistmaker.util.setTextOrHide
+import com.practicum.playlistmaker.util.showBottomSheet
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import kotlin.math.abs
@@ -160,14 +162,13 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
                     state.playlistName
                 )
             )
-
             is AddTrackToPlaylistState.WasAdded -> showTrackAdded(state.playlistName)
             is AddTrackToPlaylistState.ShowPlaylists -> adapter.submitList(state.playlists)
         }
     }
 
     private fun showTrackAdded(playlistName: String) {
-        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+        bottomSheetBehavior.hideBottomSheet()
         FeedbackUtils.showSnackbar(
             requireView(),
             getString(R.string.track_added_in_playlist, playlistName)
@@ -183,7 +184,7 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
     private fun setAddToPlaylistClickListener() {
         binding.btnAddToPlaylist.setOnClickListener {
             viewModel.getAllPlaylists()
-            bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+            bottomSheetBehavior.showBottomSheet()
         }
     }
 
@@ -234,7 +235,7 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
 
     private fun initBottomSheet() {
         bottomSheetBehavior = BottomSheetBehavior.from(binding.playlistsBottomSheet).apply {
-            state = BottomSheetBehavior.STATE_HIDDEN
+            hideBottomSheet()
         }
 
         bottomSheetBehavior.addBottomSheetCallback(object :
