@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import android.widget.Toast
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
@@ -31,9 +30,11 @@ import kotlin.math.abs
 class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
 
     private lateinit var track: Track
+
     private val viewModel: PlayerViewModel by viewModel {
         parametersOf(track)
     }
+
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<LinearLayout>
     private lateinit var adapter: PlaylistBSAdapter
 
@@ -44,38 +45,26 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
         return FragmentPlayerBinding.inflate(inflater, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
         requireArguments().let {
             track = it.getParcelable(ARGS_TRACK)!!
         }
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         setTrackInfoToViews()
         initPlaylistsRv()
         initBottomSheet()
         setFavsBtnImage(track.isFavorite)
-
-        binding.arrowBack.setOnClickListener {
-            findNavController().navigateUp()
-        }
-
-        binding.btnPlay.setOnClickListener {
-            viewModel.playbackControl()
-        }
-
-        binding.btnAddToFavs.setOnClickListener {
-            viewModel.onFavoriteClicked()
-        }
-
-        binding.btnAddToPlaylist.setOnClickListener {
-            viewModel.getAllPlaylists()
-            bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-        }
-
-        binding.btnCreatePlaylist.setOnClickListener {
-            findNavController().navigate(R.id.action_playerFragment_to_createPlaylistFragment)
-        }
+        setArrowBackClickListener()
+        setBtnPlayClickListener()
+        setAddToFavsClickListener()
+        setAddToPlaylistClickListener()
+        setBtnCreatePlaylistClickListener()
 
         observeViewModel()
     }
@@ -97,6 +86,68 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
         }
         viewModel.addTrackState.observe(viewLifecycleOwner) {
             renderAddTrackState(it)
+        }
+    }
+
+    private fun renderPlayerState(state: PlayerState) {
+        when (state) {
+            PlayerState.PLAYING -> showPauseBtn()
+            PlayerState.PAUSED, PlayerState.PREPARED -> showPlayBtn()
+            PlayerState.DEFAULT -> showNotReady()
+            PlayerState.ERROR -> showError()
+        }
+    }
+
+    private fun showNotReady() {
+        binding.btnPlay.setOnClickListener {
+            FeedbackUtils.showToast(getString(R.string.player_not_ready), requireContext())
+        }
+        setIconPlay()
+    }
+
+    private fun showPlayBtn() {
+        setBtnPlayClickListener()
+        setIconPlay()
+    }
+
+    private fun showPauseBtn() {
+        setBtnPlayClickListener()
+        setIconPause()
+    }
+
+    private fun setBtnPlayClickListener() {
+        binding.btnPlay.setOnClickListener {
+            viewModel.playbackControl()
+        }
+    }
+
+    private fun showError() {
+        binding.btnPlay.setOnClickListener {
+            FeedbackUtils.showToast(getString(R.string.error_loading_preview), requireContext())
+        }
+        setIconPlay()
+    }
+
+    private fun setIconPause() {
+        binding.btnPlay.setImageResource(R.drawable.ic_btn_pause)
+    }
+
+    private fun setIconPlay() {
+        binding.btnPlay.setImageResource(R.drawable.ic_play)
+    }
+
+    private fun setFavsBtnImage(isFavorite: Boolean) {
+        if (isFavorite) {
+            binding.btnAddToFavs.setImageDrawable(
+                AppCompatResources.getDrawable(
+                    requireContext(),
+                    R.drawable.ic_add_to_favs_activated
+                )
+            )
+        } else {
+            binding.btnAddToFavs.setImageDrawable(
+                AppCompatResources.getDrawable(requireContext(), R.drawable.ic_add_to_favs)
+            )
         }
     }
 
@@ -123,81 +174,38 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
         )
     }
 
+    private fun setBtnCreatePlaylistClickListener() {
+        binding.btnCreatePlaylist.setOnClickListener {
+            findNavController().navigate(R.id.action_playerFragment_to_createPlaylistFragment)
+        }
+    }
+
+    private fun setAddToPlaylistClickListener() {
+        binding.btnAddToPlaylist.setOnClickListener {
+            viewModel.getAllPlaylists()
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        }
+    }
+
+    private fun setAddToFavsClickListener() {
+        binding.btnAddToFavs.setOnClickListener {
+            viewModel.onFavoriteClicked()
+        }
+    }
+
+    private fun setArrowBackClickListener() {
+        binding.arrowBack.setOnClickListener {
+            findNavController().navigateUp()
+        }
+    }
+
+
     private fun initPlaylistsRv() {
         adapter = PlaylistBSAdapter { playlist ->
             viewModel.addTrackToPlaylist(playlist)
         }
-
         binding.rvPlaylists.layoutManager = LinearLayoutManager(requireContext())
         binding.rvPlaylists.adapter = adapter
-    }
-
-    private fun setFavsBtnImage(isFavorite: Boolean) {
-        if (isFavorite) {
-            binding.btnAddToFavs.setImageDrawable(
-                AppCompatResources.getDrawable(
-                    requireContext(),
-                    R.drawable.ic_add_to_favs_activated
-                )
-            )
-        } else {
-            binding.btnAddToFavs.setImageDrawable(
-                AppCompatResources.getDrawable(requireContext(), R.drawable.ic_add_to_favs)
-            )
-        }
-    }
-
-    private fun renderPlayerState(state: PlayerState) {
-        when (state) {
-            PlayerState.PLAYING -> showPauseBtn()
-            PlayerState.PAUSED, PlayerState.PREPARED -> showPlayBtn()
-            PlayerState.DEFAULT -> showNotReady()
-            PlayerState.ERROR -> showError()
-        }
-    }
-
-    private fun showNotReady() {
-        binding.btnPlay.setOnClickListener {
-            showToast(getString(R.string.player_not_ready))
-        }
-        setIconPlay()
-    }
-
-    private fun showPlayBtn() {
-        binding.btnPlay.setOnClickListener {
-            viewModel.playbackControl()
-        }
-        setIconPlay()
-    }
-
-    private fun showPauseBtn() {
-        binding.btnPlay.setOnClickListener {
-            viewModel.playbackControl()
-        }
-        setIconPause()
-    }
-
-    private fun showError() {
-        binding.btnPlay.setOnClickListener {
-            showToast(getString(R.string.error_loading_preview))
-        }
-        setIconPlay()
-    }
-
-    private fun setIconPause() {
-        binding.btnPlay.setImageResource(R.drawable.ic_btn_pause)
-    }
-
-    private fun setIconPlay() {
-        binding.btnPlay.setImageResource(R.drawable.ic_play)
-    }
-
-    private fun showToast(message: String) {
-        Toast.makeText(
-            requireContext(),
-            message,
-            Toast.LENGTH_SHORT
-        ).show()
     }
 
     private fun setTrackInfoToViews() {
