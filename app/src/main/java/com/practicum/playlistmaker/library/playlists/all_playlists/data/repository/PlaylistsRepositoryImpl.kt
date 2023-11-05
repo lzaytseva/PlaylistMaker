@@ -5,7 +5,6 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Environment
-import androidx.core.net.toFile
 import com.practicum.playlistmaker.library.core.data.db.AppDatabase
 import com.practicum.playlistmaker.library.fav_tracks.data.mapper.TrackDbMapper
 import com.practicum.playlistmaker.library.playlists.all_playlists.data.mapper.PlaylistDbMapper
@@ -55,13 +54,12 @@ class PlaylistsRepositoryImpl(
             filePath.mkdirs()
         }
 
-        var file = uri.toFile()
 
-        if (file.exists()) {
+        if (!uri.scheme.equals("content")) {
             return uri
         }
 
-        file = File(
+        val file = File(
             filePath, String.format(
                 FILE_NAME,
                 System.currentTimeMillis()
