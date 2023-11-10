@@ -25,15 +25,6 @@
             app:layout_constraintGuide_end="@dimen/margin16dp" />
 
         <ImageView
-            android:id="@+id/arrow_back"
-            style="@style/arrow_back_style"
-            android:layout_marginTop="@dimen/margin16dp"
-            android:contentDescription="@string/btn_back_description"
-            app:layout_constraintStart_toStartOf="@id/guideline_start"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/black" />
-
-        <ImageView
             android:id="@+id/iv_playlist_cover"
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -42,6 +33,15 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/arrow_back"
+            style="@style/arrow_back_style"
+            android:layout_marginTop="@dimen/margin16dp"
+            android:contentDescription="@string/btn_back_description"
+            app:layout_constraintStart_toStartOf="@id/guideline_start"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/black" />
 
         <ImageView
             android:id="@+id/iv_placeholder"
