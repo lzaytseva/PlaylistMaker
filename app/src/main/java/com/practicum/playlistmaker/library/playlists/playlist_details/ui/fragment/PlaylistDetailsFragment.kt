@@ -25,10 +25,10 @@ import com.practicum.playlistmaker.library.playlists.all_playlists.ui.adapters.P
 import com.practicum.playlistmaker.library.playlists.edit_playlist.ui.fragment.EditPlaylistFragment
 import com.practicum.playlistmaker.library.playlists.playlist_details.domain.model.PlaylistDetails
 import com.practicum.playlistmaker.library.playlists.playlist_details.domain.model.PlaylistDetailsScreenState
+import com.practicum.playlistmaker.library.playlists.playlist_details.ui.adapter.PlaylistTrackAdapter
 import com.practicum.playlistmaker.library.playlists.playlist_details.ui.view_model.PlaylistDetailsViewModel
 import com.practicum.playlistmaker.player.ui.fragment.PlayerFragment
 import com.practicum.playlistmaker.search.domain.model.Track
-import com.practicum.playlistmaker.search.ui.adapters.TrackAdapter
 import com.practicum.playlistmaker.util.FeedbackUtils
 import com.practicum.playlistmaker.util.hideBottomSheet
 import com.practicum.playlistmaker.util.showBottomSheet
@@ -48,12 +48,18 @@ class PlaylistDetailsFragment : Fragment() {
     private lateinit var bottomSheetBehaviorMore: BottomSheetBehavior<LinearLayout>
 
     private var playlistAdapter = PlaylistBSAdapter {}
-    private val adapter = TrackAdapter {
-        findNavController().navigate(
-            R.id.action_playlistDetailsFragment_to_playerFragment,
-            PlayerFragment.createArgs(track = it)
-        )
-    }
+    private val adapter = PlaylistTrackAdapter(
+        onTrackClicked = {
+            findNavController().navigate(
+                R.id.action_playlistDetailsFragment_to_playerFragment,
+                PlayerFragment.createArgs(track = it)
+            )
+        },
+        onTrackLongClicked = {
+            showDeleteTrackDialog(it)
+            true
+        }
+    )
 
     private val viewModel: PlaylistDetailsViewModel by viewModel {
         parametersOf(playlistId)
@@ -247,10 +253,6 @@ class PlaylistDetailsFragment : Fragment() {
         binding.rvTracks.layoutManager = LinearLayoutManager(requireContext())
         binding.rvTracks.adapter = adapter
         binding.rvTracks.itemAnimator = null
-        adapter.setOnTrackLongClicked {
-            showDeleteTrackDialog(it)
-            true
-        }
     }
 
     private fun showDeleteTrackDialog(track: Track) {
@@ -282,6 +284,7 @@ class PlaylistDetailsFragment : Fragment() {
 
     private fun setClickListenersInMoreBS() {
         binding.btnShareBs.setOnClickListener {
+            bottomSheetBehaviorMore.hideBottomSheet()
             sharePlaylist()
         }
         binding.btnEditPlaylist.setOnClickListener {

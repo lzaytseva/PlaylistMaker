@@ -21,6 +21,8 @@ data class Track(
 
     val artworkUrl512
         get() = artworkUrl100.replaceAfterLast('/', "512x512bb.jpg")
+    val artworkUrl60
+        get() = artworkUrl100.replaceAfterLast('/', "60x60bb.jpg")
 }
 
 

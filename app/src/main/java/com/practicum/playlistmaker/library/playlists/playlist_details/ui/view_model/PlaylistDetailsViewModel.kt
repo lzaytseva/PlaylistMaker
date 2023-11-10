@@ -87,7 +87,7 @@ class PlaylistDetailsViewModel(
                 )
             )
             tracks.forEachIndexed { index, track ->
-                append("${index + 1}. ${track.artistName} - ${track.trackName} (${track.duration})")
+                appendLine("${index + 1}. ${track.artistName} - ${track.trackName} (${track.duration})")
             }
         }
         try {

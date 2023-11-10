@@ -1,57 +1,49 @@
-package com.practicum.playlistmaker.search.ui.adapters
+package com.practicum.playlistmaker.library.playlists.playlist_details.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.databinding.TrackViewBinding
 import com.practicum.playlistmaker.search.domain.model.Track
-import com.practicum.playlistmaker.util.setTextOrHide
+import com.practicum.playlistmaker.search.ui.adapters.TrackAdapter
+import com.practicum.playlistmaker.search.ui.adapters.TrackDiffCallback
 
-class TrackAdapter(
+class PlaylistTrackAdapter(
     private val onTrackClicked: (Track) -> Unit,
-) : ListAdapter<Track, TrackAdapter.TrackViewHolder>(TrackDiffCallback) {
+    private val onTrackLongClicked: ((Track) -> Boolean)
+) : ListAdapter<Track, PlaylistTrackAdapter.PlaylistTrackViewHolder>(TrackDiffCallback) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlaylistTrackViewHolder {
         val binding = TrackViewBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
             false
         )
-        return TrackViewHolder(binding)
+        return PlaylistTrackViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: PlaylistTrackViewHolder, position: Int) {
         val track = getItem(holder.adapterPosition)
         holder.bind(track)
 
         holder.itemView.setOnClickListener {
             onTrackClicked.invoke(track)
         }
+        holder.itemView.setOnLongClickListener {
+            onTrackLongClicked.invoke(track)
+        }
     }
 
-    open class TrackViewHolder(private val binding: TrackViewBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+    class PlaylistTrackViewHolder(private val binding: TrackViewBinding) :
+        TrackAdapter.TrackViewHolder(binding) {
 
-        fun bind(model: Track) {
-            with(binding) {
-                with(model) {
-                    tvSongTitle.text = trackName
-                    tvArtist.text = artistName
-                    tvDuration.setTextOrHide(duration, ellipse)
-                    setCover(model)
-                }
-            }
-
-        }
-
-        open fun setCover(model: Track) {
+        override fun setCover(model: Track) {
             Glide.with(itemView)
-                .load(model.artworkUrl100)
+                .load(model.artworkUrl60)
                 .placeholder(R.drawable.cover_placeholder)
                 .transform(
                     CenterCrop(),
