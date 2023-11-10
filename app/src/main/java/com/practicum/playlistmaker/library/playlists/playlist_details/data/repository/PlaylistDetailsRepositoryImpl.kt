@@ -44,7 +44,7 @@ class PlaylistDetailsRepositoryImpl(
 
     override suspend fun deleteTrackFromTable(track: Track) {
         val playlists = db.playlistsDao().getAllPlaylists().filter {
-            it.id == track.trackId
+            it.tracksId.contains(Regex(track.trackId.toString()))
         }
         if (playlists.isEmpty()) {
             db.tracksDao().deleteTrack(trackMapper.mapDomainToPlaylistTrack(track))
