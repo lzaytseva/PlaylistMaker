@@ -104,7 +104,7 @@ open class CreatePlaylistFragment : BindingFragment<FragmentCreatePlaylistBindin
         }
     }
 
-    private fun setArrowBackClickListener() {
+    open fun setArrowBackClickListener() {
         binding.arrowBack.setOnClickListener {
             shouldCloseScreen()
         }

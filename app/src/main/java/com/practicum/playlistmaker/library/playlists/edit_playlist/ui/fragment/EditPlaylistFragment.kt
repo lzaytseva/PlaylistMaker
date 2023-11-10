@@ -31,6 +31,7 @@ class EditPlaylistFragment : CreatePlaylistFragment() {
         changeLabels()
         setKeyboardMode()
         setCoverClickListener()
+        setArrowBackClickListener()
         addTitleTextWatcher()
         setBtnSaveClickListener()
         setInputFieldsColorsBehavior()
@@ -81,6 +82,12 @@ class EditPlaylistFragment : CreatePlaylistFragment() {
                 name = binding.etPlaylistTitle.text.toString(),
                 description = binding.etPlaylistDesc.text.toString()
             )
+        }
+    }
+
+    override fun setArrowBackClickListener() {
+        binding.arrowBack.setOnClickListener {
+            findNavController().navigateUp()
         }
     }
 
