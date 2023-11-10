@@ -208,12 +208,13 @@ class PlaylistDetailsFragment : Fragment() {
             (screenHeight - binding.btnShare.bottom - BS_TRACKS_OFFSET_PX).coerceAtLeast(
                 BS_MIN_SIZE_PX
             )
+        bottomSheetBehaviorTracks.state = BottomSheetBehavior.STATE_COLLAPSED
     }
 
     private fun initBottomSheets() {
         bottomSheetBehaviorTracks = BottomSheetBehavior.from(binding.tracksBottomSheet).apply {
-            hideBottomSheet()
-        }
+                hideBottomSheet()
+            }
         bottomSheetBehaviorMore = BottomSheetBehavior.from(binding.moreBottomSheet).apply {
             hideBottomSheet()
         }
