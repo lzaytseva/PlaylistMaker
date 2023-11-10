@@ -13,7 +13,7 @@ interface TracksDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addTrack(track: PlaylistTrackEntity)
 
-    @Query("SELECT * FROM tracks_from_playlists")
+    @Query("SELECT * FROM tracks_from_playlists ORDER BY timestamp")
     suspend fun getAllTracks(): List<PlaylistTrackEntity>
 
     @Delete

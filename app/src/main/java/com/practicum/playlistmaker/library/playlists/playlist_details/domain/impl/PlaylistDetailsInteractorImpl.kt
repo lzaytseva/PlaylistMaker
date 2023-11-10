@@ -5,6 +5,7 @@ import com.practicum.playlistmaker.library.playlists.playlist_details.domain.api
 import com.practicum.playlistmaker.library.playlists.playlist_details.domain.api.PlaylistDetailsRepository
 import com.practicum.playlistmaker.search.domain.model.Track
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 class PlaylistDetailsInteractorImpl(
     private val repository: PlaylistDetailsRepository
@@ -15,7 +16,11 @@ class PlaylistDetailsInteractorImpl(
     }
 
     override fun getTracks(tracksId: List<Int>): Flow<List<Track>> {
-        return repository.getTracks(tracksId)
+        return flow {
+            repository.getTracks(tracksId).collect {
+                emit(it.reversed())
+            }
+        }
     }
 
     override suspend fun updatePlaylist(playlist: Playlist) {
