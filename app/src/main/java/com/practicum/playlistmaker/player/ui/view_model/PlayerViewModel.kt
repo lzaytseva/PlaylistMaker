@@ -127,11 +127,19 @@ class PlayerViewModel(
 
     fun addTrackToPlaylist(playlist: Playlist) {
         if (playlist.tracksId.contains(track.trackId)) {
-            _addTrackState.value = AddTrackToPlaylistState.AlreadyPresent(playlist.name)
+            _addTrackState.value = AddTrackToPlaylistState.AlreadyPresent(
+                playlistName = playlist.name,
+                feedbackWasShown = false
+            )
         } else {
             viewModelScope.launch {
                 playlistsInteractor.addTrackToPlaylist(track, playlist)
-                _addTrackState.postValue(AddTrackToPlaylistState.WasAdded(playlist.name))
+                _addTrackState.postValue(
+                    AddTrackToPlaylistState.WasAdded(
+                        playlistName = playlist.name,
+                        feedbackWasShown = false
+                    )
+                )
             }
 
         }
@@ -142,6 +150,15 @@ class PlayerViewModel(
             playlistsInteractor.getAllPlaylists().collect {
                 _addTrackState.postValue(AddTrackToPlaylistState.ShowPlaylists(it))
             }
+        }
+    }
+
+    fun setFeedbackWasShown(state: AddTrackToPlaylistState) {
+        if (state is AddTrackToPlaylistState.WasAdded) {
+            _addTrackState.value = state
+        }
+        if (state is AddTrackToPlaylistState.AlreadyPresent) {
+            _addTrackState.value = state
         }
     }
 

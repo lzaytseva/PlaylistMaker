@@ -155,24 +155,36 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
 
     private fun renderAddTrackState(state: AddTrackToPlaylistState) {
         when (state) {
-            is AddTrackToPlaylistState.AlreadyPresent -> FeedbackUtils.showSnackbar(
-                requireView(),
-                getString(
-                    R.string.track_already_present,
-                    state.playlistName
-                )
-            )
-            is AddTrackToPlaylistState.WasAdded -> showTrackAdded(state.playlistName)
+            is AddTrackToPlaylistState.AlreadyPresent -> if (!state.feedbackWasShown) {
+                showAlreadyPresent(state)
+            }
+
+            is AddTrackToPlaylistState.WasAdded -> if (!state.feedbackWasShown) {
+                showTrackAdded(state)
+            }
+
             is AddTrackToPlaylistState.ShowPlaylists -> adapter.submitList(state.playlists)
         }
     }
 
-    private fun showTrackAdded(playlistName: String) {
+    private fun showAlreadyPresent(state: AddTrackToPlaylistState.AlreadyPresent) {
+        FeedbackUtils.showSnackbar(
+            requireView(),
+            getString(
+                R.string.track_already_present,
+                state.playlistName
+            )
+        )
+        viewModel.setFeedbackWasShown(state.copy(feedbackWasShown = true))
+    }
+
+    private fun showTrackAdded(state: AddTrackToPlaylistState.WasAdded) {
         bottomSheetBehavior.hideBottomSheet()
         FeedbackUtils.showSnackbar(
             requireView(),
-            getString(R.string.track_added_in_playlist, playlistName)
+            getString(R.string.track_added_in_playlist, state.playlistName)
         )
+        viewModel.setFeedbackWasShown(state.copy(feedbackWasShown = true))
     }
 
     private fun setBtnCreatePlaylistClickListener() {
