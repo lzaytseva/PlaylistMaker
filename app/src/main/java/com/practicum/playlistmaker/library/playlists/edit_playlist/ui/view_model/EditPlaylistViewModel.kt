@@ -20,6 +20,7 @@ class EditPlaylistViewModel(
     private val _state = MutableLiveData<EditPlaylistScreenState>()
     val state: LiveData<EditPlaylistScreenState>
         get() = _state
+    private lateinit var playlist: Playlist
 
     init {
         getPlaylistCurrentInfo()
@@ -27,7 +28,7 @@ class EditPlaylistViewModel(
 
     private fun getPlaylistCurrentInfo() {
         viewModelScope.launch {
-            val playlist = playlistDetailsInteractor.getPlaylist(playlistId)
+            playlist = playlistDetailsInteractor.getPlaylist(playlistId)
             _state.postValue(
                 EditPlaylistScreenState.CurrentData(
                     playlistName = playlist.name,
@@ -43,11 +44,10 @@ class EditPlaylistViewModel(
 
         viewModelScope.launch {
             playlistDetailsInteractor.updatePlaylist(
-                Playlist(
-                    id = playlistId,
+                playlist.copy(
                     name = name,
                     description = description.orEmpty(),
-                    coverUri = uriInternalStorage,
+                    coverUri = uriInternalStorage
                 )
             )
 

@@ -31,7 +31,6 @@ import com.practicum.playlistmaker.search.domain.model.Track
 import com.practicum.playlistmaker.search.ui.adapters.TrackAdapter
 import com.practicum.playlistmaker.util.FeedbackUtils
 import com.practicum.playlistmaker.util.hideBottomSheet
-import com.practicum.playlistmaker.util.setTextOrHide
 import com.practicum.playlistmaker.util.showBottomSheet
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
@@ -79,6 +78,7 @@ class PlaylistDetailsFragment : Fragment() {
         }
         return binding.root
     }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -133,7 +133,7 @@ class PlaylistDetailsFragment : Fragment() {
     private fun showPlaylistInfo(playlist: Playlist, totalDuration: Int = 0) {
         with(binding) {
             with(playlist) {
-                tvPlaylistDescription.setTextOrHide(text = description, fieldLabel = null)
+                tvPlaylistDescription.text
                 tvPlaylistTitle.text = name
                 tvTracksTotal.text = resources.getQuantityString(
                     R.plurals.track_amount,
@@ -213,8 +213,8 @@ class PlaylistDetailsFragment : Fragment() {
 
     private fun initBottomSheets() {
         bottomSheetBehaviorTracks = BottomSheetBehavior.from(binding.tracksBottomSheet).apply {
-                hideBottomSheet()
-            }
+            hideBottomSheet()
+        }
         bottomSheetBehaviorMore = BottomSheetBehavior.from(binding.moreBottomSheet).apply {
             hideBottomSheet()
         }
