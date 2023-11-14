@@ -13,7 +13,7 @@ import com.practicum.playlistmaker.search.domain.model.Track
 import com.practicum.playlistmaker.util.setTextOrHide
 
 class TrackAdapter(
-    private val onTrackClicked: (Track) -> Unit
+    private val onTrackClicked: (Track) -> Unit,
 ) : ListAdapter<Track, TrackAdapter.TrackViewHolder>(TrackDiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
@@ -26,14 +26,15 @@ class TrackAdapter(
     }
 
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
-        holder.bind(getItem(holder.adapterPosition))
+        val track = getItem(holder.adapterPosition)
+        holder.bind(track)
 
         holder.itemView.setOnClickListener {
-            onTrackClicked.invoke(getItem(holder.adapterPosition))
+            onTrackClicked.invoke(track)
         }
     }
 
-    class TrackViewHolder(private val binding: TrackViewBinding) :
+    open class TrackViewHolder(private val binding: TrackViewBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(model: Track) {
@@ -42,18 +43,23 @@ class TrackAdapter(
                     tvSongTitle.text = trackName
                     tvArtist.text = artistName
                     tvDuration.setTextOrHide(duration, ellipse)
-                    Glide.with(itemView)
-                        .load(artworkUrl100)
-                        .placeholder(R.drawable.cover_placeholder)
-                        .transform(
-                            CenterCrop(),
-                            RoundedCorners(
-                                itemView.resources.getDimensionPixelSize(R.dimen.album_cover_corner_radius)
-                            ),
-                        )
-                        .into(ivAlbumCover)
+                    setCover(model)
                 }
             }
+
+        }
+
+        open fun setCover(model: Track) {
+            Glide.with(itemView)
+                .load(model.artworkUrl100)
+                .placeholder(R.drawable.cover_placeholder)
+                .transform(
+                    CenterCrop(),
+                    RoundedCorners(
+                        itemView.resources.getDimensionPixelSize(R.dimen.album_cover_corner_radius)
+                    ),
+                )
+                .into(binding.ivAlbumCover)
         }
     }
 }

@@ -80,7 +80,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin16dp"
         android:layout_marginEnd="@dimen/margin8dp"
-        android:src="@drawable/arrow_forward"
+        android:src="@drawable/ic_arrow_forward"
         app:tint="@color/settings_icons_tint"
         tools:ignore="ContentDescription" />
 

@@ -47,7 +47,7 @@
             android:layout_height="18dp"
             android:layout_gravity="end|center"
             android:contentDescription="@string/share_app"
-            android:src="@drawable/share"
+            android:src="@drawable/ic_share"
             app:tint="@color/settings_icons_tint" />
 
     </FrameLayout>
@@ -66,7 +66,7 @@
             android:layout_height="18dp"
             android:layout_gravity="end|center"
             android:contentDescription="@string/contact_support"
-            android:src="@drawable/support"
+            android:src="@drawable/ic_support"
             app:tint="@color/settings_icons_tint" />
 
     </FrameLayout>
@@ -85,7 +85,7 @@
             android:layout_height="18dp"
             android:layout_gravity="end|center"
             android:contentDescription="@string/go_forward"
-            android:src="@drawable/arrow_forward"
+            android:src="@drawable/ic_arrow_forward"
             app:tint="@color/settings_icons_tint" />
 
     </FrameLayout>

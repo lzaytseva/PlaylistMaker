@@ -37,4 +37,14 @@ class ExternalNavigator(private val context: Context) {
             context.startActivity(this)
         }
     }
+
+    fun sharePlaylist(fullPlaylistDesc: String) {
+        Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, fullPlaylistDesc)
+            type = "text/plain"
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            context.startActivity(this)
+        }
+    }
 }

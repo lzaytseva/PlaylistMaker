@@ -49,9 +49,7 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         setupBtnClearHistoryClickListener()
         setupBtnRefreshClickListener()
 
-        viewModel.state.observe(viewLifecycleOwner) {
-            renderState(it)
-        }
+        observeViewModel()
     }
 
     override fun onResume() {
@@ -64,6 +62,12 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
     override fun onStop() {
         super.onStop()
         binding.searchEditText.setText("")
+    }
+
+    private fun observeViewModel() {
+        viewModel.state.observe(viewLifecycleOwner) {
+            renderState(it)
+        }
     }
 
     private fun renderState(it: SearchScreenState) {
