@@ -37,7 +37,7 @@ class PlaylistDetailsRepositoryImpl(
     }
 
     override suspend fun updatePlaylist(playlist: Playlist) {
-        db.playlistsDao().updateTracksInPlaylist(
+        db.playlistsDao().savePlaylist(
             playlistMapper.mapDomainToEntity(playlist)
         )
     }
