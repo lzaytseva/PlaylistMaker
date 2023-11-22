@@ -22,7 +22,7 @@
 
 ## Примеры использования
 ### Создание плейлиста
-<img src="https://github.com/lzaytseva/PlaylistMaker/blob/dev/app/src/main/assets/create_playlst.gif"  width="270" height="600" alt="create playlist">
+<img src="https://github.com/lzaytseva/PlaylistMaker/blob/dev/app/src/main/assets/create_playlist.gif"  width="270" height="600" alt="create playlist">
 
 ### Редактирование и удаление плейлиста
 <img src="https://github.com/lzaytseva/PlaylistMaker/blob/dev/app/src/main/assets/edit_delete_playlist.gif"  width="270" height="600" alt="edit playlist">
