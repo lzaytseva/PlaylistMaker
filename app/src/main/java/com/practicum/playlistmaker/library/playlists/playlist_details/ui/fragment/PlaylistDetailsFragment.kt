@@ -139,7 +139,7 @@ class PlaylistDetailsFragment : Fragment() {
     private fun showPlaylistInfo(playlist: Playlist, totalDuration: Int = 0) {
         with(binding) {
             with(playlist) {
-                tvPlaylistDescription.text
+                tvPlaylistDescription.text = description
                 tvPlaylistTitle.text = name
                 tvTracksTotal.text = resources.getQuantityString(
                     R.plurals.track_amount,
