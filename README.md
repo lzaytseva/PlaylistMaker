@@ -22,13 +22,13 @@
 
 ## Примеры использования
 ### Создание плейлиста
-<img src="https://github.com/lzaytseva/PlaylistMaker/assets/create_playlist.gif"  width="270" height="600" alt="create playlist">
+<img src="https://github.com/lzaytseva/PlaylistMaker/blob/dev/app/src/main/assets/create_playlst.gif"  width="270" height="600" alt="create playlist">
 
 ### Редактирование и удаление плейлиста
-<img src="https://github.com/lzaytseva/PlaylistMaker/assets/edit_delete_playlist.gif"  width="270" height="600" alt="edit playlist">
+<img src="https://github.com/lzaytseva/PlaylistMaker/blob/dev/app/src/main/assets/edit_delete_playlist.gif"  width="270" height="600" alt="edit playlist">
 
 ### Настройки
-<img src="https://github.com/lzaytseva/PlaylistMaker/assets/settings.gif"  width="270" height="600" alt="settings">
+<img src="https://github.com/lzaytseva/PlaylistMaker/blob/dev/app/src/main/assets/settings.gif"  width="270" height="600" alt="settings">
 
 ### Добавление в избранное
-<img src="https://github.com/lzaytseva/PlaylistMaker/assets/favs.gif"  width="270" height="600" alt="adding to favs">
+<img src="https://github.com/lzaytseva/PlaylistMaker/blob/dev/app/src/main/assets/favs.gif"  width="270" height="600" alt="adding to favs">
