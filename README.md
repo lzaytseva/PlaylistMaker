@@ -2,14 +2,16 @@
 Учебный проект с курса "Android разработка" Яндекс Практикума. Приложение для поиска песен в базе iTunes и создания плейлистов. 
 
 ## Используемые технологии и инструменты
-- MVVM
-- ViewBinding
-- Koin
+- Kotlin
+- Room
 - Retrofit
 - Kotlin Coroutines
+- Koin
+- ViewBinding
 - RecyclerView, DiffUtil
 - ViewPager
 - SharedPreferences
+- Clean Architecture (MVVM)
 
 ## Функционал приложения
 - Поиск песен в базе iTunes
