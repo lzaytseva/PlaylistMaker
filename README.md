@@ -34,3 +34,9 @@
 
 ### Добавление в избранное
 <img src="https://github.com/lzaytseva/PlaylistMaker/blob/dev/app/src/main/assets/favs.gif"  width="270" height="600" alt="adding to favs">
+
+## Установка
+[<img src="https://github.com/lzaytseva/PlaylistMaker/assets/121244389/0fc85bcc-e88f-4ac8-a3fa-cf0fa9fbcd08"
+    alt="Get it on GitHub"
+    height="80">](https://github.com/lzaytseva/PlaylistMaker/releases/latest)
+
