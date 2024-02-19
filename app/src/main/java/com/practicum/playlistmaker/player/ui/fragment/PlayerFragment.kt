@@ -93,10 +93,11 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
 
     private fun renderPlayerState(state: PlayerState) {
         when (state) {
-            PlayerState.PLAYING -> showPauseBtn()
-            PlayerState.PAUSED, PlayerState.PREPARED -> showPlayBtn()
+            // Стейт перед началом и в конце воспроизведения
+            PlayerState.PREPARED -> showPlayBtn()
             PlayerState.DEFAULT -> showNotReady()
             PlayerState.ERROR -> showError()
+            else -> {}
         }
     }
 
@@ -112,11 +113,6 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
         setIconPlay()
     }
 
-    private fun showPauseBtn() {
-        setBtnPlayClickListener()
-        setIconPause()
-    }
-
     private fun setBtnPlayClickListener() {
         binding.btnPlay.setOnClickListener {
             viewModel.playbackControl()
@@ -130,12 +126,8 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
         setIconPlay()
     }
 
-    private fun setIconPause() {
-        binding.btnPlay.setImageResource(R.drawable.ic_btn_pause)
-    }
-
     private fun setIconPlay() {
-        binding.btnPlay.setImageResource(R.drawable.ic_play)
+        binding.btnPlay.setStatePlay()
     }
 
     private fun setFavsBtnImage(isFavorite: Boolean) {

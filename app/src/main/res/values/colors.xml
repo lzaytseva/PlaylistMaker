@@ -12,7 +12,7 @@
     <color name="dark_blue">#3772E7</color>
     <color name="gray">#AEAFB4</color>
 
-    <color name="btn_play_background">@color/white</color>
+    <color name="playback_btn_color">@color/black</color>
     <color name="basic_btn_background">@color/black</color>
     <color name="basic_btn_text_color">@color/white</color>
     <color name="et_search_color">@color/light_gray</color>
