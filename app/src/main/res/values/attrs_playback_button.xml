@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="PlaybackButtonView">
+        <attr name="playImageResId" format="reference" />
+        <attr name="pauseImageResId" format="reference" />
+    </declare-styleable>
+
+    <!-- Добавили атрибут для стиля -->
+    <attr name="playbackButtonStyle"
+        format="reference" />
+
+    <!-- Стиль ButtonsContainer по умолчанию (обе кнопки розовые) -->
+    <style name="DefaultPlaybackButtonStyle">
+        <item name="playImageResId">@drawable/ic_btn_play</item>
+        <item name="pauseImageResId">@drawable/ic_btn_pause</item>
+    </style>
+</resources>
