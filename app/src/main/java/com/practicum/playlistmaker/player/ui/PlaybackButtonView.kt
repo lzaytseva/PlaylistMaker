@@ -11,6 +11,7 @@ import androidx.annotation.AttrRes
 import androidx.annotation.StyleRes
 import androidx.core.graphics.drawable.toBitmap
 import com.practicum.playlistmaker.R
+import com.practicum.playlistmaker.player.ui.PlaybackButtonView.ButtonState.*
 
 class PlaybackButtonView @JvmOverloads constructor(
     context: Context,
@@ -19,7 +20,7 @@ class PlaybackButtonView @JvmOverloads constructor(
     @StyleRes defStyleRes: Int = 0,
 ) : View(context, attrs, defStyleAttr, defStyleRes) {
 
-    private var state: Int = STATE_PLAY
+    private var state: ButtonState = STATE_PLAY
     private val playImageBitmap: Bitmap?
     private val pauseImageBitmap: Bitmap?
     private var imageRect = RectF(0f, 0f, 0f, 0f)
@@ -95,15 +96,15 @@ class PlaybackButtonView @JvmOverloads constructor(
         setButtonState(STATE_PLAY)
     }
 
-    private fun setButtonState(buttonState: Int) {
+    private fun setButtonState(buttonState: ButtonState) {
         if (state != buttonState) {
             state = buttonState
             invalidate()
         }
     }
 
-    private companion object {
-        const val STATE_PLAY = 0
-        const val STATE_PAUSE = 1
+    enum class ButtonState {
+        STATE_PLAY,
+        STATE_PAUSE
     }
 }
