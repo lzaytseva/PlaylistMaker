@@ -16,8 +16,8 @@ import com.practicum.playlistmaker.player.ui.PlaybackButtonView.ButtonState.*
 class PlaybackButtonView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
-    @AttrRes defStyleAttr: Int = 0,
-    @StyleRes defStyleRes: Int = 0,
+    @AttrRes defStyleAttr: Int = R.attr.playbackButtonStyle,
+    @StyleRes defStyleRes: Int = R.style.DefaultPlaybackButtonStyle,
 ) : View(context, attrs, defStyleAttr, defStyleRes) {
 
     private var state: ButtonState = STATE_PLAY

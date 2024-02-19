@@ -102,9 +102,7 @@
                 app:layout_constraintBottom_toTopOf="@+id/tv_play_progress"
                 app:layout_constraintEnd_toStartOf="@+id/btn_add_to_favs"
                 app:layout_constraintStart_toEndOf="@id/btn_add_to_playlist"
-                app:layout_constraintTop_toBottomOf="@+id/tv_artist"
-                app:pauseImageResId="@drawable/ic_btn_pause"
-                app:playImageResId="@drawable/ic_btn_play" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_artist" />
 
             <ImageButton
                 android:id="@+id/btn_add_to_favs"
