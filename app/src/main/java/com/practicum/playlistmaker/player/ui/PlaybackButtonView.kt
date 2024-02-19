@@ -51,18 +51,9 @@ class PlaybackButtonView @JvmOverloads constructor(
     }
 
     override fun onDraw(canvas: Canvas) {
-        when (state) {
-            STATE_PLAY -> {
-                if (playImageBitmap != null) {
-                    canvas.drawBitmap(playImageBitmap, null, imageRect, null)
-                }
-            }
-
-            STATE_PAUSE -> {
-                if (pauseImageBitmap != null) {
-                    canvas.drawBitmap(pauseImageBitmap, null, imageRect, null)
-                }
-            }
+        val bitmap = if (state == STATE_PLAY) playImageBitmap else pauseImageBitmap
+        bitmap?.let {
+            canvas.drawBitmap(it, null, imageRect, null)
         }
     }
 
