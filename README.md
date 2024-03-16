@@ -12,6 +12,8 @@
 - ViewPager
 - SharedPreferences
 - Clean Architecture (MVVM)
+- Custom View
+- Broadcast Receiver
 
 ## Функционал приложения
 - Поиск песен в базе iTunes
