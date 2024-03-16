@@ -1,5 +1,6 @@
 package com.practicum.playlistmaker.search.ui.fragment
 
+import android.content.IntentFilter
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -9,6 +10,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,6 +22,7 @@ import com.practicum.playlistmaker.search.domain.model.Track
 import com.practicum.playlistmaker.search.ui.adapters.TrackAdapter
 import com.practicum.playlistmaker.search.ui.view_model.SearchViewModel
 import com.practicum.playlistmaker.util.BindingFragment
+import com.practicum.playlistmaker.util.NetworkStateBroadcastReceiver
 import com.practicum.playlistmaker.util.debounce
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -29,6 +32,8 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
 
     private lateinit var adapter: TrackAdapter
     private lateinit var searchHistoryAdapter: TrackAdapter
+
+    private val networkStateBroadcastReceiver = NetworkStateBroadcastReceiver()
 
     override fun createBinding(
         inflater: LayoutInflater,
@@ -57,6 +62,18 @@ class SearchFragment : BindingFragment<FragmentSearchBinding>() {
         if (binding.searchEditText.text.isEmpty()) {
             viewModel.showHistory()
         }
+
+        ContextCompat.registerReceiver(
+            requireContext(),
+            networkStateBroadcastReceiver,
+            IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"),
+            ContextCompat.RECEIVER_NOT_EXPORTED
+        )
+    }
+
+    override fun onPause() {
+        super.onPause()
+        requireActivity().unregisterReceiver(networkStateBroadcastReceiver)
     }
 
     override fun onStop() {

@@ -1,11 +1,13 @@
 package com.practicum.playlistmaker.player.ui.fragment
 
+import android.content.IntentFilter
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,6 +24,7 @@ import com.practicum.playlistmaker.player.ui.view_model.PlayerViewModel
 import com.practicum.playlistmaker.search.domain.model.Track
 import com.practicum.playlistmaker.util.BindingFragment
 import com.practicum.playlistmaker.util.FeedbackUtils
+import com.practicum.playlistmaker.util.NetworkStateBroadcastReceiver
 import com.practicum.playlistmaker.util.hideBottomSheet
 import com.practicum.playlistmaker.util.setTextOrHide
 import com.practicum.playlistmaker.util.showBottomSheet
@@ -39,6 +42,8 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
 
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<LinearLayout>
     private lateinit var adapter: PlaylistBSAdapter
+
+    private val networkStateBroadcastReceiver = NetworkStateBroadcastReceiver()
 
     override fun createBinding(
         inflater: LayoutInflater,
@@ -71,9 +76,21 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
         observeViewModel()
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        ContextCompat.registerReceiver(
+            requireContext(),
+            networkStateBroadcastReceiver,
+            IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"),
+            ContextCompat.RECEIVER_NOT_EXPORTED
+        )
+    }
+
     override fun onPause() {
         super.onPause()
         viewModel.pause()
+        requireActivity().unregisterReceiver(networkStateBroadcastReceiver)
     }
 
     private fun observeViewModel() {
