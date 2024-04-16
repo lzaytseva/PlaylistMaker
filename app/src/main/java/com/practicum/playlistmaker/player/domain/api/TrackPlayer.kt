@@ -1,12 +1,13 @@
 package com.practicum.playlistmaker.player.domain.api
 
-import androidx.lifecycle.LiveData
 import com.practicum.playlistmaker.player.domain.model.PlayerState
+import kotlinx.coroutines.flow.StateFlow
 
 interface TrackPlayer {
-    fun preparePlayer(trackUrl: String)
 
-    fun getState(): LiveData<PlayerState>
+    val playerState: StateFlow<PlayerState>
+
+    fun preparePlayer(trackUrl: String)
 
     fun play()
 

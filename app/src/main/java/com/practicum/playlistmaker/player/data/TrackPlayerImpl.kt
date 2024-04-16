@@ -1,14 +1,15 @@
 package com.practicum.playlistmaker.player.data
 
 import android.media.MediaPlayer
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.practicum.playlistmaker.player.domain.api.TrackPlayer
 import com.practicum.playlistmaker.player.domain.model.PlayerState
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 class TrackPlayerImpl(private val mediaPlayer: MediaPlayer) : TrackPlayer {
 
-    private val playerState = MutableLiveData(PlayerState.DEFAULT)
+    private val _playerState = MutableStateFlow(PlayerState.DEFAULT)
+    override val playerState = _playerState.asStateFlow()
 
     override fun preparePlayer(trackUrl: String) {
         if (trackUrl.isNotEmpty()) {
@@ -17,31 +18,27 @@ class TrackPlayerImpl(private val mediaPlayer: MediaPlayer) : TrackPlayer {
                     setDataSource(trackUrl)
                     prepareAsync()
                 } catch (e: Exception) {
-                    playerState.value = PlayerState.ERROR
+                    _playerState.value = PlayerState.ERROR
                 }
 
                 setOnPreparedListener {
-                    playerState.value = PlayerState.PREPARED
+                    _playerState.value = PlayerState.PREPARED
                 }
                 setOnCompletionListener {
-                    playerState.value = PlayerState.PREPARED
+                    _playerState.value = PlayerState.PREPARED
                 }
             }
         }
     }
 
-    override fun getState(): LiveData<PlayerState> {
-        return playerState
-    }
-
     override fun play() {
         mediaPlayer.start()
-        playerState.value = PlayerState.PLAYING
+        _playerState.value = PlayerState.PLAYING
     }
 
     override fun pause() {
         mediaPlayer.pause()
-        playerState.value = PlayerState.PAUSED
+        _playerState.value = PlayerState.PAUSED
     }
 
     override fun getCurrentPosition(): Int {

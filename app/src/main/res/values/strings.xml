@@ -72,4 +72,7 @@
     <string name="btn_more_content_desc">Кнопка дополнительного меню</string>
     <string name="playlist">Плейлист \"%1$s\"</string>
     <string name="empty_playlist">В этом плейлисте еще нет треков</string>
+    <string name="service_notification">%1$s - %2$s</string>
+    <string name="no_notification_permission">Отсутствует разрешение на показ уведомлений</string>
+    <string name="player_notification_channel_name">Уведомление плеера</string>
 </resources>

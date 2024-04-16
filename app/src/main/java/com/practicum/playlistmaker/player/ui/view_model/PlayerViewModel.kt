@@ -3,13 +3,14 @@ package com.practicum.playlistmaker.player.ui.view_model
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.practicum.playlistmaker.library.fav_tracks.domain.api.FavTracksInteractor
 import com.practicum.playlistmaker.library.playlists.all_playlists.domain.api.PlaylistsInteractor
 import com.practicum.playlistmaker.library.playlists.all_playlists.domain.model.Playlist
-import com.practicum.playlistmaker.player.domain.api.TrackPlayerInteractor
 import com.practicum.playlistmaker.player.domain.model.AddTrackToPlaylistState
 import com.practicum.playlistmaker.player.domain.model.PlayerState
+import com.practicum.playlistmaker.player.service.PlayerService
 import com.practicum.playlistmaker.search.domain.model.Track
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -20,16 +21,23 @@ import java.util.Locale
 
 class PlayerViewModel(
     private val track: Track,
-    private val playerInteractor: TrackPlayerInteractor,
     private val favTracksInteractor: FavTracksInteractor,
     private val playlistsInteractor: PlaylistsInteractor
 ) : ViewModel() {
 
-    val playerState = playerInteractor.getState()
+    private var playerService: PlayerService? = null
+    val playerState by lazy {
+        playerService?.playerState?.asLiveData()
+    }
 
     private val _timeProgress = MutableLiveData(INITIAL_TIME)
     val timeProgress: LiveData<String>
         get() = _timeProgress
+    private var timerJob: Job? = null
+
+    private val formatter: SimpleDateFormat by lazy {
+        SimpleDateFormat("mm:ss", Locale.getDefault())
+    }
 
     private val _isFavorite = MutableLiveData<Boolean>()
     val isFavorite: LiveData<Boolean>
@@ -39,46 +47,32 @@ class PlayerViewModel(
     val addTrackState: LiveData<AddTrackToPlaylistState>
         get() = _addTrackState
 
-    private var timerJob: Job? = null
 
-    init {
-        playerInteractor.preparePlayer(track.previewUrl)
-    }
-
-    private fun play() {
-        playerInteractor.play()
-    }
-
-    fun pause() {
-        playerInteractor.pause()
+    fun setPlayerService(service: PlayerService) {
+        playerService = service
     }
 
     private fun getFormattedCurrentPlayerPosition(): String {
-        return SimpleDateFormat(
-            "mm:ss",
-            Locale.getDefault()
-        ).format(playerInteractor.getCurrentPosition())
+        return formatter.format(playerService?.getCurrentPosition())
     }
 
     fun playbackControl() {
-        when (playerState.value) {
-            PlayerState.PLAYING -> {
-                pause()
-            }
-
-            PlayerState.PREPARED, PlayerState.PAUSED -> {
-                play()
-            }
-
-            else -> {}
-        }
+        playerService?.playbackControl()
         updateTimer()
+    }
+
+    fun hideServiceNotification() {
+        playerService?.hideNotification()
+    }
+
+    fun showServiceNotification() {
+        playerService?.showNotification()
     }
 
     private fun updateTimer() {
         val time = getFormattedCurrentPlayerPosition()
 
-        when (playerState.value) {
+        when (playerState?.value) {
             PlayerState.PLAYING -> {
                 _timeProgress.postValue(time)
                 timerJob = viewModelScope.launch(Dispatchers.Default) {
@@ -99,10 +93,6 @@ class PlayerViewModel(
         }
     }
 
-    private fun releasePlayer() {
-        playerInteractor.release()
-    }
-
     fun onFavoriteClicked() {
         viewModelScope.launch {
             if (track.isFavorite) {
@@ -118,11 +108,6 @@ class PlayerViewModel(
     private fun changeFavState(isFavorite: Boolean) {
         track.isFavorite = isFavorite
         _isFavorite.postValue(isFavorite)
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        releasePlayer()
     }
 
     fun addTrackToPlaylist(playlist: Playlist) {
