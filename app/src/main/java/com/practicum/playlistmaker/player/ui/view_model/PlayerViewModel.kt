@@ -9,12 +9,9 @@ import com.practicum.playlistmaker.library.fav_tracks.domain.api.FavTracksIntera
 import com.practicum.playlistmaker.library.playlists.all_playlists.domain.api.PlaylistsInteractor
 import com.practicum.playlistmaker.library.playlists.all_playlists.domain.model.Playlist
 import com.practicum.playlistmaker.player.domain.model.AddTrackToPlaylistState
-import com.practicum.playlistmaker.player.domain.model.PlayerState
-import com.practicum.playlistmaker.player.service.PlayerService
+import com.practicum.playlistmaker.player.service.AudioPlayerControl
 import com.practicum.playlistmaker.search.domain.model.Track
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -25,19 +22,20 @@ class PlayerViewModel(
     private val playlistsInteractor: PlaylistsInteractor
 ) : ViewModel() {
 
-    private var playerService: PlayerService? = null
+    private var playerControl: AudioPlayerControl? = null
+
     val playerState by lazy {
-        playerService?.playerState?.asLiveData()
+        playerControl?.playerState?.asLiveData()
     }
-
-    private val _timeProgress = MutableLiveData(INITIAL_TIME)
-    val timeProgress: LiveData<String>
-        get() = _timeProgress
-    private var timerJob: Job? = null
-
+    val timeProgress by lazy {
+        playerControl?.playbackProgress
+            ?.map { formatter.format(it) }
+            ?.asLiveData()
+    }
     private val formatter: SimpleDateFormat by lazy {
         SimpleDateFormat("mm:ss", Locale.getDefault())
     }
+
 
     private val _isFavorite = MutableLiveData<Boolean>()
     val isFavorite: LiveData<Boolean>
@@ -48,54 +46,27 @@ class PlayerViewModel(
         get() = _addTrackState
 
 
-    fun setPlayerService(service: PlayerService) {
-        playerService = service
+    fun setPlayerControl(audioPlayerControl: AudioPlayerControl) {
+        playerControl = audioPlayerControl
     }
 
-    private fun getFormattedCurrentPlayerPosition(): String {
-        return try {
-            formatter.format(playerService?.getCurrentPosition())
-        } catch (e: IllegalStateException) {
-            INITIAL_TIME
-        }
+    fun removeControl() {
+        playerControl = null
     }
+
 
     fun playbackControl() {
-        playerService?.playbackControl()
-        updateTimer()
+        playerControl?.playbackControl()
     }
 
     fun hideServiceNotification() {
-        playerService?.hideNotification()
+        playerControl?.hideNotification()
     }
 
     fun showServiceNotification() {
-        playerService?.showNotification()
+        playerControl?.showNotification()
     }
 
-    private fun updateTimer() {
-        val time = getFormattedCurrentPlayerPosition()
-
-        when (playerState?.value) {
-            PlayerState.PLAYING -> {
-                _timeProgress.postValue(time)
-                timerJob = viewModelScope.launch(Dispatchers.Default) {
-                    delay(UPDATE_TIMER_DELAY_IN_MILLIS)
-                    updateTimer()
-                }
-            }
-
-            PlayerState.PAUSED -> {
-                _timeProgress.postValue(time)
-                timerJob?.cancel()
-            }
-
-            else -> {
-                timerJob?.cancel()
-                _timeProgress.postValue(INITIAL_TIME)
-            }
-        }
-    }
 
     fun onFavoriteClicked() {
         viewModelScope.launch {
@@ -151,8 +122,8 @@ class PlayerViewModel(
         }
     }
 
-    companion object {
-        private const val UPDATE_TIMER_DELAY_IN_MILLIS = 300L
-        private const val INITIAL_TIME = "00:00"
+    override fun onCleared() {
+        super.onCleared()
+        playerControl = null
     }
 }

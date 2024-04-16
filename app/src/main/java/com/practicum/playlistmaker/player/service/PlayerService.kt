@@ -15,19 +15,29 @@ import com.practicum.playlistmaker.player.domain.api.TrackPlayer
 import com.practicum.playlistmaker.player.domain.model.PlayerState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.get
 
-class PlayerService : Service() {
+class PlayerService : Service(), AudioPlayerControl {
     private val binder = PlayerServiceBinder()
 
     private val player: TrackPlayer = get()
-    val playerState = player.playerState
+    override val playerState = player.playerState
+
+    private val _playbackProgress = MutableStateFlow(INITIAL_PROGRESS)
+    override val playbackProgress = _playbackProgress.asStateFlow()
 
     private var trackUrl: String? = null
     private var trackArtist: String? = null
     private var trackTitle: String? = null
+
+    private var timerJob: Job? = null
+
 
     private val coroutineScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
 
@@ -51,7 +61,7 @@ class PlayerService : Service() {
         return super.onUnbind(intent)
     }
 
-    fun playbackControl() {
+    override fun playbackControl() {
         when (playerState.value) {
             PlayerState.PLAYING -> {
                 player.pause()
@@ -63,13 +73,42 @@ class PlayerService : Service() {
 
             else -> {}
         }
+        updateTimer()
     }
 
-    fun getCurrentPosition(): Int {
-        return player.getCurrentPosition()
+    private fun updateTimer() {
+        val time = getCurrentPosition()
+
+        when (playerState.value) {
+            PlayerState.PLAYING -> {
+                _playbackProgress.value = time
+                timerJob = coroutineScope.launch(Dispatchers.Default) {
+                    delay(UPDATE_TIMER_DELAY_IN_MILLIS)
+                    updateTimer()
+                }
+            }
+
+            PlayerState.PAUSED -> {
+                _playbackProgress.value = time
+                timerJob?.cancel()
+            }
+
+            else -> {
+                timerJob?.cancel()
+                _playbackProgress.value = INITIAL_PROGRESS
+            }
+        }
     }
 
-    fun showNotification() {
+    private fun getCurrentPosition(): Int {
+        return try {
+            player.getCurrentPosition()
+        } catch (e: IllegalStateException) {
+            INITIAL_PROGRESS
+        }
+    }
+
+    override fun showNotification() {
         ServiceCompat.startForeground(
             this,
             SERVICE_NOTIFICATION_ID,
@@ -78,7 +117,7 @@ class PlayerService : Service() {
         )
     }
 
-    fun hideNotification() {
+    override fun hideNotification() {
         ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_REMOVE)
     }
 
@@ -86,6 +125,7 @@ class PlayerService : Service() {
         return NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
             .setContentTitle(getString(R.string.app_name))
             .setContentText(getString(R.string.service_notification, trackArtist, trackTitle))
+            .setSmallIcon(R.drawable.ic_launcher)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setCategory(NotificationCompat.CATEGORY_SERVICE)
             .build()
@@ -110,7 +150,7 @@ class PlayerService : Service() {
     }
 
     inner class PlayerServiceBinder : Binder() {
-        fun getService(): PlayerService = this@PlayerService
+        fun getService(): AudioPlayerControl = this@PlayerService
     }
 
     companion object {
@@ -119,6 +159,9 @@ class PlayerService : Service() {
         private const val EXTRA_ARTIST = "EXTRA_ARTIST"
         private const val EXTRA_TITLE = "EXTRA_TITLE"
         private const val EXTRA_SONG_URL = "EXTRA_URL"
+
+        private const val UPDATE_TIMER_DELAY_IN_MILLIS = 300L
+        private const val INITIAL_PROGRESS = 0
 
         fun createIntent(
             context: Context,

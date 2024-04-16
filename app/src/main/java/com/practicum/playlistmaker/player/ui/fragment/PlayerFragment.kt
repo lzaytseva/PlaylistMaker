@@ -27,6 +27,7 @@ import com.practicum.playlistmaker.databinding.FragmentPlayerBinding
 import com.practicum.playlistmaker.library.playlists.all_playlists.ui.adapters.PlaylistBSAdapter
 import com.practicum.playlistmaker.player.domain.model.AddTrackToPlaylistState
 import com.practicum.playlistmaker.player.domain.model.PlayerState
+import com.practicum.playlistmaker.player.service.AudioPlayerControl
 import com.practicum.playlistmaker.player.service.PlayerService
 import com.practicum.playlistmaker.player.ui.view_model.PlayerViewModel
 import com.practicum.playlistmaker.search.domain.model.Track
@@ -53,20 +54,20 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
 
     private val networkStateBroadcastReceiver = NetworkStateBroadcastReceiver()
 
-    private var playerService: PlayerService? = null
+    private var playerControl: AudioPlayerControl? = null
 
     private val playerServiceConnection = object : ServiceConnection {
         override fun onServiceConnected(p0: ComponentName?, p1: IBinder?) {
             val binder = p1 as PlayerService.PlayerServiceBinder
-            playerService = binder.getService()
-            playerService?.let {
-                viewModel.setPlayerService(it)
+            playerControl = binder.getService()
+            playerControl?.let {
+                viewModel.setPlayerControl(it)
                 observePlayerState()
             }
         }
 
         override fun onServiceDisconnected(p0: ComponentName?) {
-            playerService = null
+            viewModel.removeControl()
         }
     }
 
@@ -157,7 +158,7 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
     }
 
     private fun showServiceNotification() {
-        if (playerService?.playerState?.value == PlayerState.PLAYING) {
+        if (playerControl?.playerState?.value == PlayerState.PLAYING) {
             viewModel.showServiceNotification()
         }
     }
@@ -175,7 +176,7 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
         viewModel.playerState?.observe(viewLifecycleOwner) {
             renderPlayerState(it)
         }
-        viewModel.timeProgress.observe(viewLifecycleOwner) {
+        viewModel.timeProgress?.observe(viewLifecycleOwner) {
             binding.tvPlayProgress.text = it
         }
     }
