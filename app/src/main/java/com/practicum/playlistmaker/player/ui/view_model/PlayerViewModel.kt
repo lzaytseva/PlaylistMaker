@@ -53,7 +53,11 @@ class PlayerViewModel(
     }
 
     private fun getFormattedCurrentPlayerPosition(): String {
-        return formatter.format(playerService?.getCurrentPosition())
+        return try {
+            formatter.format(playerService?.getCurrentPosition())
+        } catch (e: IllegalStateException) {
+            INITIAL_TIME
+        }
     }
 
     fun playbackControl() {
