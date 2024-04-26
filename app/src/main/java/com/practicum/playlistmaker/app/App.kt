@@ -1,12 +1,19 @@
 package com.practicum.playlistmaker.app
 
 import android.app.Application
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
 import android.content.SharedPreferences
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatDelegate
+import com.practicum.playlistmaker.R
 import com.practicum.playlistmaker.di.dataModule
 import com.practicum.playlistmaker.di.interactorModule
 import com.practicum.playlistmaker.di.repositoryModule
 import com.practicum.playlistmaker.di.viewModelModule
+import com.practicum.playlistmaker.player.service.PlayerService.Companion.NOTIFICATION_CHANNEL_ID
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
@@ -15,10 +22,12 @@ class App : Application() {
     var darkTheme = false
     private lateinit var sharedPrefs: SharedPreferences
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate() {
         super.onCreate()
         initDI()
         setTheme()
+        createPlayerNotificationChannel()
     }
 
     private fun initDI() {
@@ -46,6 +55,18 @@ class App : Application() {
         sharedPrefs.edit()
             .putBoolean(DARK_MODE_KEY, darkTheme)
             .apply()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun createPlayerNotificationChannel() {
+        val channel = NotificationChannel(
+            NOTIFICATION_CHANNEL_ID,
+            getString(R.string.player_notification_channel_name),
+            NotificationManager.IMPORTANCE_HIGH
+        )
+        val notificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(channel)
     }
 
     companion object {

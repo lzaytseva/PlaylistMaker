@@ -1,11 +1,18 @@
 package com.practicum.playlistmaker.player.ui.fragment
 
+import android.content.ComponentName
+import android.content.Context
 import android.content.IntentFilter
+import android.content.ServiceConnection
+import android.os.Build
 import android.os.Bundle
+import android.os.IBinder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
@@ -20,6 +27,8 @@ import com.practicum.playlistmaker.databinding.FragmentPlayerBinding
 import com.practicum.playlistmaker.library.playlists.all_playlists.ui.adapters.PlaylistBSAdapter
 import com.practicum.playlistmaker.player.domain.model.AddTrackToPlaylistState
 import com.practicum.playlistmaker.player.domain.model.PlayerState
+import com.practicum.playlistmaker.player.service.AudioPlayerControl
+import com.practicum.playlistmaker.player.service.PlayerService
 import com.practicum.playlistmaker.player.ui.view_model.PlayerViewModel
 import com.practicum.playlistmaker.search.domain.model.Track
 import com.practicum.playlistmaker.util.BindingFragment
@@ -45,6 +54,37 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
 
     private val networkStateBroadcastReceiver = NetworkStateBroadcastReceiver()
 
+    private var playerControl: AudioPlayerControl? = null
+
+    private val playerServiceConnection = object : ServiceConnection {
+        override fun onServiceConnected(p0: ComponentName?, p1: IBinder?) {
+            val binder = p1 as PlayerService.PlayerServiceBinder
+            playerControl = binder.getService()
+            playerControl?.let {
+                viewModel.setPlayerControl(it)
+                observePlayerState()
+            }
+        }
+
+        override fun onServiceDisconnected(p0: ComponentName?) {
+            viewModel.removeControl()
+        }
+    }
+
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            bindMusicService(track)
+        } else {
+            Toast.makeText(
+                requireContext(),
+                getString(R.string.no_notification_permission),
+                Toast.LENGTH_LONG
+            ).show()
+        }
+    }
+
     override fun createBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
@@ -63,6 +103,7 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        requestPermissionForService()
         setTrackInfoToViews()
         initPlaylistsRv()
         initBottomSheet()
@@ -76,6 +117,27 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
         observeViewModel()
     }
 
+    private fun bindMusicService(track: Track) {
+        requireContext().bindService(
+            PlayerService.createIntent(
+                requireContext(),
+                track.artistName,
+                track.trackName,
+                track.previewUrl
+            ),
+            playerServiceConnection,
+            Context.BIND_AUTO_CREATE
+        )
+    }
+
+    private fun requestPermissionForService() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            requestPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+        } else {
+            bindMusicService(track)
+        }
+    }
+
     override fun onResume() {
         super.onResume()
 
@@ -85,26 +147,37 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
             IntentFilter("android.net.conn.CONNECTIVITY_CHANGE"),
             ContextCompat.RECEIVER_NOT_EXPORTED
         )
+
+        viewModel.hideServiceNotification()
     }
 
     override fun onPause() {
         super.onPause()
-        viewModel.pause()
         requireActivity().unregisterReceiver(networkStateBroadcastReceiver)
+        showServiceNotification()
+    }
+
+    private fun showServiceNotification() {
+        if (playerControl?.playerState?.value == PlayerState.PLAYING) {
+            viewModel.showServiceNotification()
+        }
     }
 
     private fun observeViewModel() {
-        viewModel.playerState.observe(viewLifecycleOwner) {
-            renderPlayerState(it)
-        }
-        viewModel.timeProgress.observe(viewLifecycleOwner) {
-            binding.tvPlayProgress.text = it
-        }
         viewModel.isFavorite.observe(viewLifecycleOwner) {
             setFavsBtnImage(it)
         }
         viewModel.addTrackState.observe(viewLifecycleOwner) {
             renderAddTrackState(it)
+        }
+    }
+
+    private fun observePlayerState() {
+        viewModel.playerState?.observe(viewLifecycleOwner) {
+            renderPlayerState(it)
+        }
+        viewModel.timeProgress?.observe(viewLifecycleOwner) {
+            binding.tvPlayProgress.text = it
         }
     }
 
@@ -278,6 +351,12 @@ class PlayerFragment : BindingFragment<FragmentPlayerBinding>() {
                 binding.overlay.alpha = 1 - abs(slideOffset)
             }
         })
+    }
+
+    override fun onDestroyView() {
+        viewModel.hideServiceNotification()
+        requireContext().unbindService(playerServiceConnection)
+        super.onDestroyView()
     }
 
     companion object {
